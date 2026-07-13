@@ -96,7 +96,7 @@
       .daily-apply:hover { background: #eefbfc; }
 
       .workspace { border: 1px solid var(--line); border-radius: 6px; background: #fff; box-shadow: var(--shadow); overflow: hidden; }
-      .controls { display: grid; grid-template-columns: minmax(220px, 1.15fr) minmax(250px, .9fr) repeat(3, minmax(110px, .42fr)) auto; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); background: #f9fafb; }
+      .controls { display: grid; grid-template-columns: repeat(2, minmax(170px, .7fr)) minmax(240px, .85fr) repeat(3, minmax(105px, .4fr)) auto; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); background: #f9fafb; }
       .field { position: relative; }
       .field svg { position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: #7d8792; pointer-events: none; }
       input[type="search"], input[type="date"], select { width: 100%; height: 42px; border: 1px solid #cfd5db; border-radius: 4px; background: #fff; color: var(--ink); outline: none; }
@@ -186,7 +186,7 @@
         .hero-character { right: -130px; width: 520px; opacity: .84; }
         .summary { grid-template-columns: repeat(2, 1fr); }
         .controls { grid-template-columns: 1fr 1fr; }
-        .controls .field:first-child { grid-column: 1 / -1; }
+        .controls .field:nth-child(-n+2) { grid-column: auto; }
         .export-button { width: 100%; }
         .daily-picker { grid-template-columns: minmax(180px, 240px) 1fr; }
         .daily-apply { grid-column: 1 / -1; width: 100%; }
@@ -269,7 +269,11 @@
         <div class="controls">
           <label class="field">
             <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <input id="search" type="search" placeholder="영상 제목 또는 유튜버 검색" aria-label="영상 검색" />
+            <input id="creator-search" type="search" placeholder="유튜버" aria-label="유튜버 검색" />
+          </label>
+          <label class="field">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="title-search" type="search" placeholder="영상 제목" aria-label="영상 제목 검색" />
           </label>
           <div class="date-range" aria-label="날짜 구간 필터">
             <input id="start-date" type="date" aria-label="시작일" />
@@ -308,7 +312,7 @@
         <div class="method-grid">
           <div class="method-copy">
             <h2 id="collection-method-title">영상 수집 기준</h2>
-            <p>YouTube 대한민국 검색 환경에서 아래 16개 검색어로 공개 영상을 탐색해 132개를 확정하고, 장기협업 KOL 5개 공식 채널을 2026년 5월 28일부터 추가 조사했습니다. KOL 영상 16개 중 중복 1개를 제거해 총 147개를 제공합니다.</p>
+            <p>YouTube 대한민국 검색 환경에서 아래 16개 검색어로 공개 영상을 탐색해 132개를 확정하고, 장기협업 KOL 5개 공식 채널을 2026년 5월 28일부터 추가 조사했습니다. 제목·설명과 YouTube 게임 항목을 함께 확인해 KOL 영상 18개를 포함한 총 149개를 제공합니다.</p>
             <div class="keyword-list" aria-label="사용 검색어 16개">
               <span class="keyword">명조</span><span class="keyword">명조 워더링 웨이브</span><span class="keyword">워더링 웨이브</span><span class="keyword">wuthering waves 명조</span>
               <span class="keyword">명조 3.5</span><span class="keyword">명조 양양</span><span class="keyword">명조 현령</span><span class="keyword">명조 수수</span>
@@ -350,7 +354,7 @@
       const data = window.VOD_DATA || { videos: [], period: {} };
       const nf = new Intl.NumberFormat("ko-KR");
       const compact = new Intl.NumberFormat("ko-KR", { notation: "compact", maximumFractionDigits: 1 });
-      const state = { query: "", startDate: data.period.start || "", endDate: data.period.end || "", format: "all", koc: "all", topic: "all", sort: "views" };
+      const state = { creatorQuery: "", titleQuery: "", startDate: data.period.start || "", endDate: data.period.end || "", format: "all", koc: "all", topic: "all", sort: "views" };
 
       const topicOf = (video) => {
         const text = video.title.toLowerCase();
@@ -410,12 +414,14 @@
       renderDailySummary();
 
       function filteredVideos() {
-        const query = state.query.trim().toLowerCase();
+        const creatorQuery = state.creatorQuery.trim().toLowerCase();
+        const titleQuery = state.titleQuery.trim().toLowerCase();
         return enriched.filter((video) => {
-          const matchesQuery = !query || `${video.title} ${video.creator}`.toLowerCase().includes(query);
+          const matchesCreator = !creatorQuery || video.creator.toLowerCase().includes(creatorQuery);
+          const matchesTitle = !titleQuery || video.title.toLowerCase().includes(titleQuery);
           const matchesKoc = state.koc === "all" || (state.koc === "koc" && video.isKoc) || (state.koc === "kol" && video.isKol) || (state.koc === "non-partner" && !video.isKoc && !video.isKol);
           const matchesDate = (!state.startDate || video.date >= state.startDate) && (!state.endDate || video.date <= state.endDate);
-          return matchesQuery && matchesKoc && matchesDate && (state.format === "all" || video.format === state.format) && (state.topic === "all" || video.topic === state.topic);
+          return matchesCreator && matchesTitle && matchesKoc && matchesDate && (state.format === "all" || video.format === state.format) && (state.topic === "all" || video.topic === state.topic);
         }).sort((a, b) => state.sort === "date" ? b.date.localeCompare(a.date) || b.views - a.views : (b[state.sort] || 0) - (a[state.sort] || 0));
       }
 
@@ -449,7 +455,8 @@
         const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" })); link.download = "myeongjo-vod-filtered.csv"; link.click(); URL.revokeObjectURL(link.href);
       }
 
-      document.getElementById("search").addEventListener("input", (event) => { state.query = event.target.value; render(); });
+      document.getElementById("creator-search").addEventListener("input", (event) => { state.creatorQuery = event.target.value; render(); });
+      document.getElementById("title-search").addEventListener("input", (event) => { state.titleQuery = event.target.value; render(); });
       dailyDate.addEventListener("change", renderDailySummary);
       document.getElementById("daily-apply").addEventListener("click", () => {
         state.startDate = dailyDate.value;

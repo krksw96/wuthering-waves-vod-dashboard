@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 
 const broad = JSON.parse(await readFile(resolve("../data/youtube_kol_2026-05-28_2026-07-13.json"), "utf8"));
 const channelSearch = JSON.parse(await readFile(resolve("../data/youtube_kol_channel_search_enriched.json"), "utf8"));
+const officialAll = JSON.parse(await readFile(resolve("../data/youtube_kol_official_all.json"), "utf8"));
 const output = resolve("data/kol-videos.json");
 const channelMap = new Map([
   ["UCYk95JQsXbgk5Vto4MvRh2g", "마레플로스"],
@@ -15,13 +16,16 @@ const channelMap = new Map([
   ["UC_8GOc5dWX2Kpb74_nQ7vSQ", "러끼"],
 ]);
 const explicitRelatedIds = new Set(["I7nIxc3SU4U"]);
-const isRelated = (row) => /명조|워더링|wuthering\s*waves|wuwa|鳴潮/i.test(`${row.title || ""} ${row.description || ""}`) || explicitRelatedIds.has(row.youtubeId);
+const isRelated = (row) => /명조|워더링|wuthering\s*waves|wuwa|鳴潮/i.test(`${row.title || ""} ${row.description || ""} ${row.gameTitle || ""}`) || explicitRelatedIds.has(row.youtubeId);
 
 const rowsById = new Map();
 for (const row of broad.rows) {
   if (channelMap.has(row.channelId)) rowsById.set(row.youtubeId, row);
 }
 for (const row of channelSearch.rows) {
+  if (channelMap.has(row.channelId) && isRelated(row)) rowsById.set(row.youtubeId, row);
+}
+for (const row of officialAll.rows) {
   if (channelMap.has(row.channelId) && isRelated(row)) rowsById.set(row.youtubeId, row);
 }
 

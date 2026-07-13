@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 
 const source = resolve(process.argv[2] || "../data/youtube_kol_candidates.json");
 const output = resolve(process.argv[3] || "../data/youtube_kol_official_enriched.json");
+const includeAll = process.argv.includes("--all");
 const payload = JSON.parse((await readFile(source, "utf8")).replace(/^\uFEFF/, ""));
 const headers = {
   "accept-language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -47,6 +48,17 @@ function extractStats(value) {
   return stats;
 }
 
+function extractGameTitle(value) {
+  let gameTitle = "";
+  walk(value, (node) => {
+    if (gameTitle || typeof node.title !== "string") return;
+    if (/^(?:명조(?::\s*워더링\s*웨이브)?|워더링\s*웨이브|wuthering\s*waves)$/i.test(node.title.trim())) {
+      gameTitle = node.title.trim();
+    }
+  });
+  return gameTitle;
+}
+
 const configHtml = await (await fetch("https://www.youtube.com/results?search_query=%EB%AA%85%EC%A1%B0&hl=ko&gl=KR", { headers })).text();
 const apiKey = configHtml.match(/"INNERTUBE_API_KEY":"([^"]+)"/)?.[1];
 const clientVersion = configHtml.match(/"INNERTUBE_CONTEXT_CLIENT_VERSION":"([^"]+)"/)?.[1];
@@ -66,29 +78,32 @@ async function youtubei(endpoint, body) {
 }
 
 const relevant = payload.channels.flatMap((channel) => (channel.candidates || channel.videoIds.map((videoId) => ({ videoId, title: "" })))
-  .filter((candidate) => !channel.candidates || /명조|워더링|wuthering\s*waves|wuwa|鳴潮/i.test(candidate.title))
+  .filter((candidate) => includeAll || !channel.candidates || /명조|워더링|wuthering\s*waves|wuwa|鳴潮/i.test(candidate.title))
   .map((candidate) => ({ ...candidate, kolName: channel.name, expectedChannelId: channel.id })));
 const rows = [];
 const errors = [];
 
-for (const candidate of relevant) {
+async function enrichCandidate(candidate) {
   try {
     const player = await youtubei("player", { videoId: candidate.videoId });
     const details = player.videoDetails || {};
     const micro = player.microformat?.playerMicroformatRenderer || {};
     const channelId = details.channelId || "";
-    if (channelId !== candidate.expectedChannelId) continue;
+    if (channelId !== candidate.expectedChannelId) return null;
     const date = String(micro.publishDate || micro.uploadDate || "").slice(0, 10);
-    if (date < "2026-05-28" || date > "2026-07-13") continue;
+    if (date < "2026-05-28" || date > "2026-07-13") return null;
     const title = clean(details.title || candidate.title);
     const description = clean(details.shortDescription || micro.description);
-    if (/\b(?:ai|suno|udio|chatgpt)\b|인공지능|생성형/i.test(`${title} ${description}`)) continue;
-    if (/광고|협찬|유료\s*프로모션|paid\s*promotion|sponsored/i.test(`${title} ${description}`)) continue;
+    if (/\b(?:ai|suno|udio|chatgpt)\b|인공지능|생성형/i.test(`${title} ${description}`)) return null;
+    if (/광고|협찬|유료\s*프로모션|paid\s*promotion|sponsored/i.test(`${title} ${description}`)) return null;
 
     let next = {};
     let updated = {};
     try { next = await youtubei("next", { videoId: candidate.videoId }); } catch {}
     try { updated = await youtubei("updated_metadata", { videoId: candidate.videoId }); } catch {}
+    const gameTitle = extractGameTitle(next);
+    const isMyeongjo = /명조|워더링|wuthering\s*waves|wuwa|鳴潮/i.test(`${title} ${description}`) || Boolean(gameTitle);
+    if (!isMyeongjo) return null;
     const stats = { ...extractStats(next), ...Object.fromEntries(Object.entries(extractStats(updated)).filter(([, value]) => value != null)) };
     const seconds = Number.parseInt(details.lengthSeconds, 10) || null;
     let format = "VOD";
@@ -96,7 +111,7 @@ for (const candidate of relevant) {
       const shorts = await fetch(`https://www.youtube.com/shorts/${candidate.videoId}?hl=ko&gl=KR`, { headers, redirect: "manual" });
       if (shorts.ok) format = "Shorts";
     }
-    rows.push({
+    const row = {
       title,
       link: `https://www.youtube.com/watch?v=${candidate.videoId}`,
       shortsLink: `https://www.youtube.com/shorts/${candidate.videoId}`,
@@ -111,12 +126,21 @@ for (const candidate of relevant) {
       durationSeconds: seconds,
       format,
       description,
+      gameTitle,
       sources: `official KOL channel / ${candidate.kolName}`,
-    });
+    };
     console.error(`${candidate.kolName} ${date} ${format} ${title}`);
+    return row;
   } catch (error) {
     errors.push({ videoId: candidate.videoId, message: error.message });
+    return null;
   }
+}
+
+for (let offset = 0; offset < relevant.length; offset += 6) {
+  const batch = await Promise.all(relevant.slice(offset, offset + 6).map(enrichCandidate));
+  rows.push(...batch.filter(Boolean));
+  if (offset % 60 === 0) console.error(`Processed ${Math.min(offset + 6, relevant.length)}/${relevant.length}`);
 }
 
 await writeFile(output, `${JSON.stringify({ meta: { start: "2026-05-28", end: "2026-07-13", resultCount: rows.length, errors }, rows }, null, 2)}\n`);
