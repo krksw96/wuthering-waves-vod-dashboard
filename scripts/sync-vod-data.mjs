@@ -9,11 +9,13 @@ const output = resolve(projectRoot, "data", "videos.js");
 const kocSource = resolve(projectRoot, "data", "koc-list.json");
 const kolSource = resolve(projectRoot, "data", "kol-list.json");
 const kolVideosSource = resolve(projectRoot, "data", "kol-videos.json");
+const statsSource = resolve(projectRoot, "data", "stats-overrides.json");
 
 const input = JSON.parse(await readFile(source, "utf8"));
 const kocList = JSON.parse(await readFile(kocSource, "utf8"));
 const kolList = JSON.parse(await readFile(kolSource, "utf8"));
 const kolVideos = JSON.parse(await readFile(kolVideosSource, "utf8"));
+const stats = JSON.parse(await readFile(statsSource, "utf8").catch(() => "{}"));
 const normalizeName = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
 const kocAliases = new Map();
 for (const koc of kocList) {
@@ -36,8 +38,8 @@ const videos = [...rowsById.values()].map((row) => ({
   subscribers: row.subscriberCount ?? null,
   date: row.date,
   views: row.viewCount ?? 0,
-  likes: row.likeCount ?? null,
-  comments: row.commentCount ?? 0,
+  likes: stats[row.youtubeId]?.likes ?? row.likeCount ?? null,
+  comments: stats[row.youtubeId]?.comments ?? row.commentCount ?? 0,
   duration: row.durationSeconds ?? null,
   format: row.format,
   isKoc: kocAliases.has(normalizeName(row.channelTitle)),
