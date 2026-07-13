@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(here, "..");
-const source = resolve(projectRoot, "..", "data", "youtube_myeongjo_2026-07-10_2026-07-13.kr_all_filtered.json");
+const source = resolve(projectRoot, "..", "data", "youtube_myeongjo_2026-05-28_2026-07-13.filtered.json");
 const output = resolve(projectRoot, "data", "videos.js");
 const kocSource = resolve(projectRoot, "data", "koc-list.json");
 const kolSource = resolve(projectRoot, "data", "kol-list.json");
