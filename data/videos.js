@@ -1,9 +1,273 @@
 window.VOD_DATA = {
-  "generatedAt": "2026-07-13T06:11:16.206Z",
+  "generatedAt": "2026-07-13T06:45:44.399Z",
   "period": {
     "start": "2026-07-10",
     "end": "2026-07-13"
   },
+  "kocList": [
+    {
+      "name": "키플",
+      "aliases": [
+        "키플",
+        "KEYPLE"
+      ]
+    },
+    {
+      "name": "대요리",
+      "aliases": [
+        "대요리"
+      ]
+    },
+    {
+      "name": "도도리코",
+      "aliases": [
+        "도도리코",
+        "dodorico"
+      ]
+    },
+    {
+      "name": "니브",
+      "aliases": [
+        "니브"
+      ]
+    },
+    {
+      "name": "스누피",
+      "aliases": [
+        "스누피"
+      ]
+    },
+    {
+      "name": "빠돌군",
+      "aliases": [
+        "빠돌군"
+      ]
+    },
+    {
+      "name": "흑우수달",
+      "aliases": [
+        "흑우수달"
+      ]
+    },
+    {
+      "name": "닝냉뇽",
+      "aliases": [
+        "닝냉뇽"
+      ]
+    },
+    {
+      "name": "명떡",
+      "aliases": [
+        "명떡"
+      ]
+    },
+    {
+      "name": "티오형",
+      "aliases": [
+        "티오형"
+      ]
+    },
+    {
+      "name": "앙코",
+      "aliases": [
+        "앙코"
+      ]
+    },
+    {
+      "name": "G스토리",
+      "aliases": [
+        "G스토리",
+        "Gstory",
+        "지스토리"
+      ]
+    },
+    {
+      "name": "관종대왕",
+      "aliases": [
+        "관종대왕"
+      ]
+    },
+    {
+      "name": "윤치",
+      "aliases": [
+        "윤치"
+      ]
+    },
+    {
+      "name": "상덕",
+      "aliases": [
+        "상덕"
+      ]
+    },
+    {
+      "name": "고뇨",
+      "aliases": [
+        "고뇨"
+      ]
+    },
+    {
+      "name": "몽키매직 게임채널",
+      "aliases": [
+        "몽키매직 게임채널"
+      ]
+    },
+    {
+      "name": "류은유",
+      "aliases": [
+        "류은유"
+      ]
+    },
+    {
+      "name": "앙리형",
+      "aliases": [
+        "앙리형"
+      ]
+    },
+    {
+      "name": "김츠유",
+      "aliases": [
+        "김츠유"
+      ]
+    },
+    {
+      "name": "명예훈장",
+      "aliases": [
+        "명예훈장"
+      ]
+    },
+    {
+      "name": "매드라이프",
+      "aliases": [
+        "매드라이프",
+        "MadLife",
+        "매드라이FULL"
+      ]
+    },
+    {
+      "name": "강퀴",
+      "aliases": [
+        "강퀴"
+      ]
+    },
+    {
+      "name": "이플린",
+      "aliases": [
+        "이플린"
+      ]
+    },
+    {
+      "name": "리크리",
+      "aliases": [
+        "리크리"
+      ]
+    },
+    {
+      "name": "은가비v",
+      "aliases": [
+        "은가비v"
+      ]
+    },
+    {
+      "name": "은뿌",
+      "aliases": [
+        "은뿌"
+      ]
+    },
+    {
+      "name": "준선유",
+      "aliases": [
+        "준선유"
+      ]
+    },
+    {
+      "name": "이쿠롬",
+      "aliases": [
+        "이쿠롬"
+      ]
+    },
+    {
+      "name": "미오",
+      "aliases": [
+        "미오",
+        "Mio"
+      ]
+    },
+    {
+      "name": "옥쓔",
+      "aliases": [
+        "옥쓔"
+      ]
+    },
+    {
+      "name": "모 아",
+      "aliases": [
+        "모 아",
+        "모아",
+        "다시 모아보기"
+      ]
+    },
+    {
+      "name": "적쌤",
+      "aliases": [
+        "적쌤"
+      ]
+    },
+    {
+      "name": "알렌비",
+      "aliases": [
+        "알렌비"
+      ]
+    },
+    {
+      "name": "진청",
+      "aliases": [
+        "진청"
+      ]
+    },
+    {
+      "name": "시루시루",
+      "aliases": [
+        "시루시루",
+        "Siru"
+      ]
+    },
+    {
+      "name": "은왕",
+      "aliases": [
+        "은왕"
+      ]
+    },
+    {
+      "name": "카츄",
+      "aliases": [
+        "카츄"
+      ]
+    },
+    {
+      "name": "세잠",
+      "aliases": [
+        "세잠"
+      ]
+    },
+    {
+      "name": "췌드방",
+      "aliases": [
+        "췌드방"
+      ]
+    },
+    {
+      "name": "박서림",
+      "aliases": [
+        "박서림"
+      ]
+    },
+    {
+      "name": "미니멜로",
+      "aliases": [
+        "미니멜로"
+      ]
+    }
+  ],
   "videos": [
     {
       "id": "9r9YafTrYyk",
@@ -16,7 +280,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 17,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "jyc2tIxHk7w",
@@ -29,7 +295,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 643,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "9IvX_yugu54",
@@ -42,7 +310,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 23,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "v8d47jKqd5g",
@@ -55,7 +325,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 34,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "kM1o3R04rns",
@@ -68,7 +340,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 42,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "x1v6QAsuQN0",
@@ -81,7 +355,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 43,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "wA4AdN3GGmg",
@@ -94,7 +370,9 @@ window.VOD_DATA = {
       "likes": 51,
       "comments": 5,
       "duration": 26429,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "모 아"
     },
     {
       "id": "K4NcWtSIH4c",
@@ -107,7 +385,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 19961,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "CfRoizIYqPo",
@@ -120,7 +400,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 32409,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "E3iY2wMNXPs",
@@ -133,7 +415,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 26373,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "7lR3rUOdaA8",
@@ -146,7 +430,9 @@ window.VOD_DATA = {
       "likes": 0,
       "comments": 0,
       "duration": 12876,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "9XE_PXX3sMM",
@@ -159,7 +445,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 38,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "관종대왕"
     },
     {
       "id": "-NgC7oGBUlY",
@@ -172,7 +460,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 20,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "u3LsyaeKCE0",
@@ -185,7 +475,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 20,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "JaD9xb4iCso",
@@ -198,7 +490,9 @@ window.VOD_DATA = {
       "likes": 349,
       "comments": 20,
       "duration": 305,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "앙리형"
     },
     {
       "id": "tmehPgxHPQk",
@@ -211,7 +505,9 @@ window.VOD_DATA = {
       "likes": 332,
       "comments": 20,
       "duration": 609,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "앙리형"
     },
     {
       "id": "_dg5ZROa5B0",
@@ -224,7 +520,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 27,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "DSXbjLbVmpQ",
@@ -237,7 +535,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 62,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "앙리형"
     },
     {
       "id": "KWXU49NLXsA",
@@ -250,7 +550,9 @@ window.VOD_DATA = {
       "likes": 294,
       "comments": 40,
       "duration": 492,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "bB9nJoUOoo4",
@@ -263,7 +565,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 23,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "AMm1QdQ-Mhk",
@@ -276,7 +580,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 60,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "박서림"
     },
     {
       "id": "KW79NbMpUXU",
@@ -289,7 +595,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 892,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "명떡"
     },
     {
       "id": "ih1_ZjCMz1o",
@@ -302,7 +610,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 345,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "vVfvGgH6EUk",
@@ -315,7 +625,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 57,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "적쌤"
     },
     {
       "id": "RHtgmdOgerk",
@@ -328,7 +640,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 56,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "IW4ayn5kvtg",
@@ -341,7 +655,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 498,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "관종대왕"
     },
     {
       "id": "680oZMLOE2U",
@@ -354,7 +670,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 23,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "HlGuGoF8wvI",
@@ -367,7 +685,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 42,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "_ZOKX0Pvwdc",
@@ -380,7 +700,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 348,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "HVF7iVzHthI",
@@ -393,7 +715,9 @@ window.VOD_DATA = {
       "likes": 164,
       "comments": 20,
       "duration": 1342,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "박서림"
     },
     {
       "id": "rcG6oR3MOrM",
@@ -406,7 +730,9 @@ window.VOD_DATA = {
       "likes": 114,
       "comments": 18,
       "duration": 18080,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "고뇨"
     },
     {
       "id": "VtrlBWlpbGQ",
@@ -419,7 +745,9 @@ window.VOD_DATA = {
       "likes": 160,
       "comments": 33,
       "duration": 25816,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "H-a3xXQJjUk",
@@ -432,7 +760,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 26,
       "duration": 11808,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "IGDIP1YxQUU",
@@ -445,7 +775,9 @@ window.VOD_DATA = {
       "likes": 51,
       "comments": 8,
       "duration": 15667,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "q48tgVObxrA",
@@ -458,7 +790,9 @@ window.VOD_DATA = {
       "likes": 110,
       "comments": 20,
       "duration": 928,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "z3c0c-u8a9c",
@@ -471,7 +805,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 20,
       "duration": 631,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "X2o0LHwPmAU",
@@ -484,7 +820,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 28,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "RhtYZ7svqRI",
@@ -497,7 +835,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 35,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "XZ-b7gaXPIg",
@@ -510,7 +850,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 1234,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "박서림"
     },
     {
       "id": "tcU40TTgJbk",
@@ -523,7 +865,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 26,
       "duration": 12514,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "ykxD1bbPfpw",
@@ -536,7 +880,9 @@ window.VOD_DATA = {
       "likes": 32,
       "comments": 1,
       "duration": 30588,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "매드라이프"
     },
     {
       "id": "kFhTvaGBXQM",
@@ -549,7 +895,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 29,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "nvi87AmAvro",
@@ -562,7 +910,9 @@ window.VOD_DATA = {
       "likes": 14,
       "comments": 0,
       "duration": 11234,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "G스토리"
     },
     {
       "id": "hhA8xOvL1es",
@@ -575,7 +925,9 @@ window.VOD_DATA = {
       "likes": 12,
       "comments": 1,
       "duration": 271,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "hhW5J4weGJU",
@@ -588,7 +940,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 26379,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "GwD8WQReSiU",
@@ -601,7 +955,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 12425,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "-QxZS6idbyQ",
@@ -614,7 +970,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 19,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "Jtsiui6rkxs",
@@ -627,7 +985,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 26,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "관종대왕"
     },
     {
       "id": "1vsyNsWWybg",
@@ -640,7 +1000,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 35,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "상덕"
     },
     {
       "id": "XDGLAyOfA7o",
@@ -653,7 +1015,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 33,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "적쌤"
     },
     {
       "id": "2foXJY7ZVc8",
@@ -666,7 +1030,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 24,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "FXLqZtrsupI",
@@ -679,7 +1045,9 @@ window.VOD_DATA = {
       "likes": 896,
       "comments": 20,
       "duration": 188,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "닝냉뇽"
     },
     {
       "id": "p3MjuigF1lM",
@@ -692,7 +1060,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 13,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "ZcCINX6DJDo",
@@ -705,7 +1075,9 @@ window.VOD_DATA = {
       "likes": 608,
       "comments": 20,
       "duration": 479,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "명떡"
     },
     {
       "id": "9a_nyboPKWE",
@@ -718,7 +1090,9 @@ window.VOD_DATA = {
       "likes": 356,
       "comments": 20,
       "duration": 504,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "mCelOTZxenY",
@@ -731,7 +1105,9 @@ window.VOD_DATA = {
       "likes": 326,
       "comments": 20,
       "duration": 791,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "앙리형"
     },
     {
       "id": "B2g7a-_YuRg",
@@ -744,7 +1120,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 30,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "4W7XwNE4Bc0",
@@ -757,7 +1135,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 43,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "oxv3F5m7N9s",
@@ -770,7 +1150,9 @@ window.VOD_DATA = {
       "likes": 298,
       "comments": 20,
       "duration": 684,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "고뇨"
     },
     {
       "id": "ICm11pR9_FA",
@@ -783,7 +1165,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 18,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "cXbBZ6jmlE0",
@@ -796,7 +1180,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 60,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "Fq1C_7cm9VQ",
@@ -809,7 +1195,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 59,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "9J-hJLOqw1o",
@@ -822,7 +1210,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 36,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "흑우수달"
     },
     {
       "id": "8Fe7Myx3VIw",
@@ -835,7 +1225,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 60,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "sC0gdUeWOh8",
@@ -848,7 +1240,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 62,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "RtwyIJ1CX6I",
@@ -861,7 +1255,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 32,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "8GM6xmhEVo0",
@@ -874,7 +1270,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 60,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "9oFR3DBeYZE",
@@ -887,7 +1285,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 406,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "baXGcMWmhJY",
@@ -900,7 +1300,9 @@ window.VOD_DATA = {
       "likes": 199,
       "comments": 12,
       "duration": 16540,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "ItM4SM6Rb38",
@@ -913,7 +1315,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 507,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "관종대왕"
     },
     {
       "id": "fOSBuCDh7go",
@@ -926,7 +1330,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 51,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "z0CxDKVjMeA",
@@ -939,7 +1345,9 @@ window.VOD_DATA = {
       "likes": 311,
       "comments": 20,
       "duration": 600,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "상덕"
     },
     {
       "id": "FvvN2A3QDCk",
@@ -952,7 +1360,9 @@ window.VOD_DATA = {
       "likes": 94,
       "comments": 11,
       "duration": 29022,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "박서림"
     },
     {
       "id": "Iqxi70T7B-s",
@@ -965,7 +1375,9 @@ window.VOD_DATA = {
       "likes": 67,
       "comments": 14,
       "duration": 448,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "흑우수달"
     },
     {
       "id": "VzTqnrTIEno",
@@ -978,7 +1390,9 @@ window.VOD_DATA = {
       "likes": 126,
       "comments": 8,
       "duration": 12234,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "-9lKD4PP5SA",
@@ -991,7 +1405,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 12463,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "박서림"
     },
     {
       "id": "_4yaEwSR9oc",
@@ -1004,7 +1420,9 @@ window.VOD_DATA = {
       "likes": 122,
       "comments": 11,
       "duration": 42920,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "8Jk3byf9jyA",
@@ -1017,7 +1435,9 @@ window.VOD_DATA = {
       "likes": 168,
       "comments": 25,
       "duration": 41273,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "_kTKbwabMWA",
@@ -1030,7 +1450,9 @@ window.VOD_DATA = {
       "likes": 53,
       "comments": 20,
       "duration": 391,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "VdCIX5QkKGY",
@@ -1043,7 +1465,9 @@ window.VOD_DATA = {
       "likes": 83,
       "comments": 11,
       "duration": 289,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "EvcYsx4x3zo",
@@ -1056,7 +1480,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 165,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "관종대왕"
     },
     {
       "id": "H25C_7aqZxk",
@@ -1069,7 +1495,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 93,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "적쌤"
     },
     {
       "id": "_Lh_SW6Y1d8",
@@ -1082,7 +1510,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 286,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "대요리"
     },
     {
       "id": "LufGKgAqIbE",
@@ -1095,7 +1525,9 @@ window.VOD_DATA = {
       "likes": 33,
       "comments": 4,
       "duration": 259,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "G스토리"
     },
     {
       "id": "CPxxw2_0Ekk",
@@ -1108,7 +1540,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 41,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "DBCdCC0Tt4U",
@@ -1121,7 +1555,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 167,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "니브"
     },
     {
       "id": "8JcBLpjDQhs",
@@ -1134,7 +1570,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 168,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "니브"
     },
     {
       "id": "vQ5FH2pWqL4",
@@ -1147,7 +1585,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 4,
       "duration": 10980,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "은뿌"
     },
     {
       "id": "5_DgCOLPTXk",
@@ -1160,7 +1600,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 1086,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "AlbA5tCfn3E",
@@ -1173,7 +1615,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 19,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "_x98Bb-KLvM",
@@ -1186,7 +1630,9 @@ window.VOD_DATA = {
       "likes": 3,
       "comments": 0,
       "duration": 13526,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "tGHjmpmY2kM",
@@ -1199,7 +1645,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 48,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "박서림"
     },
     {
       "id": "eqBxKE4TBf0",
@@ -1212,7 +1660,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 15,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "oF4pLzg4rVQ",
@@ -1225,7 +1675,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 27,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "관종대왕"
     },
     {
       "id": "TZ7wuKsG74w",
@@ -1238,7 +1690,9 @@ window.VOD_DATA = {
       "likes": 564,
       "comments": 20,
       "duration": 760,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "고뇨"
     },
     {
       "id": "VsK6zvzsDpA",
@@ -1251,7 +1705,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 19,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "Ahh57-H9fnM",
@@ -1264,7 +1720,9 @@ window.VOD_DATA = {
       "likes": 754,
       "comments": 20,
       "duration": 169,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "닝냉뇽"
     },
     {
       "id": "I4_WsL0cXwQ",
@@ -1277,7 +1735,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 45,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "JzHw0LHkkm0",
@@ -1290,7 +1750,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 21,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "5Wmq1yk4cVE",
@@ -1303,7 +1765,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 47,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "준선유"
     },
     {
       "id": "OfyljzQaOAg",
@@ -1316,7 +1780,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 52,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "적쌤"
     },
     {
       "id": "4XPysq6uDVM",
@@ -1329,7 +1795,9 @@ window.VOD_DATA = {
       "likes": 669,
       "comments": 20,
       "duration": 1218,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "상덕"
     },
     {
       "id": "TptmV8sTMUQ",
@@ -1342,7 +1810,9 @@ window.VOD_DATA = {
       "likes": 232,
       "comments": 20,
       "duration": 626,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "몽키매직 게임채널"
     },
     {
       "id": "K5hhkbgd6ZU",
@@ -1355,7 +1825,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 37,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "sdAvqH1XzSM",
@@ -1368,7 +1840,9 @@ window.VOD_DATA = {
       "likes": 222,
       "comments": 20,
       "duration": 493,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "hrVAlbotHSo",
@@ -1381,7 +1855,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 11,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "SDJPh3aknAQ",
@@ -1394,7 +1870,9 @@ window.VOD_DATA = {
       "likes": 189,
       "comments": 39,
       "duration": 317,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "r2GU5sunBEY",
@@ -1407,7 +1885,9 @@ window.VOD_DATA = {
       "likes": 235,
       "comments": 33,
       "duration": 30920,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "zASfIuAa8q0",
@@ -1420,7 +1900,9 @@ window.VOD_DATA = {
       "likes": 81,
       "comments": 10,
       "duration": 418,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "흑우수달"
     },
     {
       "id": "9YSq5o_cBJE",
@@ -1433,7 +1915,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 41,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "FSB3E4jl0TM",
@@ -1446,7 +1930,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 60,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "ofmDsDlKnV8",
@@ -1459,7 +1945,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 875,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "관종대왕"
     },
     {
       "id": "JjcGWgLyV-U",
@@ -1472,7 +1960,9 @@ window.VOD_DATA = {
       "likes": 80,
       "comments": 20,
       "duration": 314,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "니브"
     },
     {
       "id": "ddbFFRDwMbc",
@@ -1485,7 +1975,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 8828,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "YAZawabUxsA",
@@ -1498,7 +1990,9 @@ window.VOD_DATA = {
       "likes": 171,
       "comments": 12,
       "duration": 1513,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "관종대왕"
     },
     {
       "id": "oo_C5aV8b3k",
@@ -1511,7 +2005,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 7811,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "2y6oPG1FNo4",
@@ -1524,7 +2020,9 @@ window.VOD_DATA = {
       "likes": 64,
       "comments": 16,
       "duration": 569,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "니브"
     },
     {
       "id": "PdgvJ-rPka8",
@@ -1537,7 +2035,9 @@ window.VOD_DATA = {
       "likes": 37,
       "comments": 14,
       "duration": 426,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "적쌤"
     },
     {
       "id": "1l6frWKpOc8",
@@ -1550,7 +2050,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 2497,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "DapE1XHkk1w",
@@ -1563,7 +2065,9 @@ window.VOD_DATA = {
       "likes": 38,
       "comments": 9,
       "duration": 559,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "G스토리"
     },
     {
       "id": "mRLEyJs2wJo",
@@ -1576,7 +2080,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 893,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "대요리"
     },
     {
       "id": "NltOeLC_slk",
@@ -1589,7 +2095,9 @@ window.VOD_DATA = {
       "likes": 115,
       "comments": 10,
       "duration": 25133,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "옥쓔"
     },
     {
       "id": "FRZsvilRsWU",
@@ -1602,7 +2110,9 @@ window.VOD_DATA = {
       "likes": 40,
       "comments": 13,
       "duration": 1085,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "대요리"
     },
     {
       "id": "GAZ7yRUkckM",
@@ -1615,7 +2125,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 176,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": true,
+      "kocName": "적쌤"
     },
     {
       "id": "zD80_5i9l48",
@@ -1628,7 +2140,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 945,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "VOu3kdsLc7w",
@@ -1641,7 +2155,9 @@ window.VOD_DATA = {
       "likes": null,
       "comments": 0,
       "duration": 92,
-      "format": "Shorts"
+      "format": "Shorts",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "cBTHJEQQHB4",
@@ -1654,7 +2170,9 @@ window.VOD_DATA = {
       "likes": 14,
       "comments": 1,
       "duration": 1119,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "D10Z0-sDrgg",
@@ -1667,7 +2185,9 @@ window.VOD_DATA = {
       "likes": 21,
       "comments": 4,
       "duration": 124,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": true,
+      "kocName": "흑우수달"
     },
     {
       "id": "o9B95oJr-QY",
@@ -1680,7 +2200,9 @@ window.VOD_DATA = {
       "likes": 2,
       "comments": 0,
       "duration": 20447,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "Zx6bp9AaGIA",
@@ -1693,7 +2215,9 @@ window.VOD_DATA = {
       "likes": 3,
       "comments": 0,
       "duration": 33558,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "xMxvgsePOBI",
@@ -1706,7 +2230,9 @@ window.VOD_DATA = {
       "likes": 1,
       "comments": 0,
       "duration": 224,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     },
     {
       "id": "9l6kuIp6MXc",
@@ -1719,7 +2245,9 @@ window.VOD_DATA = {
       "likes": 1,
       "comments": 0,
       "duration": 39,
-      "format": "VOD"
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null
     }
   ]
 };
