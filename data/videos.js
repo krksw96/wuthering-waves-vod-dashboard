@@ -1,5 +1,5 @@
 window.VOD_DATA = {
-  "generatedAt": "2026-07-13T09:30:53.814Z",
+  "generatedAt": "2026-07-13T10:24:56.902Z",
   "period": {
     "start": "2026-05-28",
     "end": "2026-07-13"
@@ -2994,24 +2994,6 @@ window.VOD_DATA = {
       "isAdTask": false
     },
     {
-      "id": "Kr9AIiI4IPw",
-      "title": "1부 웹소설이야기 + 스토리엔진 소개(광고)2부 명조 4장 1막~2막 같이 보기(w브리스)- 오후 6시부터",
-      "url": "https://www.youtube.com/watch?v=Kr9AIiI4IPw",
-      "creator": "나비계곡의 웹소설 이야기",
-      "subscribers": 27800,
-      "date": "2026-07-13",
-      "views": 2173,
-      "likes": 51,
-      "comments": 3,
-      "duration": 41841,
-      "format": "VOD",
-      "isKoc": false,
-      "kocName": null,
-      "isKol": false,
-      "kolName": null,
-      "isAdTask": true
-    },
-    {
       "id": "FGm9_9sJg2I",
       "title": "[광고] 고뇨,명떡님에게 도티형이랑 명조 영업당하기(?) (19시~)",
       "url": "https://www.youtube.com/watch?v=FGm9_9sJg2I",
@@ -3046,6 +3028,24 @@ window.VOD_DATA = {
       "isKol": false,
       "kolName": null,
       "isAdTask": true
+    },
+    {
+      "id": "Kr9AIiI4IPw",
+      "title": "1부 웹소설이야기 + 스토리엔진 소개(광고)2부 명조 4장 1막~2막 같이 보기(w브리스)- 오후 6시부터",
+      "url": "https://www.youtube.com/watch?v=Kr9AIiI4IPw",
+      "creator": "나비계곡의 웹소설 이야기",
+      "subscribers": 27800,
+      "date": "2026-07-13",
+      "views": 2173,
+      "likes": 51,
+      "comments": 3,
+      "duration": 41841,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": false,
+      "kolName": null,
+      "isAdTask": false
     }
   ]
 };

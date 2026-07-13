@@ -11,6 +11,7 @@ const kolSource = resolve(projectRoot, "data", "kol-list.json");
 const kolVideosSource = resolve(projectRoot, "data", "kol-videos.json");
 const statsSource = resolve(projectRoot, "data", "stats-overrides.json");
 const adVideosSource = resolve(projectRoot, "data", "ad-videos.json");
+const supplementalVideosSource = resolve(projectRoot, "data", "supplemental-videos.json");
 
 const input = JSON.parse(await readFile(source, "utf8"));
 const kocList = JSON.parse(await readFile(kocSource, "utf8"));
@@ -18,6 +19,7 @@ const kolList = JSON.parse(await readFile(kolSource, "utf8"));
 const kolVideos = JSON.parse(await readFile(kolVideosSource, "utf8"));
 const stats = JSON.parse(await readFile(statsSource, "utf8").catch(() => "{}"));
 const adVideos = JSON.parse(await readFile(adVideosSource, "utf8"));
+const supplementalVideos = JSON.parse(await readFile(supplementalVideosSource, "utf8"));
 const normalizeName = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
 const kocAliases = new Map();
 for (const koc of kocList) {
@@ -28,7 +30,7 @@ for (const kol of kolList) {
   for (const alias of kol.aliases) kolAliases.set(normalizeName(alias), kol.name);
 }
 const rowsById = new Map();
-for (const row of [...input.rows, ...kolVideos.rows, ...adVideos.rows]) {
+for (const row of [...input.rows, ...kolVideos.rows, ...adVideos.rows, ...supplementalVideos.rows]) {
   const existing = rowsById.get(row.youtubeId) || {};
   rowsById.set(row.youtubeId, Object.fromEntries(Object.entries({ ...existing, ...row }).map(([key, value]) => [key, value ?? existing[key] ?? null])));
 }
