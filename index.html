@@ -86,17 +86,15 @@
       .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 14px; }
       .section-head h2 { margin: 0; font-size: 21px; letter-spacing: 0; }
       .section-head p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
-      .daily-picker { display: grid; grid-template-columns: minmax(180px, 240px) 1fr auto; align-items: center; gap: 18px; margin-bottom: 34px; border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: #fff; }
+      .daily-picker { display: grid; grid-template-columns: minmax(180px, 240px) 1fr; align-items: center; gap: 18px; margin-bottom: 34px; border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: #fff; }
       .daily-picker input { font-weight: 700; }
       .daily-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; min-width: 0; }
       .daily-metric { display: grid; gap: 3px; }
       .daily-metric span { color: var(--muted); font-size: 9px; }
       .daily-metric strong { font-size: 13px; font-variant-numeric: tabular-nums; }
-      .daily-apply { height: 42px; border: 1px solid var(--cyan); border-radius: 4px; padding: 0 14px; background: #fff; color: #087d88; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; }
-      .daily-apply:hover { background: #eefbfc; }
 
       .workspace { border: 1px solid var(--line); border-radius: 6px; background: #fff; box-shadow: var(--shadow); overflow: hidden; }
-      .controls { display: grid; grid-template-columns: repeat(2, minmax(170px, .7fr)) minmax(240px, .85fr) repeat(3, minmax(105px, .4fr)) auto; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); background: #f9fafb; }
+      .controls { display: grid; grid-template-columns: repeat(2, minmax(160px, .7fr)) minmax(230px, .85fr) repeat(3, minmax(100px, .4fr)) auto auto; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); background: #f9fafb; }
       .field { position: relative; }
       .field svg { position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: #7d8792; pointer-events: none; }
       input[type="search"], input[type="date"], select { width: 100%; height: 42px; border: 1px solid #cfd5db; border-radius: 4px; background: #fff; color: var(--ink); outline: none; }
@@ -108,6 +106,8 @@
       .date-range span { color: var(--muted); font-size: 11px; }
       .export-button { height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--dark); border-radius: 4px; padding: 0 14px; background: var(--dark); color: #fff; cursor: pointer; white-space: nowrap; }
       .export-button:hover { background: #2a313c; }
+      .period-reset { height: 42px; border: 1px solid #cfd5db; border-radius: 4px; padding: 0 12px; background: #fff; color: #46515d; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+      .period-reset:hover { border-color: var(--cyan); color: #087d88; }
       .sortbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
       .result-count { color: var(--muted); font-size: 12px; }
       .segments { display: inline-flex; border: 1px solid #cfd5db; border-radius: 4px; overflow: hidden; }
@@ -187,9 +187,8 @@
         .summary { grid-template-columns: repeat(2, 1fr); }
         .controls { grid-template-columns: 1fr 1fr; }
         .controls .field:nth-child(-n+2) { grid-column: auto; }
-        .export-button { width: 100%; }
+        .export-button, .period-reset { width: 100%; }
         .daily-picker { grid-template-columns: minmax(180px, 240px) 1fr; }
-        .daily-apply { grid-column: 1 / -1; width: 100%; }
       }
       @media (max-width: 640px) {
         .shell { width: min(100% - 24px, 1500px); }
@@ -204,7 +203,6 @@
         .stat { min-height: 98px; padding: 14px; }
         .stat-value { font-size: 24px; }
         .daily-picker { grid-template-columns: 1fr; gap: 14px; }
-        .daily-apply { grid-column: auto; }
         .controls { grid-template-columns: 1fr; }
         .controls .field:first-child { grid-column: auto; }
         .sortbar { align-items: flex-start; flex-direction: column; }
@@ -253,7 +251,7 @@
 
     <main class="shell">
       <section>
-        <div class="section-head"><div><h2>일자별 업로드</h2><p>수집 기간 내 영상 수와 조회수 흐름</p></div></div>
+        <div class="section-head"><div><h2>일자별 업로드</h2><p>선택한 날짜의 업로드 수치</p></div></div>
         <div class="daily-picker">
           <input id="daily-date" type="date" aria-label="업로드 날짜 선택" />
           <div class="daily-summary" aria-live="polite">
@@ -261,7 +259,6 @@
             <div class="daily-metric"><span>조회수</span><strong id="daily-views">-</strong></div>
             <div class="daily-metric"><span>형식</span><strong id="daily-formats">-</strong></div>
           </div>
-          <button class="daily-apply" id="daily-apply" type="button">이 날짜 목록 보기</button>
         </div>
       </section>
 
@@ -283,6 +280,7 @@
           <select id="format-filter" aria-label="영상 형식 필터"><option value="all">전체 형식</option></select>
           <select id="koc-filter" aria-label="채널 구분 필터"><option value="all">전체 채널</option><option value="koc">KOC</option><option value="kol">장기협업 KOL</option><option value="non-partner">非KOC</option></select>
           <select id="topic-filter" aria-label="콘텐츠 주제 필터"><option value="all">전체 주제</option></select>
+          <button class="period-reset" id="period-reset" type="button">전체 기간</button>
           <button class="export-button" id="export" type="button">
             <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>CSV
           </button>
@@ -458,16 +456,15 @@
       document.getElementById("creator-search").addEventListener("input", (event) => { state.creatorQuery = event.target.value; render(); });
       document.getElementById("title-search").addEventListener("input", (event) => { state.titleQuery = event.target.value; render(); });
       dailyDate.addEventListener("change", renderDailySummary);
-      document.getElementById("daily-apply").addEventListener("click", () => {
-        state.startDate = dailyDate.value;
-        state.endDate = dailyDate.value;
-        document.getElementById("start-date").value = dailyDate.value;
-        document.getElementById("end-date").value = dailyDate.value;
-        render();
-        document.querySelector(".workspace").scrollIntoView({ behavior: "smooth", block: "start" });
-      });
       document.getElementById("start-date").addEventListener("change", (event) => { state.startDate = event.target.value; render(); });
       document.getElementById("end-date").addEventListener("change", (event) => { state.endDate = event.target.value; render(); });
+      document.getElementById("period-reset").addEventListener("click", () => {
+        state.startDate = data.period.start || "";
+        state.endDate = data.period.end || "";
+        document.getElementById("start-date").value = state.startDate;
+        document.getElementById("end-date").value = state.endDate;
+        render();
+      });
       document.getElementById("format-filter").addEventListener("change", (event) => { state.format = event.target.value; render(); });
       document.getElementById("koc-filter").addEventListener("change", (event) => { state.koc = event.target.value; render(); });
       document.getElementById("topic-filter").addEventListener("change", (event) => { state.topic = event.target.value; render(); });
