@@ -134,6 +134,7 @@
       .format-badge.shorts { border-color: rgba(220,79,131,.35); color: #b52e61; }
       .koc-badge { display: inline-flex; align-items: center; margin-left: 6px; border: 1px solid #d2a82c; border-radius: 3px; padding: 2px 5px; background: #fff8dc; color: #775600; font-size: 9px; font-weight: 900; }
       .kol-badge { display: inline-flex; align-items: center; margin-left: 6px; border: 1px solid #d14f83; border-radius: 3px; padding: 2px 5px; background: #fff1f6; color: #a72759; font-size: 9px; font-weight: 900; }
+      .ad-badge { display: inline-flex; align-items: center; margin-left: 6px; border: 1px solid #5b6f87; border-radius: 3px; padding: 2px 5px; background: #eef3f7; color: #34495e; font-size: 9px; font-weight: 900; }
       .creator-wrap { display: flex; align-items: center; min-width: 0; }
       .creator-wrap > span:first-child { overflow: hidden; text-overflow: ellipsis; }
       .creator { overflow: hidden; text-overflow: ellipsis; font-weight: 700; text-align: left; white-space: nowrap; }
@@ -235,7 +236,7 @@
         <div class="hero-copy">
           <p class="eyebrow">KOREA · ORGANIC VOD · NO AI</p>
           <h1>명조 영상<br />데이터 보드</h1>
-          <p class="hero-description">한국어로 게시된 명조 일반 영상과 쇼츠를 한곳에서 비교합니다. 광고·협찬 및 AI 사용 표기 콘텐츠를 제외한 공개 지표를 기준으로 구성했습니다.</p>
+          <p class="hero-description">한국어로 게시된 명조 일반 영상과 쇼츠를 한곳에서 비교합니다. 광고 과업은 별도 표시하고, AI 사용 표기 콘텐츠는 제외한 공개 지표를 기준으로 구성했습니다.</p>
           <div class="period"><span id="period-label">2026.07.10 — 2026.07.13</span><span>수집 기준</span></div>
         </div>
       </div>
@@ -282,7 +283,7 @@
             <input id="end-date" type="date" aria-label="종료일" />
           </div>
           <select id="format-filter" aria-label="영상 형식 필터"><option value="all">전체 형식</option></select>
-          <select id="koc-filter" aria-label="채널 구분 필터"><option value="all">전체 채널</option><option value="koc">KOC</option><option value="kol">장기협업 KOL</option><option value="non-partner">非KOC</option></select>
+          <select id="koc-filter" aria-label="채널 구분 필터"><option value="all">전체 채널</option><option value="koc">KOC</option><option value="kol">장기협업 KOL</option><option value="ad-task">광고 과업</option><option value="non-partner">非KOC</option></select>
           <select id="topic-filter" aria-label="콘텐츠 주제 필터"><option value="all">전체 주제</option></select>
           <button class="period-reset" id="period-reset" type="button">전체 기간</button>
           <button class="export-button" id="export" type="button">
@@ -324,7 +325,7 @@
           </div>
           <div class="method-rules">
             <div class="method-rule"><strong>수집 범위</strong><span>설정 기간 내 한국어 일반 영상과 쇼츠, 조회수 제한 없음</span></div>
-            <div class="method-rule"><strong>제외 기준</strong><span>광고·협찬·유료 프로모션 및 AI 생성·AI 사용 표기 영상 제외</span></div>
+            <div class="method-rule"><strong>분류 기준</strong><span>광고·협찬·유료 프로모션은 광고 과업으로 별도 표시하고 AI 생성·AI 사용 표기 영상은 제외</span></div>
             <div class="method-rule"><strong>정리 방식</strong><span>YouTube 영상 ID로 중복 제거 후 제목·설명·채널 정보를 기준으로 관련성 검토</span></div>
             <div class="method-rule"><strong>수집 한계</strong><span>제목에 게임명이 없는 영상과 YouTube 검색에 노출되지 않은 영상은 누락될 수 있음</span></div>
           </div>
@@ -351,7 +352,7 @@
 
     <footer><div class="shell"><span>Wuthering Waves VOD Data Board</span><span id="generated-at"></span></div></footer>
 
-    <script src="data/videos.js?v=f3acff5"></script>
+    <script src="data/videos.js?v=ads-152"></script>
     <script>
       const data = window.VOD_DATA || { videos: [], period: {} };
       const nf = new Intl.NumberFormat("ko-KR");
@@ -389,7 +390,7 @@
       document.getElementById("total-likes").textContent = compact.format(enriched.reduce((sum, video) => sum + (video.likes || 0), 0));
       document.getElementById("total-comments").textContent = compact.format(enriched.reduce((sum, video) => sum + (video.comments || 0), 0));
       document.getElementById("total-creators").textContent = nf.format(new Set(enriched.map((video) => video.creator)).size);
-      document.getElementById("creator-summary").textContent = `KOC ${new Set(enriched.filter((video) => video.isKoc).map((video) => video.kocName)).size}명 · KOL ${new Set(enriched.filter((video) => video.isKol).map((video) => video.kolName)).size}명`;
+      document.getElementById("creator-summary").textContent = `KOC ${new Set(enriched.filter((video) => video.isKoc).map((video) => video.kocName)).size}명 · KOL ${new Set(enriched.filter((video) => video.isKol).map((video) => video.kolName)).size}명 · 광고 ${enriched.filter((video) => video.isAdTask).length}건`;
       document.getElementById("generated-at").textContent = `데이터 생성 ${new Date(data.generatedAt).toLocaleString("ko-KR")}`;
 
       for (const id of ["start-date", "end-date"]) {
@@ -432,7 +433,7 @@
         return enriched.filter((video) => {
           const matchesCreator = !creatorQuery || video.creator.toLowerCase().includes(creatorQuery);
           const matchesTitle = !titleQuery || video.title.toLowerCase().includes(titleQuery);
-          const matchesKoc = state.koc === "all" || (state.koc === "koc" && video.isKoc) || (state.koc === "kol" && video.isKol) || (state.koc === "non-partner" && !video.isKoc && !video.isKol);
+          const matchesKoc = state.koc === "all" || (state.koc === "koc" && video.isKoc) || (state.koc === "kol" && video.isKol) || (state.koc === "ad-task" && video.isAdTask) || (state.koc === "non-partner" && !video.isKoc && !video.isKol && !video.isAdTask);
           const matchesDate = (!state.startDate || video.date >= state.startDate) && (!state.endDate || video.date <= state.endDate);
           return matchesCreator && matchesTitle && matchesKoc && matchesDate && (state.format === "all" || video.format === state.format) && (state.topic === "all" || video.topic === state.topic);
         }).sort((a, b) => state.sort === "date" ? b.date.localeCompare(a.date) || b.views - a.views : (b[state.sort] || 0) - (a[state.sort] || 0));
@@ -445,8 +446,8 @@
       function render() {
         const rows = filteredVideos();
         document.getElementById("result-count").textContent = `총 ${nf.format(rows.length)}개 영상`;
-        document.getElementById("video-rows").innerHTML = rows.map((video, index) => `<tr data-id="${video.id}"><td class="rank">${index + 1}</td><td>${videoCell(video)}</td><td class="creator" title="${escapeHtml(video.creator)}"><div class="creator-wrap"><span>${escapeHtml(video.creator)}</span>${video.isKoc ? '<span class="koc-badge">KOC</span>' : ''}${video.isKol ? '<span class="kol-badge">KOL</span>' : ''}</div></td><td>${displayDate(video.date).slice(5)}</td><td class="metric-number">${fmt(video.subscribers)}</td><td class="metric-number"><strong>${fmt(video.views)}</strong></td><td class="metric-number">${fmt(video.likes)}</td><td class="metric-number">${fmt(video.comments)}</td><td class="engagement">${engagementRate(video).toFixed(2)}%</td></tr>`).join("");
-        document.getElementById("mobile-list").innerHTML = rows.map((video) => `<article class="video-card" data-id="${video.id}"><div class="thumb"><img src="${thumbnail(video.id)}" alt="" loading="lazy"/><span class="duration">${fmtDuration(video.duration)}</span></div><div><a class="video-title" href="${video.url}" target="_blank" rel="noreferrer" data-stop>${escapeHtml(video.title)}</a><span class="format-badge ${video.format === "Shorts" ? "shorts" : ""}">${video.format}</span><span class="topic">${video.topic}</span>${video.isKoc ? '<span class="koc-badge">KOC</span>' : ''}${video.isKol ? '<span class="kol-badge">KOL</span>' : ''}<div class="video-card-stats"><span>${escapeHtml(video.creator)}</span><span>조회 ${fmt(video.views)}</span><span>좋아요 ${fmt(video.likes)}</span></div></div></article>`).join("");
+        document.getElementById("video-rows").innerHTML = rows.map((video, index) => `<tr data-id="${video.id}"><td class="rank">${index + 1}</td><td>${videoCell(video)}</td><td class="creator" title="${escapeHtml(video.creator)}"><div class="creator-wrap"><span>${escapeHtml(video.creator)}</span>${video.isKoc ? '<span class="koc-badge">KOC</span>' : ''}${video.isKol ? '<span class="kol-badge">KOL</span>' : ''}${video.isAdTask ? '<span class="ad-badge">광고 과업</span>' : ''}</div></td><td>${displayDate(video.date).slice(5)}</td><td class="metric-number">${fmt(video.subscribers)}</td><td class="metric-number"><strong>${fmt(video.views)}</strong></td><td class="metric-number">${fmt(video.likes)}</td><td class="metric-number">${fmt(video.comments)}</td><td class="engagement">${engagementRate(video).toFixed(2)}%</td></tr>`).join("");
+        document.getElementById("mobile-list").innerHTML = rows.map((video) => `<article class="video-card" data-id="${video.id}"><div class="thumb"><img src="${thumbnail(video.id)}" alt="" loading="lazy"/><span class="duration">${fmtDuration(video.duration)}</span></div><div><a class="video-title" href="${video.url}" target="_blank" rel="noreferrer" data-stop>${escapeHtml(video.title)}</a><span class="format-badge ${video.format === "Shorts" ? "shorts" : ""}">${video.format}</span><span class="topic">${video.topic}</span>${video.isKoc ? '<span class="koc-badge">KOC</span>' : ''}${video.isKol ? '<span class="kol-badge">KOL</span>' : ''}${video.isAdTask ? '<span class="ad-badge">광고 과업</span>' : ''}<div class="video-card-stats"><span>${escapeHtml(video.creator)}</span><span>조회 ${fmt(video.views)}</span><span>좋아요 ${fmt(video.likes)}</span></div></div></article>`).join("");
         document.getElementById("empty").style.display = rows.length ? "none" : "block";
       }
 
@@ -454,17 +455,17 @@
         const video = enriched.find((item) => item.id === id); if (!video) return;
         document.getElementById("detail-image").src = thumbnail(video.id, "maxresdefault");
         document.getElementById("detail-title").textContent = video.title;
-        document.getElementById("detail-meta").textContent = `${video.creator}${video.isKoc ? ` · KOC (${video.kocName})` : ""}${video.isKol ? ` · 장기협업 KOL (${video.kolName})` : ""} · ${displayDate(video.date)} · ${video.topic}`;
+        document.getElementById("detail-meta").textContent = `${video.creator}${video.isKoc ? ` · KOC (${video.kocName})` : ""}${video.isKol ? ` · 장기협업 KOL (${video.kolName})` : ""}${video.isAdTask ? " · 광고 과업" : ""} · ${displayDate(video.date)} · ${video.topic}`;
         document.getElementById("detail-stats").innerHTML = [["구독자", video.subscribers], ["조회수", video.views], ["좋아요", video.likes], ["댓글", video.comments]].map(([label,value]) => `<div class="detail-stat"><span>${label}</span><strong>${fmt(value)}</strong></div>`).join("");
         document.getElementById("detail-link").href = video.url;
         document.getElementById("detail-dialog").showModal();
       }
 
       function exportCsv() {
-        const headers = ["제목","링크","유튜버 이름","KOC 여부","장기협업 KOL 여부","유튜버 구독자 수","날짜","조회수","좋아요 수","댓글 수"];
-        const keys = ["title","url","creator","isKoc","isKol","subscribers","date","views","likes","comments"];
+        const headers = ["제목","링크","유튜버 이름","KOC 여부","장기협업 KOL 여부","광고 과업 여부","유튜버 구독자 수","날짜","조회수","좋아요 수","댓글 수"];
+        const keys = ["title","url","creator","isKoc","isKol","isAdTask","subscribers","date","views","likes","comments"];
         const quote = (value) => `"${String(value ?? "").replaceAll('"','""')}"`;
-        const csv = [headers.map(quote).join(","), ...filteredVideos().map((video) => keys.map((key) => quote(key === "isKoc" ? (video.isKoc ? "KOC" : "非KOC") : key === "isKol" ? (video.isKol ? "장기협업 KOL" : "") : video[key])).join(","))].join("\r\n");
+        const csv = [headers.map(quote).join(","), ...filteredVideos().map((video) => keys.map((key) => quote(key === "isKoc" ? (video.isKoc ? "KOC" : "非KOC") : key === "isKol" ? (video.isKol ? "장기협업 KOL" : "") : key === "isAdTask" ? (video.isAdTask ? "광고 과업" : "") : video[key])).join(","))].join("\r\n");
         const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" })); link.download = "myeongjo-vod-filtered.csv"; link.click(); URL.revokeObjectURL(link.href);
       }
 
