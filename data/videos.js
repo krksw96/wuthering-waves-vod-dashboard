@@ -1,7 +1,7 @@
 window.VOD_DATA = {
-  "generatedAt": "2026-07-13T06:45:44.399Z",
+  "generatedAt": "2026-07-13T07:24:35.285Z",
   "period": {
-    "start": "2026-07-10",
+    "start": "2026-05-28",
     "end": "2026-07-13"
   },
   "kocList": [
@@ -268,6 +268,48 @@ window.VOD_DATA = {
       ]
     }
   ],
+  "kolList": [
+    {
+      "name": "러끼",
+      "url": "https://www.youtube.com/@%EB%9F%AC%EB%81%BC",
+      "aliases": [
+        "러끼"
+      ]
+    },
+    {
+      "name": "마레플로스",
+      "url": "https://www.youtube.com/c/MareFlosCh",
+      "aliases": [
+        "마레플로스",
+        "마레플로스 생방송 다시보기",
+        "MareFlos"
+      ]
+    },
+    {
+      "name": "과로사",
+      "url": "https://www.youtube.com/@%EA%B3%BC%EB%A1%9C%EC%82%AC",
+      "aliases": [
+        "과로사",
+        "압둘알리과로사"
+      ]
+    },
+    {
+      "name": "코렛트",
+      "url": "https://www.youtube.com/@Collet11/featured",
+      "aliases": [
+        "코렛트",
+        "코렛트YouTube",
+        "Collet11"
+      ]
+    },
+    {
+      "name": "델로략국",
+      "url": "https://www.youtube.com/channel/UCls1Y2LgkPk6t5TMFIKaoBQ",
+      "aliases": [
+        "델로략국"
+      ]
+    }
+  ],
   "videos": [
     {
       "id": "9r9YafTrYyk",
@@ -282,7 +324,9 @@ window.VOD_DATA = {
       "duration": 17,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "jyc2tIxHk7w",
@@ -297,7 +341,9 @@ window.VOD_DATA = {
       "duration": 643,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "9IvX_yugu54",
@@ -312,7 +358,9 @@ window.VOD_DATA = {
       "duration": 23,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "v8d47jKqd5g",
@@ -327,7 +375,9 @@ window.VOD_DATA = {
       "duration": 34,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "kM1o3R04rns",
@@ -342,7 +392,9 @@ window.VOD_DATA = {
       "duration": 42,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "x1v6QAsuQN0",
@@ -357,7 +409,9 @@ window.VOD_DATA = {
       "duration": 43,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "wA4AdN3GGmg",
@@ -372,7 +426,9 @@ window.VOD_DATA = {
       "duration": 26429,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "모 아"
+      "kocName": "모 아",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "K4NcWtSIH4c",
@@ -387,7 +443,9 @@ window.VOD_DATA = {
       "duration": 19961,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "CfRoizIYqPo",
@@ -402,7 +460,9 @@ window.VOD_DATA = {
       "duration": 32409,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "E3iY2wMNXPs",
@@ -411,13 +471,15 @@ window.VOD_DATA = {
       "creator": "마레플로스 생방송 다시보기",
       "subscribers": 18500,
       "date": "2026-07-13",
-      "views": 164,
+      "views": 1003,
       "likes": null,
       "comments": 0,
       "duration": 26373,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": true,
+      "kolName": "마레플로스"
     },
     {
       "id": "7lR3rUOdaA8",
@@ -432,7 +494,9 @@ window.VOD_DATA = {
       "duration": 12876,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "9XE_PXX3sMM",
@@ -447,7 +511,9 @@ window.VOD_DATA = {
       "duration": 38,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "관종대왕"
+      "kocName": "관종대왕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "-NgC7oGBUlY",
@@ -462,7 +528,9 @@ window.VOD_DATA = {
       "duration": 20,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "u3LsyaeKCE0",
@@ -477,7 +545,9 @@ window.VOD_DATA = {
       "duration": 20,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "JaD9xb4iCso",
@@ -492,7 +562,9 @@ window.VOD_DATA = {
       "duration": 305,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "앙리형"
+      "kocName": "앙리형",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "tmehPgxHPQk",
@@ -507,7 +579,9 @@ window.VOD_DATA = {
       "duration": 609,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "앙리형"
+      "kocName": "앙리형",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "_dg5ZROa5B0",
@@ -522,7 +596,9 @@ window.VOD_DATA = {
       "duration": 27,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "DSXbjLbVmpQ",
@@ -537,7 +613,9 @@ window.VOD_DATA = {
       "duration": 62,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "앙리형"
+      "kocName": "앙리형",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "KWXU49NLXsA",
@@ -552,7 +630,9 @@ window.VOD_DATA = {
       "duration": 492,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "bB9nJoUOoo4",
@@ -567,7 +647,9 @@ window.VOD_DATA = {
       "duration": 23,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "AMm1QdQ-Mhk",
@@ -582,7 +664,9 @@ window.VOD_DATA = {
       "duration": 60,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "박서림"
+      "kocName": "박서림",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "KW79NbMpUXU",
@@ -597,7 +681,9 @@ window.VOD_DATA = {
       "duration": 892,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "명떡"
+      "kocName": "명떡",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "ih1_ZjCMz1o",
@@ -612,7 +698,9 @@ window.VOD_DATA = {
       "duration": 345,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "vVfvGgH6EUk",
@@ -627,7 +715,9 @@ window.VOD_DATA = {
       "duration": 57,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "적쌤"
+      "kocName": "적쌤",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "RHtgmdOgerk",
@@ -642,7 +732,9 @@ window.VOD_DATA = {
       "duration": 56,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "IW4ayn5kvtg",
@@ -657,7 +749,9 @@ window.VOD_DATA = {
       "duration": 498,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "관종대왕"
+      "kocName": "관종대왕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "680oZMLOE2U",
@@ -672,7 +766,9 @@ window.VOD_DATA = {
       "duration": 23,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "HlGuGoF8wvI",
@@ -687,7 +783,9 @@ window.VOD_DATA = {
       "duration": 42,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "_ZOKX0Pvwdc",
@@ -702,7 +800,9 @@ window.VOD_DATA = {
       "duration": 348,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "HVF7iVzHthI",
@@ -717,7 +817,9 @@ window.VOD_DATA = {
       "duration": 1342,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "박서림"
+      "kocName": "박서림",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "rcG6oR3MOrM",
@@ -732,7 +834,9 @@ window.VOD_DATA = {
       "duration": 18080,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "고뇨"
+      "kocName": "고뇨",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "VtrlBWlpbGQ",
@@ -747,7 +851,9 @@ window.VOD_DATA = {
       "duration": 25816,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "H-a3xXQJjUk",
@@ -762,7 +868,9 @@ window.VOD_DATA = {
       "duration": 11808,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "IGDIP1YxQUU",
@@ -777,7 +885,9 @@ window.VOD_DATA = {
       "duration": 15667,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "q48tgVObxrA",
@@ -792,7 +902,9 @@ window.VOD_DATA = {
       "duration": 928,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "z3c0c-u8a9c",
@@ -807,7 +919,9 @@ window.VOD_DATA = {
       "duration": 631,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "X2o0LHwPmAU",
@@ -822,7 +936,9 @@ window.VOD_DATA = {
       "duration": 28,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "RhtYZ7svqRI",
@@ -837,7 +953,9 @@ window.VOD_DATA = {
       "duration": 35,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "XZ-b7gaXPIg",
@@ -852,7 +970,9 @@ window.VOD_DATA = {
       "duration": 1234,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "박서림"
+      "kocName": "박서림",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "tcU40TTgJbk",
@@ -867,7 +987,9 @@ window.VOD_DATA = {
       "duration": 12514,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "ykxD1bbPfpw",
@@ -882,7 +1004,9 @@ window.VOD_DATA = {
       "duration": 30588,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "매드라이프"
+      "kocName": "매드라이프",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "kFhTvaGBXQM",
@@ -897,7 +1021,9 @@ window.VOD_DATA = {
       "duration": 29,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "nvi87AmAvro",
@@ -912,7 +1038,9 @@ window.VOD_DATA = {
       "duration": 11234,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "G스토리"
+      "kocName": "G스토리",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "hhA8xOvL1es",
@@ -927,7 +1055,9 @@ window.VOD_DATA = {
       "duration": 271,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "hhW5J4weGJU",
@@ -942,7 +1072,9 @@ window.VOD_DATA = {
       "duration": 26379,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "GwD8WQReSiU",
@@ -957,7 +1089,9 @@ window.VOD_DATA = {
       "duration": 12425,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "-QxZS6idbyQ",
@@ -972,7 +1106,9 @@ window.VOD_DATA = {
       "duration": 19,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "Jtsiui6rkxs",
@@ -987,7 +1123,9 @@ window.VOD_DATA = {
       "duration": 26,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "관종대왕"
+      "kocName": "관종대왕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "1vsyNsWWybg",
@@ -1002,7 +1140,9 @@ window.VOD_DATA = {
       "duration": 35,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "상덕"
+      "kocName": "상덕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "XDGLAyOfA7o",
@@ -1017,7 +1157,9 @@ window.VOD_DATA = {
       "duration": 33,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "적쌤"
+      "kocName": "적쌤",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "2foXJY7ZVc8",
@@ -1032,7 +1174,9 @@ window.VOD_DATA = {
       "duration": 24,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "FXLqZtrsupI",
@@ -1047,7 +1191,9 @@ window.VOD_DATA = {
       "duration": 188,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "닝냉뇽"
+      "kocName": "닝냉뇽",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "p3MjuigF1lM",
@@ -1062,7 +1208,9 @@ window.VOD_DATA = {
       "duration": 13,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "ZcCINX6DJDo",
@@ -1077,7 +1225,9 @@ window.VOD_DATA = {
       "duration": 479,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "명떡"
+      "kocName": "명떡",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "9a_nyboPKWE",
@@ -1092,7 +1242,9 @@ window.VOD_DATA = {
       "duration": 504,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "mCelOTZxenY",
@@ -1107,7 +1259,9 @@ window.VOD_DATA = {
       "duration": 791,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "앙리형"
+      "kocName": "앙리형",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "B2g7a-_YuRg",
@@ -1122,7 +1276,9 @@ window.VOD_DATA = {
       "duration": 30,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "4W7XwNE4Bc0",
@@ -1137,7 +1293,9 @@ window.VOD_DATA = {
       "duration": 43,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "oxv3F5m7N9s",
@@ -1152,7 +1310,9 @@ window.VOD_DATA = {
       "duration": 684,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "고뇨"
+      "kocName": "고뇨",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "ICm11pR9_FA",
@@ -1167,7 +1327,9 @@ window.VOD_DATA = {
       "duration": 18,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "cXbBZ6jmlE0",
@@ -1182,7 +1344,9 @@ window.VOD_DATA = {
       "duration": 60,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "Fq1C_7cm9VQ",
@@ -1197,7 +1361,9 @@ window.VOD_DATA = {
       "duration": 59,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "9J-hJLOqw1o",
@@ -1212,7 +1378,9 @@ window.VOD_DATA = {
       "duration": 36,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "흑우수달"
+      "kocName": "흑우수달",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "8Fe7Myx3VIw",
@@ -1227,7 +1395,9 @@ window.VOD_DATA = {
       "duration": 60,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "sC0gdUeWOh8",
@@ -1242,7 +1412,9 @@ window.VOD_DATA = {
       "duration": 62,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "RtwyIJ1CX6I",
@@ -1257,7 +1429,9 @@ window.VOD_DATA = {
       "duration": 32,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "8GM6xmhEVo0",
@@ -1272,7 +1446,9 @@ window.VOD_DATA = {
       "duration": 60,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "9oFR3DBeYZE",
@@ -1287,7 +1463,9 @@ window.VOD_DATA = {
       "duration": 406,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "baXGcMWmhJY",
@@ -1302,7 +1480,9 @@ window.VOD_DATA = {
       "duration": 16540,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "ItM4SM6Rb38",
@@ -1317,7 +1497,9 @@ window.VOD_DATA = {
       "duration": 507,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "관종대왕"
+      "kocName": "관종대왕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "fOSBuCDh7go",
@@ -1332,7 +1514,9 @@ window.VOD_DATA = {
       "duration": 51,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "z0CxDKVjMeA",
@@ -1347,7 +1531,9 @@ window.VOD_DATA = {
       "duration": 600,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "상덕"
+      "kocName": "상덕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "FvvN2A3QDCk",
@@ -1362,7 +1548,9 @@ window.VOD_DATA = {
       "duration": 29022,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "박서림"
+      "kocName": "박서림",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "Iqxi70T7B-s",
@@ -1377,7 +1565,9 @@ window.VOD_DATA = {
       "duration": 448,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "흑우수달"
+      "kocName": "흑우수달",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "VzTqnrTIEno",
@@ -1392,7 +1582,9 @@ window.VOD_DATA = {
       "duration": 12234,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "-9lKD4PP5SA",
@@ -1407,7 +1599,9 @@ window.VOD_DATA = {
       "duration": 12463,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "박서림"
+      "kocName": "박서림",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "_4yaEwSR9oc",
@@ -1422,7 +1616,9 @@ window.VOD_DATA = {
       "duration": 42920,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "8Jk3byf9jyA",
@@ -1437,7 +1633,9 @@ window.VOD_DATA = {
       "duration": 41273,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "_kTKbwabMWA",
@@ -1452,7 +1650,9 @@ window.VOD_DATA = {
       "duration": 391,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "VdCIX5QkKGY",
@@ -1467,7 +1667,9 @@ window.VOD_DATA = {
       "duration": 289,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "EvcYsx4x3zo",
@@ -1482,7 +1684,9 @@ window.VOD_DATA = {
       "duration": 165,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "관종대왕"
+      "kocName": "관종대왕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "H25C_7aqZxk",
@@ -1497,7 +1701,9 @@ window.VOD_DATA = {
       "duration": 93,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "적쌤"
+      "kocName": "적쌤",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "_Lh_SW6Y1d8",
@@ -1512,7 +1718,9 @@ window.VOD_DATA = {
       "duration": 286,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "대요리"
+      "kocName": "대요리",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "LufGKgAqIbE",
@@ -1527,7 +1735,9 @@ window.VOD_DATA = {
       "duration": 259,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "G스토리"
+      "kocName": "G스토리",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "CPxxw2_0Ekk",
@@ -1542,7 +1752,9 @@ window.VOD_DATA = {
       "duration": 41,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "DBCdCC0Tt4U",
@@ -1557,7 +1769,9 @@ window.VOD_DATA = {
       "duration": 167,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "니브"
+      "kocName": "니브",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "8JcBLpjDQhs",
@@ -1572,7 +1786,9 @@ window.VOD_DATA = {
       "duration": 168,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "니브"
+      "kocName": "니브",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "vQ5FH2pWqL4",
@@ -1587,7 +1803,9 @@ window.VOD_DATA = {
       "duration": 10980,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "은뿌"
+      "kocName": "은뿌",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "5_DgCOLPTXk",
@@ -1602,7 +1820,9 @@ window.VOD_DATA = {
       "duration": 1086,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "AlbA5tCfn3E",
@@ -1617,7 +1837,9 @@ window.VOD_DATA = {
       "duration": 19,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "_x98Bb-KLvM",
@@ -1632,7 +1854,9 @@ window.VOD_DATA = {
       "duration": 13526,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "tGHjmpmY2kM",
@@ -1647,7 +1871,9 @@ window.VOD_DATA = {
       "duration": 48,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "박서림"
+      "kocName": "박서림",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "eqBxKE4TBf0",
@@ -1662,7 +1888,9 @@ window.VOD_DATA = {
       "duration": 15,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "oF4pLzg4rVQ",
@@ -1677,7 +1905,9 @@ window.VOD_DATA = {
       "duration": 27,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "관종대왕"
+      "kocName": "관종대왕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "TZ7wuKsG74w",
@@ -1692,7 +1922,9 @@ window.VOD_DATA = {
       "duration": 760,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "고뇨"
+      "kocName": "고뇨",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "VsK6zvzsDpA",
@@ -1707,7 +1939,9 @@ window.VOD_DATA = {
       "duration": 19,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "Ahh57-H9fnM",
@@ -1722,7 +1956,9 @@ window.VOD_DATA = {
       "duration": 169,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "닝냉뇽"
+      "kocName": "닝냉뇽",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "I4_WsL0cXwQ",
@@ -1737,7 +1973,9 @@ window.VOD_DATA = {
       "duration": 45,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "JzHw0LHkkm0",
@@ -1752,7 +1990,9 @@ window.VOD_DATA = {
       "duration": 21,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "5Wmq1yk4cVE",
@@ -1767,7 +2007,9 @@ window.VOD_DATA = {
       "duration": 47,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "준선유"
+      "kocName": "준선유",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "OfyljzQaOAg",
@@ -1782,7 +2024,9 @@ window.VOD_DATA = {
       "duration": 52,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "적쌤"
+      "kocName": "적쌤",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "4XPysq6uDVM",
@@ -1797,7 +2041,9 @@ window.VOD_DATA = {
       "duration": 1218,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "상덕"
+      "kocName": "상덕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "TptmV8sTMUQ",
@@ -1812,7 +2058,9 @@ window.VOD_DATA = {
       "duration": 626,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "몽키매직 게임채널"
+      "kocName": "몽키매직 게임채널",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "K5hhkbgd6ZU",
@@ -1827,7 +2075,9 @@ window.VOD_DATA = {
       "duration": 37,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "sdAvqH1XzSM",
@@ -1842,7 +2092,9 @@ window.VOD_DATA = {
       "duration": 493,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "hrVAlbotHSo",
@@ -1857,7 +2109,9 @@ window.VOD_DATA = {
       "duration": 11,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "SDJPh3aknAQ",
@@ -1872,7 +2126,9 @@ window.VOD_DATA = {
       "duration": 317,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "r2GU5sunBEY",
@@ -1887,7 +2143,9 @@ window.VOD_DATA = {
       "duration": 30920,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "zASfIuAa8q0",
@@ -1902,7 +2160,9 @@ window.VOD_DATA = {
       "duration": 418,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "흑우수달"
+      "kocName": "흑우수달",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "9YSq5o_cBJE",
@@ -1917,7 +2177,9 @@ window.VOD_DATA = {
       "duration": 41,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "FSB3E4jl0TM",
@@ -1932,7 +2194,9 @@ window.VOD_DATA = {
       "duration": 60,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "ofmDsDlKnV8",
@@ -1947,7 +2211,9 @@ window.VOD_DATA = {
       "duration": 875,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "관종대왕"
+      "kocName": "관종대왕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "JjcGWgLyV-U",
@@ -1962,7 +2228,9 @@ window.VOD_DATA = {
       "duration": 314,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "니브"
+      "kocName": "니브",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "ddbFFRDwMbc",
@@ -1977,7 +2245,9 @@ window.VOD_DATA = {
       "duration": 8828,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "YAZawabUxsA",
@@ -1992,7 +2262,9 @@ window.VOD_DATA = {
       "duration": 1513,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "관종대왕"
+      "kocName": "관종대왕",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "oo_C5aV8b3k",
@@ -2007,7 +2279,9 @@ window.VOD_DATA = {
       "duration": 7811,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "2y6oPG1FNo4",
@@ -2022,7 +2296,9 @@ window.VOD_DATA = {
       "duration": 569,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "니브"
+      "kocName": "니브",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "PdgvJ-rPka8",
@@ -2037,7 +2313,9 @@ window.VOD_DATA = {
       "duration": 426,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "적쌤"
+      "kocName": "적쌤",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "1l6frWKpOc8",
@@ -2052,7 +2330,9 @@ window.VOD_DATA = {
       "duration": 2497,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "DapE1XHkk1w",
@@ -2067,7 +2347,9 @@ window.VOD_DATA = {
       "duration": 559,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "G스토리"
+      "kocName": "G스토리",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "mRLEyJs2wJo",
@@ -2082,7 +2364,9 @@ window.VOD_DATA = {
       "duration": 893,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "대요리"
+      "kocName": "대요리",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "NltOeLC_slk",
@@ -2097,7 +2381,9 @@ window.VOD_DATA = {
       "duration": 25133,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "옥쓔"
+      "kocName": "옥쓔",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "FRZsvilRsWU",
@@ -2112,7 +2398,9 @@ window.VOD_DATA = {
       "duration": 1085,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "대요리"
+      "kocName": "대요리",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "GAZ7yRUkckM",
@@ -2127,7 +2415,9 @@ window.VOD_DATA = {
       "duration": 176,
       "format": "Shorts",
       "isKoc": true,
-      "kocName": "적쌤"
+      "kocName": "적쌤",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "zD80_5i9l48",
@@ -2142,7 +2432,9 @@ window.VOD_DATA = {
       "duration": 945,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "VOu3kdsLc7w",
@@ -2157,7 +2449,9 @@ window.VOD_DATA = {
       "duration": 92,
       "format": "Shorts",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "cBTHJEQQHB4",
@@ -2172,7 +2466,9 @@ window.VOD_DATA = {
       "duration": 1119,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "D10Z0-sDrgg",
@@ -2187,7 +2483,9 @@ window.VOD_DATA = {
       "duration": 124,
       "format": "VOD",
       "isKoc": true,
-      "kocName": "흑우수달"
+      "kocName": "흑우수달",
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "o9B95oJr-QY",
@@ -2202,7 +2500,9 @@ window.VOD_DATA = {
       "duration": 20447,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "Zx6bp9AaGIA",
@@ -2217,7 +2517,9 @@ window.VOD_DATA = {
       "duration": 33558,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "xMxvgsePOBI",
@@ -2232,7 +2534,9 @@ window.VOD_DATA = {
       "duration": 224,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
     },
     {
       "id": "9l6kuIp6MXc",
@@ -2247,7 +2551,264 @@ window.VOD_DATA = {
       "duration": 39,
       "format": "VOD",
       "isKoc": false,
-      "kocName": null
+      "kocName": null,
+      "isKol": false,
+      "kolName": null
+    },
+    {
+      "id": "x9x84Zidi78",
+      "title": "안올리려다싸펑시즌2트레일러보고뽕차서그만근데둘은언제행복해지냐고!!!!!!! | 명조 3.4 사이버펑크 하이라이트 모음",
+      "url": "https://www.youtube.com/watch?v=x9x84Zidi78",
+      "creator": "마레플로스",
+      "subscribers": 141000,
+      "date": "2026-07-09",
+      "views": 49489,
+      "likes": 1531,
+      "comments": 0,
+      "duration": 1231,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "마레플로스"
+    },
+    {
+      "id": "dQmNHM3t69k",
+      "title": "명조 치사린네 스킨과 양양pv 보기",
+      "url": "https://www.youtube.com/watch?v=dQmNHM3t69k",
+      "creator": "압둘알리과로사",
+      "subscribers": 633000,
+      "date": "2026-07-08",
+      "views": 6362,
+      "likes": 184,
+      "comments": 0,
+      "duration": 2036,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "과로사"
+    },
+    {
+      "id": "jT-I7XICoMY",
+      "title": "두번 다시 볼 수 없을거라고 생각했다...",
+      "url": "https://www.youtube.com/watch?v=jT-I7XICoMY",
+      "creator": "델로략국",
+      "subscribers": 114000,
+      "date": "2026-07-05",
+      "views": 17213,
+      "likes": 541,
+      "comments": 0,
+      "duration": 1472,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "델로략국"
+    },
+    {
+      "id": "cSGTA3RchL0",
+      "title": "명조: 워더링 웨이브 3.5버전 공식방송 같이보기",
+      "url": "https://www.youtube.com/watch?v=cSGTA3RchL0",
+      "creator": "마레플로스 생방송 다시보기",
+      "subscribers": 18500,
+      "date": "2026-06-28",
+      "views": 7067,
+      "likes": null,
+      "comments": 0,
+      "duration": 9501,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "마레플로스"
+    },
+    {
+      "id": "I7nIxc3SU4U",
+      "title": "그래서 루시 옆에 있는 남자 뭔데;;",
+      "url": "https://www.youtube.com/watch?v=I7nIxc3SU4U",
+      "creator": "코렛트YouTube",
+      "subscribers": 167000,
+      "date": "2026-06-26",
+      "views": 10416,
+      "likes": 229,
+      "comments": 0,
+      "duration": 729,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "코렛트"
+    },
+    {
+      "id": "nN0NMgFRTo4",
+      "title": "명조 띵페가서 굿즈 170만원치 사왔습니다. 언박싱 ㄱㄱ!",
+      "url": "https://www.youtube.com/watch?v=nN0NMgFRTo4",
+      "creator": "코렛트YouTube",
+      "subscribers": 167000,
+      "date": "2026-06-24",
+      "views": 16045,
+      "likes": 361,
+      "comments": 0,
+      "duration": 646,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "코렛트"
+    },
+    {
+      "id": "gYh9K0yEgUI",
+      "title": "다시 널 만날 수 있다면야...",
+      "url": "https://www.youtube.com/watch?v=gYh9K0yEgUI",
+      "creator": "델로략국",
+      "subscribers": 114000,
+      "date": "2026-06-22",
+      "views": 13160,
+      "likes": 368,
+      "comments": 0,
+      "duration": 550,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "델로략국"
+    },
+    {
+      "id": "y-Z5T2ELCPk",
+      "title": "[명조: 워더링 웨이브] 3장5막의 후일담을 느끼게해주는 루실라 에필",
+      "url": "https://www.youtube.com/watch?v=y-Z5T2ELCPk",
+      "creator": "압둘알리과로사",
+      "subscribers": 633000,
+      "date": "2026-06-18",
+      "views": 5961,
+      "likes": 115,
+      "comments": 0,
+      "duration": 12549,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "과로사"
+    },
+    {
+      "id": "7dO8MgKqvq8",
+      "title": "내 안의 엣지러너 11화 | 명조 3장 외전 사이버펑크 콜라보",
+      "url": "https://www.youtube.com/watch?v=7dO8MgKqvq8",
+      "creator": "마레플로스 생방송 다시보기",
+      "subscribers": 18500,
+      "date": "2026-06-17",
+      "views": 21840,
+      "likes": null,
+      "comments": 0,
+      "duration": 20903,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "마레플로스"
+    },
+    {
+      "id": "aOi_hqc4W6I",
+      "title": "[명조: 워더링 웨이브] 엣지러너 본사람은 꼭봐야할 콜라보 스토리 내가어떻게잊었는데",
+      "url": "https://www.youtube.com/watch?v=aOi_hqc4W6I",
+      "creator": "압둘알리과로사",
+      "subscribers": 633000,
+      "date": "2026-06-15",
+      "views": 46879,
+      "likes": 902,
+      "comments": 0,
+      "duration": 16487,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "과로사"
+    },
+    {
+      "id": "lZuhIo6OL04",
+      "title": "명조, 너네라면 할 수 있잖아!",
+      "url": "https://www.youtube.com/watch?v=lZuhIo6OL04",
+      "creator": "마레플로스",
+      "subscribers": 141000,
+      "date": "2026-06-07",
+      "views": 30396,
+      "likes": 909,
+      "comments": 0,
+      "duration": 1007,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "마레플로스"
+    },
+    {
+      "id": "U64xG4kyS-Q",
+      "title": "쿠로 게임즈가 너~무 좋아! 좋아서 미쳐버릴 거 같아!!!! | 명조: 워더링 웨이브 3장 5막 에필로그",
+      "url": "https://www.youtube.com/watch?v=U64xG4kyS-Q",
+      "creator": "마레플로스 생방송 다시보기",
+      "subscribers": 18500,
+      "date": "2026-05-31",
+      "views": 11015,
+      "likes": null,
+      "comments": 0,
+      "duration": 11712,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "마레플로스"
+    },
+    {
+      "id": "-54SPQwvAyM",
+      "title": "명조x사펑 콜라보 퀄리티 진짜에요? | 명조 3.4버전 공식방송 같이보기 w.러끼",
+      "url": "https://www.youtube.com/watch?v=-54SPQwvAyM",
+      "creator": "마레플로스 생방송 다시보기",
+      "subscribers": 18500,
+      "date": "2026-05-30",
+      "views": 15454,
+      "likes": null,
+      "comments": 0,
+      "duration": 3969,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "마레플로스"
+    },
+    {
+      "id": "CqOfOUEZBpE",
+      "title": "허무 허무 허무 허무 허무 허무 허무 [명조: 워더링 웨이브] 3장 5막 에필로그",
+      "url": "https://www.youtube.com/watch?v=CqOfOUEZBpE",
+      "creator": "압둘알리과로사",
+      "subscribers": 633000,
+      "date": "2026-05-29",
+      "views": 15082,
+      "likes": 276,
+      "comments": 0,
+      "duration": 12812,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "과로사"
+    },
+    {
+      "id": "tvaj-5pBKfY",
+      "title": "명조: 워더링 웨이브 3.3 토크쇼 (w. 김도,과로사,델로략국,러끼,앵보)",
+      "url": "https://www.youtube.com/watch?v=tvaj-5pBKfY",
+      "creator": "마레플로스 생방송 다시보기",
+      "subscribers": 18500,
+      "date": "2026-05-28",
+      "views": 1931,
+      "likes": null,
+      "comments": 0,
+      "duration": 12107,
+      "format": "VOD",
+      "isKoc": false,
+      "kocName": null,
+      "isKol": true,
+      "kolName": "마레플로스"
     }
   ]
 };
