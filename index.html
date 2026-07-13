@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#11151d" />
-    <title>명조 VOD 데이터 보드</title>
+    <title>명조 영상 데이터 보드</title>
     <style>
       :root {
         --ink: #141820;
@@ -97,7 +97,7 @@
       .date-card:nth-child(4) .bar-fill { background: var(--dark); }
 
       .workspace { border: 1px solid var(--line); border-radius: 6px; background: #fff; box-shadow: var(--shadow); overflow: hidden; }
-      .controls { display: grid; grid-template-columns: minmax(260px, 1.3fr) repeat(2, minmax(150px, .55fr)) auto; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); background: #f9fafb; }
+      .controls { display: grid; grid-template-columns: minmax(260px, 1.3fr) repeat(3, minmax(130px, .5fr)) auto; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); background: #f9fafb; }
       .field { position: relative; }
       .field svg { position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: #7d8792; pointer-events: none; }
       input[type="search"], select { width: 100%; height: 42px; border: 1px solid #cfd5db; border-radius: 4px; background: #fff; color: var(--ink); outline: none; }
@@ -127,7 +127,9 @@
       .duration { position: absolute; right: 4px; bottom: 4px; padding: 2px 4px; border-radius: 2px; background: rgba(0,0,0,.8); color: #fff; font-size: 9px; }
       .video-title { display: -webkit-box; overflow: hidden; color: #202631; font-size: 13px; font-weight: 800; line-height: 1.42; text-decoration: none; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
       .video-title:hover { color: var(--cyan); text-decoration: underline; }
-      .topic { display: inline-flex; margin-top: 6px; border: 1px solid #d9dee3; border-radius: 3px; padding: 2px 5px; color: #6d7783; font-size: 9px; }
+      .topic, .format-badge { display: inline-flex; margin: 6px 4px 0 0; border: 1px solid #d9dee3; border-radius: 3px; padding: 2px 5px; color: #6d7783; font-size: 9px; }
+      .format-badge { border-color: rgba(24,169,184,.35); color: #087d88; }
+      .format-badge.shorts { border-color: rgba(220,79,131,.35); color: #b52e61; }
       .creator { overflow: hidden; text-overflow: ellipsis; font-weight: 700; text-align: left; white-space: nowrap; }
       .metric-number { font-variant-numeric: tabular-nums; }
       .engagement { color: var(--pink); font-weight: 800; }
@@ -196,7 +198,7 @@
   <body>
     <header class="topbar">
       <div class="shell topbar-inner">
-        <div class="brand"><div class="brand-mark">W</div><div class="brand-copy"><strong>명조 VOD 데이터</strong><span>WUTHERING WAVES CONTENT INTELLIGENCE</span></div></div>
+        <div class="brand"><div class="brand-mark">W</div><div class="brand-copy"><strong>명조 영상 데이터</strong><span>WUTHERING WAVES CONTENT INTELLIGENCE</span></div></div>
         <div class="top-links">
           <a class="icon-link" href="https://kurogame.feishu.cn/sheets/V9C1sSLU4hOweEtvDRdcBnENnMh?sheet=PY4QV4" target="_blank" rel="noreferrer" title="Feishu 원본 시트 열기" aria-label="Feishu 원본 시트 열기">
             <svg class="icon" viewBox="0 0 24 24"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
@@ -210,15 +212,15 @@
       <div class="shell hero-inner">
         <div class="hero-copy">
           <p class="eyebrow">KOREA · ORGANIC VOD · NO AI</p>
-          <h1>명조 VOD<br />데이터 보드</h1>
-          <p class="hero-description">한국어로 게시된 명조 일반 영상을 한곳에서 비교합니다. 광고·협찬 및 AI 사용 표기 콘텐츠를 제외한 공개 지표를 기준으로 구성했습니다.</p>
+          <h1>명조 영상<br />데이터 보드</h1>
+          <p class="hero-description">한국어로 게시된 명조 일반 영상과 쇼츠를 한곳에서 비교합니다. 광고·협찬 및 AI 사용 표기 콘텐츠를 제외한 공개 지표를 기준으로 구성했습니다.</p>
           <div class="period"><span id="period-label">2026.07.10 — 2026.07.13</span><span>수집 기준</span></div>
         </div>
       </div>
     </section>
 
     <section class="shell summary" aria-label="주요 지표">
-      <article class="stat"><div class="stat-label">수집 영상</div><div class="stat-value" id="total-videos">-</div><div class="stat-note">일반 VOD</div></article>
+      <article class="stat"><div class="stat-label">수집 영상</div><div class="stat-value" id="total-videos">-</div><div class="stat-note" id="format-summary">VOD + Shorts</div></article>
       <article class="stat"><div class="stat-label">누적 조회수</div><div class="stat-value" id="total-views">-</div><div class="stat-note">수집 시점 공개 수치</div></article>
       <article class="stat"><div class="stat-label">참여 수</div><div class="stat-value" id="total-engagement">-</div><div class="stat-note">좋아요 + 댓글</div></article>
       <article class="stat"><div class="stat-label">참여 크리에이터</div><div class="stat-value" id="total-creators">-</div><div class="stat-note">중복 제거 채널</div></article>
@@ -237,6 +239,7 @@
             <input id="search" type="search" placeholder="영상 제목 또는 유튜버 검색" aria-label="영상 검색" />
           </label>
           <select id="date-filter" aria-label="날짜 필터"><option value="all">전체 날짜</option></select>
+          <select id="format-filter" aria-label="영상 형식 필터"><option value="all">전체 형식</option></select>
           <select id="topic-filter" aria-label="콘텐츠 주제 필터"><option value="all">전체 주제</option></select>
           <button class="export-button" id="export" type="button">
             <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>CSV
@@ -280,7 +283,7 @@
       const data = window.VOD_DATA || { videos: [], period: {} };
       const nf = new Intl.NumberFormat("ko-KR");
       const compact = new Intl.NumberFormat("ko-KR", { notation: "compact", maximumFractionDigits: 1 });
-      const state = { query: "", date: "all", topic: "all", sort: "views" };
+      const state = { query: "", date: "all", format: "all", topic: "all", sort: "views" };
 
       const topicOf = (video) => {
         const text = video.title.toLowerCase();
@@ -303,16 +306,19 @@
 
       const enriched = data.videos.map((video) => ({ ...video, topic: topicOf(video) }));
       const dates = [...new Set(enriched.map((video) => video.date))].sort().reverse();
+      const formats = [...new Set(enriched.map((video) => video.format))].sort();
       const topics = [...new Set(enriched.map((video) => video.topic))].sort();
 
       document.getElementById("period-label").textContent = `${displayDate(data.period.start || "-")} — ${displayDate(data.period.end || "-")}`;
       document.getElementById("total-videos").textContent = nf.format(enriched.length);
+      document.getElementById("format-summary").textContent = formats.map((format) => `${format} ${enriched.filter((video) => video.format === format).length}`).join(" · ");
       document.getElementById("total-views").textContent = compact.format(enriched.reduce((sum, video) => sum + video.views, 0));
       document.getElementById("total-engagement").textContent = compact.format(enriched.reduce((sum, video) => sum + (video.likes || 0) + (video.comments || 0), 0));
       document.getElementById("total-creators").textContent = nf.format(new Set(enriched.map((video) => video.creator)).size);
       document.getElementById("generated-at").textContent = `데이터 생성 ${new Date(data.generatedAt).toLocaleString("ko-KR")}`;
 
       dates.forEach((date) => document.getElementById("date-filter").insertAdjacentHTML("beforeend", `<option value="${date}">${displayDate(date)}</option>`));
+      formats.forEach((format) => document.getElementById("format-filter").insertAdjacentHTML("beforeend", `<option value="${format}">${format}</option>`));
       topics.forEach((topic) => document.getElementById("topic-filter").insertAdjacentHTML("beforeend", `<option value="${topic}">${topic}</option>`));
 
       const maxDateCount = Math.max(...dates.map((date) => enriched.filter((video) => video.date === date).length));
@@ -326,19 +332,19 @@
         const query = state.query.trim().toLowerCase();
         return enriched.filter((video) => {
           const matchesQuery = !query || `${video.title} ${video.creator}`.toLowerCase().includes(query);
-          return matchesQuery && (state.date === "all" || video.date === state.date) && (state.topic === "all" || video.topic === state.topic);
+          return matchesQuery && (state.date === "all" || video.date === state.date) && (state.format === "all" || video.format === state.format) && (state.topic === "all" || video.topic === state.topic);
         }).sort((a, b) => state.sort === "date" ? b.date.localeCompare(a.date) || b.views - a.views : (b[state.sort] || 0) - (a[state.sort] || 0));
       }
 
       function videoCell(video) {
-        return `<div class="video-cell"><div class="thumb"><img src="${thumbnail(video.id)}" alt="" loading="lazy"/><span class="duration">${fmtDuration(video.duration)}</span></div><div><a class="video-title" href="${video.url}" target="_blank" rel="noreferrer" data-stop>${escapeHtml(video.title)}</a><span class="topic">${video.topic}</span></div></div>`;
+        return `<div class="video-cell"><div class="thumb"><img src="${thumbnail(video.id)}" alt="" loading="lazy"/><span class="duration">${fmtDuration(video.duration)}</span></div><div><a class="video-title" href="${video.url}" target="_blank" rel="noreferrer" data-stop>${escapeHtml(video.title)}</a><span class="format-badge ${video.format === "Shorts" ? "shorts" : ""}">${video.format}</span><span class="topic">${video.topic}</span></div></div>`;
       }
 
       function render() {
         const rows = filteredVideos();
         document.getElementById("result-count").textContent = `총 ${nf.format(rows.length)}개 영상`;
         document.getElementById("video-rows").innerHTML = rows.map((video, index) => `<tr data-id="${video.id}"><td class="rank">${index + 1}</td><td>${videoCell(video)}</td><td class="creator" title="${escapeHtml(video.creator)}">${escapeHtml(video.creator)}</td><td>${displayDate(video.date).slice(5)}</td><td class="metric-number">${fmt(video.subscribers)}</td><td class="metric-number"><strong>${fmt(video.views)}</strong></td><td class="metric-number">${fmt(video.likes)}</td><td class="metric-number">${fmt(video.comments)}</td><td class="engagement">${engagementRate(video).toFixed(2)}%</td></tr>`).join("");
-        document.getElementById("mobile-list").innerHTML = rows.map((video) => `<article class="video-card" data-id="${video.id}"><div class="thumb"><img src="${thumbnail(video.id)}" alt="" loading="lazy"/><span class="duration">${fmtDuration(video.duration)}</span></div><div><a class="video-title" href="${video.url}" target="_blank" rel="noreferrer" data-stop>${escapeHtml(video.title)}</a><span class="topic">${video.topic}</span><div class="video-card-stats"><span>${escapeHtml(video.creator)}</span><span>조회 ${fmt(video.views)}</span><span>좋아요 ${fmt(video.likes)}</span></div></div></article>`).join("");
+        document.getElementById("mobile-list").innerHTML = rows.map((video) => `<article class="video-card" data-id="${video.id}"><div class="thumb"><img src="${thumbnail(video.id)}" alt="" loading="lazy"/><span class="duration">${fmtDuration(video.duration)}</span></div><div><a class="video-title" href="${video.url}" target="_blank" rel="noreferrer" data-stop>${escapeHtml(video.title)}</a><span class="format-badge ${video.format === "Shorts" ? "shorts" : ""}">${video.format}</span><span class="topic">${video.topic}</span><div class="video-card-stats"><span>${escapeHtml(video.creator)}</span><span>조회 ${fmt(video.views)}</span><span>좋아요 ${fmt(video.likes)}</span></div></div></article>`).join("");
         document.getElementById("empty").style.display = rows.length ? "none" : "block";
       }
 
@@ -362,6 +368,7 @@
 
       document.getElementById("search").addEventListener("input", (event) => { state.query = event.target.value; render(); });
       document.getElementById("date-filter").addEventListener("change", (event) => { state.date = event.target.value; render(); });
+      document.getElementById("format-filter").addEventListener("change", (event) => { state.format = event.target.value; render(); });
       document.getElementById("topic-filter").addEventListener("change", (event) => { state.topic = event.target.value; render(); });
       document.querySelector(".segments").addEventListener("click", (event) => { const button = event.target.closest("[data-sort]"); if (!button) return; state.sort = button.dataset.sort; document.querySelectorAll(".segment").forEach((item) => item.classList.toggle("active", item === button)); render(); });
       document.querySelector(".workspace").addEventListener("click", (event) => { if (event.target.closest("[data-stop]")) return; const row = event.target.closest("[data-id]"); if (row) openDetail(row.dataset.id); });

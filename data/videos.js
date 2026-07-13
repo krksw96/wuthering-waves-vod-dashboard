@@ -1,10 +1,88 @@
 window.VOD_DATA = {
-  "generatedAt": "2026-07-13T04:47:47.660Z",
+  "generatedAt": "2026-07-13T06:11:16.206Z",
   "period": {
     "start": "2026-07-10",
     "end": "2026-07-13"
   },
   "videos": [
+    {
+      "id": "9r9YafTrYyk",
+      "title": "【#명조】 청초 인게임 모델링 공개!",
+      "url": "https://www.youtube.com/watch?v=9r9YafTrYyk",
+      "creator": "초리",
+      "subscribers": 1680,
+      "date": "2026-07-13",
+      "views": 9445,
+      "likes": null,
+      "comments": 0,
+      "duration": 17,
+      "format": "Shorts"
+    },
+    {
+      "id": "jyc2tIxHk7w",
+      "title": "새 한 마리마다 딜이 미쳤습니다 '양양 현령 명함부터 풀돌까지 성능 & 돌파 테스트 & 후기' [명조]",
+      "url": "https://www.youtube.com/watch?v=jyc2tIxHk7w",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-13",
+      "views": 5817,
+      "likes": null,
+      "comments": 0,
+      "duration": 643,
+      "format": "VOD"
+    },
+    {
+      "id": "9IvX_yugu54",
+      "title": "양양 현령 1돌 효과와 팁 [명조]",
+      "url": "https://www.youtube.com/watch?v=9IvX_yugu54",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-13",
+      "views": 5015,
+      "likes": null,
+      "comments": 0,
+      "duration": 23,
+      "format": "Shorts"
+    },
+    {
+      "id": "v8d47jKqd5g",
+      "title": "월요일 시러 하리느냥 #19",
+      "url": "https://www.youtube.com/watch?v=v8d47jKqd5g",
+      "creator": "하리느냥",
+      "subscribers": 19200,
+      "date": "2026-07-13",
+      "views": 2873,
+      "likes": null,
+      "comments": 0,
+      "duration": 34,
+      "format": "Shorts"
+    },
+    {
+      "id": "kM1o3R04rns",
+      "title": "디테일의 악마 명조",
+      "url": "https://www.youtube.com/watch?v=kM1o3R04rns",
+      "creator": "JINWOO",
+      "subscribers": 133,
+      "date": "2026-07-13",
+      "views": 1220,
+      "likes": null,
+      "comments": 0,
+      "duration": 42,
+      "format": "Shorts"
+    },
+    {
+      "id": "x1v6QAsuQN0",
+      "title": "공식이 인정한 사기 캐릭 #명조 #청초",
+      "url": "https://www.youtube.com/watch?v=x1v6QAsuQN0",
+      "creator": "불토마토",
+      "subscribers": 5,
+      "date": "2026-07-13",
+      "views": 1114,
+      "likes": null,
+      "comments": 0,
+      "duration": 43,
+      "format": "Shorts"
+    },
     {
       "id": "wA4AdN3GGmg",
       "title": "명조 : 워더링 웨이브 \"3.5버전\" 양양 현령 스토리【20260711 / 모아 다시보기】",
@@ -15,7 +93,8 @@ window.VOD_DATA = {
       "views": 943,
       "likes": 51,
       "comments": 5,
-      "duration": 26429
+      "duration": 26429,
+      "format": "VOD"
     },
     {
       "id": "K4NcWtSIH4c",
@@ -27,7 +106,8 @@ window.VOD_DATA = {
       "views": 499,
       "likes": null,
       "comments": 0,
-      "duration": 19961
+      "duration": 19961,
+      "format": "VOD"
     },
     {
       "id": "CfRoizIYqPo",
@@ -39,7 +119,8 @@ window.VOD_DATA = {
       "views": 249,
       "likes": null,
       "comments": 0,
-      "duration": 32409
+      "duration": 32409,
+      "format": "VOD"
     },
     {
       "id": "E3iY2wMNXPs",
@@ -51,7 +132,8 @@ window.VOD_DATA = {
       "views": 164,
       "likes": null,
       "comments": 0,
-      "duration": 26373
+      "duration": 26373,
+      "format": "VOD"
     },
     {
       "id": "7lR3rUOdaA8",
@@ -63,7 +145,47 @@ window.VOD_DATA = {
       "views": 3,
       "likes": 0,
       "comments": 0,
-      "duration": 12876
+      "duration": 12876,
+      "format": "VOD"
+    },
+    {
+      "id": "9XE_PXX3sMM",
+      "title": "정체가 뭐냐 너",
+      "url": "https://www.youtube.com/watch?v=9XE_PXX3sMM",
+      "creator": "관종대왕",
+      "subscribers": 84700,
+      "date": "2026-07-12",
+      "views": 101892,
+      "likes": null,
+      "comments": 0,
+      "duration": 38,
+      "format": "Shorts"
+    },
+    {
+      "id": "-NgC7oGBUlY",
+      "title": "【#명조】 캐릭터별 언어 선택 기능 추가! ㄷㄷ",
+      "url": "https://www.youtube.com/watch?v=-NgC7oGBUlY",
+      "creator": "초리",
+      "subscribers": 1680,
+      "date": "2026-07-12",
+      "views": 61680,
+      "likes": null,
+      "comments": 0,
+      "duration": 20,
+      "format": "Shorts"
+    },
+    {
+      "id": "u3LsyaeKCE0",
+      "title": "【#명조】 실시간 짬통배너에 낚이고 있다는 명조 뉴비들?",
+      "url": "https://www.youtube.com/watch?v=u3LsyaeKCE0",
+      "creator": "초리",
+      "subscribers": 1680,
+      "date": "2026-07-12",
+      "views": 54068,
+      "likes": null,
+      "comments": 0,
+      "duration": 20,
+      "format": "Shorts"
     },
     {
       "id": "JaD9xb4iCso",
@@ -75,7 +197,8 @@ window.VOD_DATA = {
       "views": 29620,
       "likes": 349,
       "comments": 20,
-      "duration": 305
+      "duration": 305,
+      "format": "VOD"
     },
     {
       "id": "tmehPgxHPQk",
@@ -87,7 +210,34 @@ window.VOD_DATA = {
       "views": 26915,
       "likes": 332,
       "comments": 20,
-      "duration": 609
+      "duration": 609,
+      "format": "VOD"
+    },
+    {
+      "id": "_dg5ZROa5B0",
+      "title": "명조 신규 수영복 스킨의 변태같은 디테일 #명조 #치사 #린네",
+      "url": "https://www.youtube.com/watch?v=_dg5ZROa5B0",
+      "creator": "워커스튜디오",
+      "subscribers": 7790,
+      "date": "2026-07-12",
+      "views": 25471,
+      "likes": null,
+      "comments": 0,
+      "duration": 27,
+      "format": "Shorts"
+    },
+    {
+      "id": "DSXbjLbVmpQ",
+      "title": "명조 양양 현령으로 사기 치기 #명조 #shorts",
+      "url": "https://www.youtube.com/watch?v=DSXbjLbVmpQ",
+      "creator": "앙리형",
+      "subscribers": 104000,
+      "date": "2026-07-12",
+      "views": 24447,
+      "likes": null,
+      "comments": 0,
+      "duration": 62,
+      "format": "Shorts"
     },
     {
       "id": "KWXU49NLXsA",
@@ -99,7 +249,34 @@ window.VOD_DATA = {
       "views": 22647,
       "likes": 294,
       "comments": 40,
-      "duration": 492
+      "duration": 492,
+      "format": "VOD"
+    },
+    {
+      "id": "bB9nJoUOoo4",
+      "title": "오늘도 플러팅에 최선을 다하는 그녀들 | 명조",
+      "url": "https://www.youtube.com/watch?v=bB9nJoUOoo4",
+      "creator": "원붕이즈굿",
+      "subscribers": 185000,
+      "date": "2026-07-12",
+      "views": 21440,
+      "likes": null,
+      "comments": 0,
+      "duration": 23,
+      "format": "Shorts"
+    },
+    {
+      "id": "AMm1QdQ-Mhk",
+      "title": "청초 사기.. #명조 #명조워더링웨이브",
+      "url": "https://www.youtube.com/watch?v=AMm1QdQ-Mhk",
+      "creator": "박서림",
+      "subscribers": 82100,
+      "date": "2026-07-12",
+      "views": 20318,
+      "likes": null,
+      "comments": 0,
+      "duration": 60,
+      "format": "Shorts"
     },
     {
       "id": "KW79NbMpUXU",
@@ -111,7 +288,86 @@ window.VOD_DATA = {
       "views": 17391,
       "likes": null,
       "comments": 0,
-      "duration": 892
+      "duration": 892,
+      "format": "VOD"
+    },
+    {
+      "id": "ih1_ZjCMz1o",
+      "title": "또대급 비틱으로 구불육 없애는 타비...(비틱주의)",
+      "url": "https://www.youtube.com/watch?v=ih1_ZjCMz1o",
+      "creator": "스텔 한 잔",
+      "subscribers": 1550,
+      "date": "2026-07-12",
+      "views": 16895,
+      "likes": null,
+      "comments": 0,
+      "duration": 345,
+      "format": "VOD"
+    },
+    {
+      "id": "vVfvGgH6EUk",
+      "title": "【명조】3.5버전 스토리 후기",
+      "url": "https://www.youtube.com/watch?v=vVfvGgH6EUk",
+      "creator": "적쌤",
+      "subscribers": 38600,
+      "date": "2026-07-12",
+      "views": 12586,
+      "likes": null,
+      "comments": 0,
+      "duration": 57,
+      "format": "Shorts"
+    },
+    {
+      "id": "RHtgmdOgerk",
+      "title": "난 반디가 진짜 싫어 [명조]",
+      "url": "https://www.youtube.com/watch?v=RHtgmdOgerk",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-12",
+      "views": 10901,
+      "likes": null,
+      "comments": 0,
+      "duration": 56,
+      "format": "Shorts"
+    },
+    {
+      "id": "IW4ayn5kvtg",
+      "title": "끝난 줄 알았더니...",
+      "url": "https://www.youtube.com/watch?v=IW4ayn5kvtg",
+      "creator": "관종대왕",
+      "subscribers": 84700,
+      "date": "2026-07-12",
+      "views": 9929,
+      "likes": null,
+      "comments": 0,
+      "duration": 498,
+      "format": "VOD"
+    },
+    {
+      "id": "680oZMLOE2U",
+      "title": "명조 바이크 과거와 현재",
+      "url": "https://www.youtube.com/watch?v=680oZMLOE2U",
+      "creator": "JINWOO",
+      "subscribers": 133,
+      "date": "2026-07-12",
+      "views": 9268,
+      "likes": null,
+      "comments": 0,
+      "duration": 23,
+      "format": "Shorts"
+    },
+    {
+      "id": "HlGuGoF8wvI",
+      "title": "[명조] 라하이로이 알파 메일의 삶",
+      "url": "https://www.youtube.com/watch?v=HlGuGoF8wvI",
+      "creator": "K tube",
+      "subscribers": 54700,
+      "date": "2026-07-12",
+      "views": 8338,
+      "likes": null,
+      "comments": 0,
+      "duration": 42,
+      "format": "Shorts"
     },
     {
       "id": "_ZOKX0Pvwdc",
@@ -123,7 +379,8 @@ window.VOD_DATA = {
       "views": 6763,
       "likes": null,
       "comments": 0,
-      "duration": 348
+      "duration": 348,
+      "format": "VOD"
     },
     {
       "id": "HVF7iVzHthI",
@@ -135,7 +392,8 @@ window.VOD_DATA = {
       "views": 5968,
       "likes": 164,
       "comments": 20,
-      "duration": 1342
+      "duration": 1342,
+      "format": "VOD"
     },
     {
       "id": "rcG6oR3MOrM",
@@ -147,7 +405,8 @@ window.VOD_DATA = {
       "views": 5271,
       "likes": 114,
       "comments": 18,
-      "duration": 18080
+      "duration": 18080,
+      "format": "VOD"
     },
     {
       "id": "VtrlBWlpbGQ",
@@ -159,7 +418,8 @@ window.VOD_DATA = {
       "views": 4510,
       "likes": 160,
       "comments": 33,
-      "duration": 25816
+      "duration": 25816,
+      "format": "VOD"
     },
     {
       "id": "H-a3xXQJjUk",
@@ -171,7 +431,8 @@ window.VOD_DATA = {
       "views": 3019,
       "likes": null,
       "comments": 26,
-      "duration": 11808
+      "duration": 11808,
+      "format": "VOD"
     },
     {
       "id": "IGDIP1YxQUU",
@@ -183,7 +444,8 @@ window.VOD_DATA = {
       "views": 2995,
       "likes": 51,
       "comments": 8,
-      "duration": 15667
+      "duration": 15667,
+      "format": "VOD"
     },
     {
       "id": "q48tgVObxrA",
@@ -195,7 +457,8 @@ window.VOD_DATA = {
       "views": 2785,
       "likes": 110,
       "comments": 20,
-      "duration": 928
+      "duration": 928,
+      "format": "VOD"
     },
     {
       "id": "z3c0c-u8a9c",
@@ -207,7 +470,60 @@ window.VOD_DATA = {
       "views": 2556,
       "likes": null,
       "comments": 20,
-      "duration": 631
+      "duration": 631,
+      "format": "VOD"
+    },
+    {
+      "id": "X2o0LHwPmAU",
+      "title": "명조 수영복 린네 미친디테일",
+      "url": "https://www.youtube.com/watch?v=X2o0LHwPmAU",
+      "creator": "JINWOO",
+      "subscribers": 133,
+      "date": "2026-07-12",
+      "views": 1876,
+      "likes": null,
+      "comments": 0,
+      "duration": 28,
+      "format": "Shorts"
+    },
+    {
+      "id": "RhtYZ7svqRI",
+      "title": "수수 모델링 실화에요??? #명조 #수수",
+      "url": "https://www.youtube.com/watch?v=RhtYZ7svqRI",
+      "creator": "불토마토",
+      "subscribers": 5,
+      "date": "2026-07-12",
+      "views": 1601,
+      "likes": null,
+      "comments": 0,
+      "duration": 35,
+      "format": "Shorts"
+    },
+    {
+      "id": "XZ-b7gaXPIg",
+      "title": "3.5 몽주 - 엔딩까지 - 스토리 평가및 해석",
+      "url": "https://www.youtube.com/watch?v=XZ-b7gaXPIg",
+      "creator": "박서림",
+      "subscribers": 82100,
+      "date": "2026-07-12",
+      "views": 1527,
+      "likes": null,
+      "comments": 0,
+      "duration": 1234,
+      "format": "VOD"
+    },
+    {
+      "id": "tcU40TTgJbk",
+      "title": "[명조] 4장 1막 스토리 플레이 (26-07-10) | 김도 풀영상",
+      "url": "https://www.youtube.com/watch?v=tcU40TTgJbk",
+      "creator": "긴도랜드",
+      "subscribers": 45200,
+      "date": "2026-07-12",
+      "views": 1395,
+      "likes": null,
+      "comments": 26,
+      "duration": 12514,
+      "format": "VOD"
     },
     {
       "id": "ykxD1bbPfpw",
@@ -219,7 +535,21 @@ window.VOD_DATA = {
       "views": 647,
       "likes": 32,
       "comments": 1,
-      "duration": 30588
+      "duration": 30588,
+      "format": "VOD"
+    },
+    {
+      "id": "kFhTvaGBXQM",
+      "title": "명조 캐릭터 속성 맞추기",
+      "url": "https://www.youtube.com/watch?v=kFhTvaGBXQM",
+      "creator": "JINWOO",
+      "subscribers": 133,
+      "date": "2026-07-12",
+      "views": 394,
+      "likes": null,
+      "comments": 0,
+      "duration": 29,
+      "format": "Shorts"
     },
     {
       "id": "nvi87AmAvro",
@@ -231,7 +561,8 @@ window.VOD_DATA = {
       "views": 381,
       "likes": 14,
       "comments": 0,
-      "duration": 11234
+      "duration": 11234,
+      "format": "VOD"
     },
     {
       "id": "hhA8xOvL1es",
@@ -243,7 +574,99 @@ window.VOD_DATA = {
       "views": 173,
       "likes": 12,
       "comments": 1,
-      "duration": 271
+      "duration": 271,
+      "format": "VOD"
+    },
+    {
+      "id": "hhW5J4weGJU",
+      "title": "【 2026/07/11 | 명조: 워더링 웨이브 】 『제4장 제1막, 산비가 내리기 전, 누각을 채운 거센 바람』명조 3.5 #1",
+      "url": "https://www.youtube.com/watch?v=hhW5J4weGJU",
+      "creator": "기록보관소 Rium Archive",
+      "subscribers": 985,
+      "date": "2026-07-12",
+      "views": 130,
+      "likes": null,
+      "comments": 0,
+      "duration": 26379,
+      "format": "VOD"
+    },
+    {
+      "id": "GwD8WQReSiU",
+      "title": "【 2026/07/11 | TALK 】 『카페읽기와 명조 대리가챠, 스킨 구경』",
+      "url": "https://www.youtube.com/watch?v=GwD8WQReSiU",
+      "creator": "기록보관소 Rium Archive",
+      "subscribers": 985,
+      "date": "2026-07-12",
+      "views": 51,
+      "likes": null,
+      "comments": 0,
+      "duration": 12425,
+      "format": "VOD"
+    },
+    {
+      "id": "-QxZS6idbyQ",
+      "title": "수상할 정도로 사이가 좋은 수수 & 양양 | 명조",
+      "url": "https://www.youtube.com/watch?v=-QxZS6idbyQ",
+      "creator": "원붕이즈굿",
+      "subscribers": 185000,
+      "date": "2026-07-11",
+      "views": 194723,
+      "likes": null,
+      "comments": 0,
+      "duration": 19,
+      "format": "Shorts"
+    },
+    {
+      "id": "Jtsiui6rkxs",
+      "title": "명조 수영복 숨겨진 기능",
+      "url": "https://www.youtube.com/watch?v=Jtsiui6rkxs",
+      "creator": "관종대왕",
+      "subscribers": 84600,
+      "date": "2026-07-11",
+      "views": 88723,
+      "likes": null,
+      "comments": 0,
+      "duration": 26,
+      "format": "Shorts"
+    },
+    {
+      "id": "1vsyNsWWybg",
+      "title": "[명조] 수영복만 젖는 게 아니었다?",
+      "url": "https://www.youtube.com/watch?v=1vsyNsWWybg",
+      "creator": "상덕",
+      "subscribers": 54800,
+      "date": "2026-07-11",
+      "views": 70264,
+      "likes": null,
+      "comments": 0,
+      "duration": 35,
+      "format": "Shorts"
+    },
+    {
+      "id": "XDGLAyOfA7o",
+      "title": "【명조】양양.현령 냉혹한 명함 전무 후기",
+      "url": "https://www.youtube.com/watch?v=XDGLAyOfA7o",
+      "creator": "적쌤",
+      "subscribers": 38600,
+      "date": "2026-07-11",
+      "views": 68632,
+      "likes": null,
+      "comments": 0,
+      "duration": 33,
+      "format": "Shorts"
+    },
+    {
+      "id": "2foXJY7ZVc8",
+      "title": "아이 헤이트 반디 [명조]",
+      "url": "https://www.youtube.com/watch?v=2foXJY7ZVc8",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-11",
+      "views": 63354,
+      "likes": null,
+      "comments": 0,
+      "duration": 24,
+      "format": "Shorts"
     },
     {
       "id": "FXLqZtrsupI",
@@ -255,7 +678,21 @@ window.VOD_DATA = {
       "views": 48524,
       "likes": 896,
       "comments": 20,
-      "duration": 188
+      "duration": 188,
+      "format": "VOD"
+    },
+    {
+      "id": "p3MjuigF1lM",
+      "title": "하늘에서 걸어 내려오는 청초 | 명조",
+      "url": "https://www.youtube.com/watch?v=p3MjuigF1lM",
+      "creator": "원붕이즈굿",
+      "subscribers": 185000,
+      "date": "2026-07-11",
+      "views": 41053,
+      "likes": null,
+      "comments": 0,
+      "duration": 13,
+      "format": "Shorts"
     },
     {
       "id": "ZcCINX6DJDo",
@@ -267,7 +704,8 @@ window.VOD_DATA = {
       "views": 34760,
       "likes": 608,
       "comments": 20,
-      "duration": 479
+      "duration": 479,
+      "format": "VOD"
     },
     {
       "id": "9a_nyboPKWE",
@@ -279,7 +717,8 @@ window.VOD_DATA = {
       "views": 30944,
       "likes": 356,
       "comments": 20,
-      "duration": 504
+      "duration": 504,
+      "format": "VOD"
     },
     {
       "id": "mCelOTZxenY",
@@ -291,7 +730,34 @@ window.VOD_DATA = {
       "views": 27735,
       "likes": 326,
       "comments": 20,
-      "duration": 791
+      "duration": 791,
+      "format": "VOD"
+    },
+    {
+      "id": "B2g7a-_YuRg",
+      "title": "3.5 신맵에서 잔렉 없애는 방법 【명조】",
+      "url": "https://www.youtube.com/watch?v=B2g7a-_YuRg",
+      "creator": "견환",
+      "subscribers": 5160,
+      "date": "2026-07-11",
+      "views": 27114,
+      "likes": null,
+      "comments": 0,
+      "duration": 30,
+      "format": "Shorts"
+    },
+    {
+      "id": "4W7XwNE4Bc0",
+      "title": "현재 양양 현령과 쓰기 좋은 조합들 [명조]",
+      "url": "https://www.youtube.com/watch?v=4W7XwNE4Bc0",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-11",
+      "views": 24648,
+      "likes": null,
+      "comments": 0,
+      "duration": 43,
+      "format": "Shorts"
     },
     {
       "id": "oxv3F5m7N9s",
@@ -303,7 +769,125 @@ window.VOD_DATA = {
       "views": 22984,
       "likes": 298,
       "comments": 20,
-      "duration": 684
+      "duration": 684,
+      "format": "VOD"
+    },
+    {
+      "id": "ICm11pR9_FA",
+      "title": "공명자 모먼트 | 양양 · 현령 #명조 #명조워더링웨이브 #양양현령",
+      "url": "https://www.youtube.com/watch?v=ICm11pR9_FA",
+      "creator": "명조:워더링 웨이브",
+      "subscribers": 133000,
+      "date": "2026-07-11",
+      "views": 19202,
+      "likes": null,
+      "comments": 0,
+      "duration": 18,
+      "format": "Shorts"
+    },
+    {
+      "id": "cXbBZ6jmlE0",
+      "title": "양양 동생 모먼트와 포동포동단 수수 언니 【명조】",
+      "url": "https://www.youtube.com/watch?v=cXbBZ6jmlE0",
+      "creator": "레벤",
+      "subscribers": 19800,
+      "date": "2026-07-11",
+      "views": 17731,
+      "likes": null,
+      "comments": 0,
+      "duration": 60,
+      "format": "Shorts"
+    },
+    {
+      "id": "Fq1C_7cm9VQ",
+      "title": "여우가 아니라 어흐네요 I 명조",
+      "url": "https://www.youtube.com/watch?v=Fq1C_7cm9VQ",
+      "creator": "코코",
+      "subscribers": 5550,
+      "date": "2026-07-11",
+      "views": 16154,
+      "likes": null,
+      "comments": 0,
+      "duration": 59,
+      "format": "Shorts"
+    },
+    {
+      "id": "9J-hJLOqw1o",
+      "title": "양양현령 풀돌 중앙탑 1층 20초!ㄷㄷ #명조 #wutheringwaves #wuwa #양양현령 #양양",
+      "url": "https://www.youtube.com/watch?v=9J-hJLOqw1o",
+      "creator": "흑우수달",
+      "subscribers": 41500,
+      "date": "2026-07-11",
+      "views": 14150,
+      "likes": null,
+      "comments": 0,
+      "duration": 36,
+      "format": "Shorts"
+    },
+    {
+      "id": "8Fe7Myx3VIw",
+      "title": "그럼 또 만나요 스타토치 아카데미 【명조】",
+      "url": "https://www.youtube.com/watch?v=8Fe7Myx3VIw",
+      "creator": "레벤",
+      "subscribers": 19800,
+      "date": "2026-07-11",
+      "views": 13911,
+      "likes": null,
+      "comments": 0,
+      "duration": 60,
+      "format": "Shorts"
+    },
+    {
+      "id": "sC0gdUeWOh8",
+      "title": "이제는 행동으로 보여주는 양양의 정실 모먼트 【명조】",
+      "url": "https://www.youtube.com/watch?v=sC0gdUeWOh8",
+      "creator": "레벤",
+      "subscribers": 19800,
+      "date": "2026-07-11",
+      "views": 13382,
+      "likes": null,
+      "comments": 0,
+      "duration": 62,
+      "format": "Shorts"
+    },
+    {
+      "id": "RtwyIJ1CX6I",
+      "title": "결국 피해갈 수 없었던 명조의 C팝?",
+      "url": "https://www.youtube.com/watch?v=RtwyIJ1CX6I",
+      "creator": "흑눈이",
+      "subscribers": 4780,
+      "date": "2026-07-11",
+      "views": 10823,
+      "likes": null,
+      "comments": 0,
+      "duration": 32,
+      "format": "Shorts"
+    },
+    {
+      "id": "8GM6xmhEVo0",
+      "title": "마음을 담아 양양 인멸 변신 【명조】",
+      "url": "https://www.youtube.com/watch?v=8GM6xmhEVo0",
+      "creator": "레벤",
+      "subscribers": 19800,
+      "date": "2026-07-11",
+      "views": 10197,
+      "likes": null,
+      "comments": 0,
+      "duration": 60,
+      "format": "Shorts"
+    },
+    {
+      "id": "9oFR3DBeYZE",
+      "title": "현재 양양 현령은 누구랑 써야 할까? '양양 현령 조합 & 딜 테스트' [명조]",
+      "url": "https://www.youtube.com/watch?v=9oFR3DBeYZE",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-11",
+      "views": 10014,
+      "likes": null,
+      "comments": 0,
+      "duration": 406,
+      "format": "VOD"
     },
     {
       "id": "baXGcMWmhJY",
@@ -315,7 +899,34 @@ window.VOD_DATA = {
       "views": 9404,
       "likes": 199,
       "comments": 12,
-      "duration": 16540
+      "duration": 16540,
+      "format": "VOD"
+    },
+    {
+      "id": "ItM4SM6Rb38",
+      "title": "그래서 누가 더 정실임",
+      "url": "https://www.youtube.com/watch?v=ItM4SM6Rb38",
+      "creator": "관종대왕",
+      "subscribers": 84700,
+      "date": "2026-07-11",
+      "views": 8846,
+      "likes": null,
+      "comments": 0,
+      "duration": 507,
+      "format": "VOD"
+    },
+    {
+      "id": "fOSBuCDh7go",
+      "title": "[명조] 또 만나요 스타토치 아카데미",
+      "url": "https://www.youtube.com/watch?v=fOSBuCDh7go",
+      "creator": "K tube",
+      "subscribers": 54700,
+      "date": "2026-07-11",
+      "views": 8669,
+      "likes": null,
+      "comments": 0,
+      "duration": 51,
+      "format": "Shorts"
     },
     {
       "id": "z0CxDKVjMeA",
@@ -327,7 +938,8 @@ window.VOD_DATA = {
       "views": 8186,
       "likes": 311,
       "comments": 20,
-      "duration": 600
+      "duration": 600,
+      "format": "VOD"
     },
     {
       "id": "FvvN2A3QDCk",
@@ -339,7 +951,8 @@ window.VOD_DATA = {
       "views": 7552,
       "likes": 94,
       "comments": 11,
-      "duration": 29022
+      "duration": 29022,
+      "format": "VOD"
     },
     {
       "id": "Iqxi70T7B-s",
@@ -351,7 +964,8 @@ window.VOD_DATA = {
       "views": 6649,
       "likes": 67,
       "comments": 14,
-      "duration": 448
+      "duration": 448,
+      "format": "VOD"
     },
     {
       "id": "VzTqnrTIEno",
@@ -363,7 +977,21 @@ window.VOD_DATA = {
       "views": 6116,
       "likes": 126,
       "comments": 8,
-      "duration": 12234
+      "duration": 12234,
+      "format": "VOD"
+    },
+    {
+      "id": "-9lKD4PP5SA",
+      "title": "3.5 몽주 - 엔딩까지 - 스토리 평가및 해석",
+      "url": "https://www.youtube.com/watch?v=-9lKD4PP5SA",
+      "creator": "박서림",
+      "subscribers": 82100,
+      "date": "2026-07-11",
+      "views": 5732,
+      "likes": null,
+      "comments": 0,
+      "duration": 12463,
+      "format": "VOD"
     },
     {
       "id": "_4yaEwSR9oc",
@@ -375,7 +1003,8 @@ window.VOD_DATA = {
       "views": 5726,
       "likes": 122,
       "comments": 11,
-      "duration": 42920
+      "duration": 42920,
+      "format": "VOD"
     },
     {
       "id": "8Jk3byf9jyA",
@@ -387,7 +1016,8 @@ window.VOD_DATA = {
       "views": 5489,
       "likes": 168,
       "comments": 25,
-      "duration": 41273
+      "duration": 41273,
+      "format": "VOD"
     },
     {
       "id": "_kTKbwabMWA",
@@ -399,7 +1029,8 @@ window.VOD_DATA = {
       "views": 5260,
       "likes": 53,
       "comments": 20,
-      "duration": 391
+      "duration": 391,
+      "format": "VOD"
     },
     {
       "id": "VdCIX5QkKGY",
@@ -411,7 +1042,34 @@ window.VOD_DATA = {
       "views": 5129,
       "likes": 83,
       "comments": 11,
-      "duration": 289
+      "duration": 289,
+      "format": "VOD"
+    },
+    {
+      "id": "EvcYsx4x3zo",
+      "title": "명조의 개쩌는 이스터에그",
+      "url": "https://www.youtube.com/watch?v=EvcYsx4x3zo",
+      "creator": "관종대왕",
+      "subscribers": 84700,
+      "date": "2026-07-11",
+      "views": 4405,
+      "likes": null,
+      "comments": 0,
+      "duration": 165,
+      "format": "VOD"
+    },
+    {
+      "id": "H25C_7aqZxk",
+      "title": "【명조】수수 첫 등장(일본어)",
+      "url": "https://www.youtube.com/watch?v=H25C_7aqZxk",
+      "creator": "적쌤",
+      "subscribers": 38600,
+      "date": "2026-07-11",
+      "views": 3387,
+      "likes": null,
+      "comments": 0,
+      "duration": 93,
+      "format": "Shorts"
     },
     {
       "id": "_Lh_SW6Y1d8",
@@ -423,7 +1081,8 @@ window.VOD_DATA = {
       "views": 3305,
       "likes": null,
       "comments": 0,
-      "duration": 286
+      "duration": 286,
+      "format": "VOD"
     },
     {
       "id": "LufGKgAqIbE",
@@ -435,7 +1094,21 @@ window.VOD_DATA = {
       "views": 2535,
       "likes": 33,
       "comments": 4,
-      "duration": 259
+      "duration": 259,
+      "format": "VOD"
+    },
+    {
+      "id": "CPxxw2_0Ekk",
+      "title": "명조 린네 인라인 어디까지 가능할까?",
+      "url": "https://www.youtube.com/watch?v=CPxxw2_0Ekk",
+      "creator": "JINWOO",
+      "subscribers": 133,
+      "date": "2026-07-11",
+      "views": 1863,
+      "likes": null,
+      "comments": 0,
+      "duration": 41,
+      "format": "Shorts"
     },
     {
       "id": "DBCdCC0Tt4U",
@@ -447,7 +1120,21 @@ window.VOD_DATA = {
       "views": 1390,
       "likes": null,
       "comments": 0,
-      "duration": 167
+      "duration": 167,
+      "format": "VOD"
+    },
+    {
+      "id": "8JcBLpjDQhs",
+      "title": "양유치 사이클 때려잡기!｜양양·유노·치사【명조】",
+      "url": "https://www.youtube.com/watch?v=8JcBLpjDQhs",
+      "creator": "니브",
+      "subscribers": 15700,
+      "date": "2026-07-11",
+      "views": 1002,
+      "likes": null,
+      "comments": 0,
+      "duration": 168,
+      "format": "VOD"
     },
     {
       "id": "vQ5FH2pWqL4",
@@ -459,7 +1146,34 @@ window.VOD_DATA = {
       "views": 759,
       "likes": null,
       "comments": 4,
-      "duration": 10980
+      "duration": 10980,
+      "format": "VOD"
+    },
+    {
+      "id": "5_DgCOLPTXk",
+      "title": "라하이로이 졸업 에필로그 음성 편지 후일담 v3.5 【명조】",
+      "url": "https://www.youtube.com/watch?v=5_DgCOLPTXk",
+      "creator": "레벤",
+      "subscribers": 19800,
+      "date": "2026-07-11",
+      "views": 446,
+      "likes": null,
+      "comments": 0,
+      "duration": 1086,
+      "format": "VOD"
+    },
+    {
+      "id": "AlbA5tCfn3E",
+      "title": "명조 국가별 음성",
+      "url": "https://www.youtube.com/watch?v=AlbA5tCfn3E",
+      "creator": "JINWOO",
+      "subscribers": 133,
+      "date": "2026-07-11",
+      "views": 426,
+      "likes": null,
+      "comments": 0,
+      "duration": 19,
+      "format": "Shorts"
     },
     {
       "id": "_x98Bb-KLvM",
@@ -471,7 +1185,47 @@ window.VOD_DATA = {
       "views": 104,
       "likes": 3,
       "comments": 0,
-      "duration": 13526
+      "duration": 13526,
+      "format": "VOD"
+    },
+    {
+      "id": "tGHjmpmY2kM",
+      "title": "명조 수영복 미친 디테일 ㄷㄷ #명조 #명조워더링웨이브",
+      "url": "https://www.youtube.com/watch?v=tGHjmpmY2kM",
+      "creator": "박서림",
+      "subscribers": 82100,
+      "date": "2026-07-10",
+      "views": 97933,
+      "likes": null,
+      "comments": 0,
+      "duration": 48,
+      "format": "Shorts"
+    },
+    {
+      "id": "eqBxKE4TBf0",
+      "title": "효율 돌파만 합니다 [명조]",
+      "url": "https://www.youtube.com/watch?v=eqBxKE4TBf0",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-10",
+      "views": 60567,
+      "likes": null,
+      "comments": 0,
+      "duration": 15,
+      "format": "Shorts"
+    },
+    {
+      "id": "oF4pLzg4rVQ",
+      "title": "안 작아졌음",
+      "url": "https://www.youtube.com/watch?v=oF4pLzg4rVQ",
+      "creator": "관종대왕",
+      "subscribers": 84700,
+      "date": "2026-07-10",
+      "views": 60096,
+      "likes": null,
+      "comments": 0,
+      "duration": 27,
+      "format": "Shorts"
     },
     {
       "id": "TZ7wuKsG74w",
@@ -483,7 +1237,21 @@ window.VOD_DATA = {
       "views": 58600,
       "likes": 564,
       "comments": 20,
-      "duration": 760
+      "duration": 760,
+      "format": "VOD"
+    },
+    {
+      "id": "VsK6zvzsDpA",
+      "title": "청초가 기대되는 이유 | 명조",
+      "url": "https://www.youtube.com/watch?v=VsK6zvzsDpA",
+      "creator": "원붕이즈굿",
+      "subscribers": 185000,
+      "date": "2026-07-10",
+      "views": 50781,
+      "likes": null,
+      "comments": 0,
+      "duration": 19,
+      "format": "Shorts"
     },
     {
       "id": "Ahh57-H9fnM",
@@ -495,7 +1263,60 @@ window.VOD_DATA = {
       "views": 41920,
       "likes": 754,
       "comments": 20,
-      "duration": 169
+      "duration": 169,
+      "format": "VOD"
+    },
+    {
+      "id": "I4_WsL0cXwQ",
+      "title": "소름 돋는 명조 연출 [명조]",
+      "url": "https://www.youtube.com/watch?v=I4_WsL0cXwQ",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-10",
+      "views": 41840,
+      "likes": null,
+      "comments": 0,
+      "duration": 45,
+      "format": "Shorts"
+    },
+    {
+      "id": "JzHw0LHkkm0",
+      "title": "【#명조】 기습 신캐(경연) 모델링 공개!",
+      "url": "https://www.youtube.com/watch?v=JzHw0LHkkm0",
+      "creator": "초리",
+      "subscribers": 1680,
+      "date": "2026-07-10",
+      "views": 35938,
+      "likes": null,
+      "comments": 0,
+      "duration": 21,
+      "format": "Shorts"
+    },
+    {
+      "id": "5Wmq1yk4cVE",
+      "title": "동술로 분석 중 [명조]",
+      "url": "https://www.youtube.com/watch?v=5Wmq1yk4cVE",
+      "creator": "준선유",
+      "subscribers": 125000,
+      "date": "2026-07-10",
+      "views": 29933,
+      "likes": null,
+      "comments": 0,
+      "duration": 47,
+      "format": "Shorts"
+    },
+    {
+      "id": "OfyljzQaOAg",
+      "title": "【명조】양양=오프닝 여신인 이유?",
+      "url": "https://www.youtube.com/watch?v=OfyljzQaOAg",
+      "creator": "적쌤",
+      "subscribers": 38600,
+      "date": "2026-07-10",
+      "views": 26257,
+      "likes": null,
+      "comments": 0,
+      "duration": 52,
+      "format": "Shorts"
     },
     {
       "id": "4XPysq6uDVM",
@@ -507,7 +1328,8 @@ window.VOD_DATA = {
       "views": 21859,
       "likes": 669,
       "comments": 20,
-      "duration": 1218
+      "duration": 1218,
+      "format": "VOD"
     },
     {
       "id": "TptmV8sTMUQ",
@@ -519,7 +1341,21 @@ window.VOD_DATA = {
       "views": 20049,
       "likes": 232,
       "comments": 20,
-      "duration": 626
+      "duration": 626,
+      "format": "VOD"
+    },
+    {
+      "id": "K5hhkbgd6ZU",
+      "title": "「하늘의 울림이여, 악을 멸하라! 」#명조 #명조워더링웨이브 #방랑자·전도",
+      "url": "https://www.youtube.com/watch?v=K5hhkbgd6ZU",
+      "creator": "명조:워더링 웨이브",
+      "subscribers": 133000,
+      "date": "2026-07-10",
+      "views": 19319,
+      "likes": null,
+      "comments": 0,
+      "duration": 37,
+      "format": "Shorts"
     },
     {
       "id": "sdAvqH1XzSM",
@@ -531,7 +1367,21 @@ window.VOD_DATA = {
       "views": 18441,
       "likes": 222,
       "comments": 20,
-      "duration": 493
+      "duration": 493,
+      "format": "VOD"
+    },
+    {
+      "id": "hrVAlbotHSo",
+      "title": "우리가 처음 마주하는 지역(?)들 #원신 #붕괴스타레일 #명조워더링웨이브 #zzz",
+      "url": "https://www.youtube.com/watch?v=hrVAlbotHSo",
+      "creator": "방방부 BangBangBoo",
+      "subscribers": 456,
+      "date": "2026-07-10",
+      "views": 17816,
+      "likes": null,
+      "comments": 0,
+      "duration": 11,
+      "format": "Shorts"
     },
     {
       "id": "SDJPh3aknAQ",
@@ -543,7 +1393,8 @@ window.VOD_DATA = {
       "views": 15897,
       "likes": 189,
       "comments": 39,
-      "duration": 317
+      "duration": 317,
+      "format": "VOD"
     },
     {
       "id": "r2GU5sunBEY",
@@ -555,7 +1406,8 @@ window.VOD_DATA = {
       "views": 11981,
       "likes": 235,
       "comments": 33,
-      "duration": 30920
+      "duration": 30920,
+      "format": "VOD"
     },
     {
       "id": "zASfIuAa8q0",
@@ -567,7 +1419,47 @@ window.VOD_DATA = {
       "views": 9790,
       "likes": 81,
       "comments": 10,
-      "duration": 418
+      "duration": 418,
+      "format": "VOD"
+    },
+    {
+      "id": "9YSq5o_cBJE",
+      "title": "오늘도 수직하락하는 냥평",
+      "url": "https://www.youtube.com/watch?v=9YSq5o_cBJE",
+      "creator": "하리느냥",
+      "subscribers": 19200,
+      "date": "2026-07-10",
+      "views": 8577,
+      "likes": null,
+      "comments": 0,
+      "duration": 41,
+      "format": "Shorts"
+    },
+    {
+      "id": "FSB3E4jl0TM",
+      "title": "미리 체험하는 수수 대기 모션 【명조】",
+      "url": "https://www.youtube.com/watch?v=FSB3E4jl0TM",
+      "creator": "레벤",
+      "subscribers": 19800,
+      "date": "2026-07-10",
+      "views": 8233,
+      "likes": null,
+      "comments": 0,
+      "duration": 60,
+      "format": "Shorts"
+    },
+    {
+      "id": "ofmDsDlKnV8",
+      "title": "일단 다 사봤습니다",
+      "url": "https://www.youtube.com/watch?v=ofmDsDlKnV8",
+      "creator": "관종대왕",
+      "subscribers": 84700,
+      "date": "2026-07-10",
+      "views": 8168,
+      "likes": null,
+      "comments": 0,
+      "duration": 875,
+      "format": "VOD"
     },
     {
       "id": "JjcGWgLyV-U",
@@ -579,7 +1471,21 @@ window.VOD_DATA = {
       "views": 7018,
       "likes": 80,
       "comments": 20,
-      "duration": 314
+      "duration": 314,
+      "format": "VOD"
+    },
+    {
+      "id": "ddbFFRDwMbc",
+      "title": "[명조] 메인 스토리 제4장 제1막 『산비가 내리기 전, 누각을 채운 거센 바람』",
+      "url": "https://www.youtube.com/watch?v=ddbFFRDwMbc",
+      "creator": "K tube",
+      "subscribers": 54700,
+      "date": "2026-07-10",
+      "views": 6936,
+      "likes": null,
+      "comments": 0,
+      "duration": 8828,
+      "format": "VOD"
     },
     {
       "id": "YAZawabUxsA",
@@ -591,7 +1497,21 @@ window.VOD_DATA = {
       "views": 6278,
       "likes": 171,
       "comments": 12,
-      "duration": 1513
+      "duration": 1513,
+      "format": "VOD"
+    },
+    {
+      "id": "oo_C5aV8b3k",
+      "title": "[명조] 메인 스토리 제4장 제2막 『골짜기를 뒤흔든 현령, 잠잠해진 물결』",
+      "url": "https://www.youtube.com/watch?v=oo_C5aV8b3k",
+      "creator": "K tube",
+      "subscribers": 54700,
+      "date": "2026-07-10",
+      "views": 5839,
+      "likes": null,
+      "comments": 0,
+      "duration": 7811,
+      "format": "VOD"
     },
     {
       "id": "2y6oPG1FNo4",
@@ -603,7 +1523,8 @@ window.VOD_DATA = {
       "views": 5722,
       "likes": 64,
       "comments": 16,
-      "duration": 569
+      "duration": 569,
+      "format": "VOD"
     },
     {
       "id": "PdgvJ-rPka8",
@@ -615,7 +1536,8 @@ window.VOD_DATA = {
       "views": 5321,
       "likes": 37,
       "comments": 14,
-      "duration": 426
+      "duration": 426,
+      "format": "VOD"
     },
     {
       "id": "1l6frWKpOc8",
@@ -627,7 +1549,8 @@ window.VOD_DATA = {
       "views": 5307,
       "likes": null,
       "comments": 0,
-      "duration": 2497
+      "duration": 2497,
+      "format": "VOD"
     },
     {
       "id": "DapE1XHkk1w",
@@ -639,7 +1562,8 @@ window.VOD_DATA = {
       "views": 4972,
       "likes": 38,
       "comments": 9,
-      "duration": 559
+      "duration": 559,
+      "format": "VOD"
     },
     {
       "id": "mRLEyJs2wJo",
@@ -651,7 +1575,8 @@ window.VOD_DATA = {
       "views": 4323,
       "likes": null,
       "comments": 0,
-      "duration": 893
+      "duration": 893,
+      "format": "VOD"
     },
     {
       "id": "NltOeLC_slk",
@@ -663,7 +1588,8 @@ window.VOD_DATA = {
       "views": 3762,
       "likes": 115,
       "comments": 10,
-      "duration": 25133
+      "duration": 25133,
+      "format": "VOD"
     },
     {
       "id": "FRZsvilRsWU",
@@ -675,7 +1601,47 @@ window.VOD_DATA = {
       "views": 3276,
       "likes": 40,
       "comments": 13,
-      "duration": 1085
+      "duration": 1085,
+      "format": "VOD"
+    },
+    {
+      "id": "GAZ7yRUkckM",
+      "title": "【명조】눈물없이 볼 수 없는 라하이로이 작별 컷신(일본어)",
+      "url": "https://www.youtube.com/watch?v=GAZ7yRUkckM",
+      "creator": "적쌤",
+      "subscribers": 38600,
+      "date": "2026-07-10",
+      "views": 3187,
+      "likes": null,
+      "comments": 0,
+      "duration": 176,
+      "format": "Shorts"
+    },
+    {
+      "id": "zD80_5i9l48",
+      "title": "[명조] 메인 스토리 제4장 에필로그 『신비로운 선율의 서약, 아득히 이어진 인연』",
+      "url": "https://www.youtube.com/watch?v=zD80_5i9l48",
+      "creator": "K tube",
+      "subscribers": 54700,
+      "date": "2026-07-10",
+      "views": 2763,
+      "likes": null,
+      "comments": 0,
+      "duration": 945,
+      "format": "VOD"
+    },
+    {
+      "id": "VOu3kdsLc7w",
+      "title": "명조 코스튬 체험해보기",
+      "url": "https://www.youtube.com/watch?v=VOu3kdsLc7w",
+      "creator": "JINWOO",
+      "subscribers": 133,
+      "date": "2026-07-10",
+      "views": 1701,
+      "likes": null,
+      "comments": 0,
+      "duration": 92,
+      "format": "Shorts"
     },
     {
       "id": "cBTHJEQQHB4",
@@ -687,7 +1653,8 @@ window.VOD_DATA = {
       "views": 643,
       "likes": 14,
       "comments": 1,
-      "duration": 1119
+      "duration": 1119,
+      "format": "VOD"
     },
     {
       "id": "D10Z0-sDrgg",
@@ -699,7 +1666,8 @@ window.VOD_DATA = {
       "views": 287,
       "likes": 21,
       "comments": 4,
-      "duration": 124
+      "duration": 124,
+      "format": "VOD"
     },
     {
       "id": "o9B95oJr-QY",
@@ -711,7 +1679,8 @@ window.VOD_DATA = {
       "views": 281,
       "likes": 2,
       "comments": 0,
-      "duration": 20447
+      "duration": 20447,
+      "format": "VOD"
     },
     {
       "id": "Zx6bp9AaGIA",
@@ -723,7 +1692,8 @@ window.VOD_DATA = {
       "views": 274,
       "likes": 3,
       "comments": 0,
-      "duration": 33558
+      "duration": 33558,
+      "format": "VOD"
     },
     {
       "id": "xMxvgsePOBI",
@@ -735,7 +1705,8 @@ window.VOD_DATA = {
       "views": 259,
       "likes": 1,
       "comments": 0,
-      "duration": 224
+      "duration": 224,
+      "format": "VOD"
     },
     {
       "id": "9l6kuIp6MXc",
@@ -747,7 +1718,8 @@ window.VOD_DATA = {
       "views": 114,
       "likes": 1,
       "comments": 0,
-      "duration": 39
+      "duration": 39,
+      "format": "VOD"
     }
   ]
 };

@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(here, "..");
-const source = resolve(projectRoot, "..", "data", "youtube_myeongjo_2026-07-10_2026-07-13.kr_vod_filtered.json");
+const source = resolve(projectRoot, "..", "data", "youtube_myeongjo_2026-07-10_2026-07-13.kr_all_filtered.json");
 const output = resolve(projectRoot, "data", "videos.js");
 
 const input = JSON.parse(await readFile(source, "utf8"));
@@ -19,6 +19,7 @@ const videos = input.rows.map((row) => ({
   likes: row.likeCount ?? null,
   comments: row.commentCount ?? 0,
   duration: row.durationSeconds ?? null,
+  format: row.format,
 }));
 
 const payload = {
