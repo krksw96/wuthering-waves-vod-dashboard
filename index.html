@@ -86,7 +86,7 @@
       .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 14px; }
       .section-head h2 { margin: 0; font-size: 21px; letter-spacing: 0; }
       .section-head p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
-      .daily-picker { display: grid; grid-template-columns: minmax(180px, 240px) 1fr; align-items: center; gap: 18px; margin-bottom: 34px; border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: #fff; }
+      .daily-picker { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; align-items: center; gap: 18px; margin-bottom: 34px; border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: #fff; }
       .daily-picker input { font-weight: 700; }
       .daily-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; min-width: 0; }
       .daily-metric { display: grid; gap: 3px; }
@@ -188,7 +188,7 @@
         .controls { grid-template-columns: 1fr 1fr; }
         .controls .field:nth-child(-n+2) { grid-column: auto; }
         .export-button, .period-reset { width: 100%; }
-        .daily-picker { grid-template-columns: minmax(180px, 240px) 1fr; }
+        .daily-picker { grid-template-columns: minmax(280px, 360px) 1fr; }
       }
       @media (max-width: 640px) {
         .shell { width: min(100% - 24px, 1500px); }
@@ -251,9 +251,13 @@
 
     <main class="shell">
       <section>
-        <div class="section-head"><div><h2>일자별 업로드</h2><p>선택한 날짜의 업로드 수치</p></div></div>
+        <div class="section-head"><div><h2>기간별 업로드</h2><p>선택한 기간의 업로드 수치</p></div></div>
         <div class="daily-picker">
-          <input id="daily-date" type="date" aria-label="업로드 날짜 선택" />
+          <div class="date-range" aria-label="업로드 집계 기간">
+            <input id="daily-start-date" type="date" aria-label="집계 시작일" />
+            <span>~</span>
+            <input id="daily-end-date" type="date" aria-label="집계 종료일" />
+          </div>
           <div class="daily-summary" aria-live="polite">
             <div class="daily-metric"><span>영상</span><strong id="daily-count">-</strong></div>
             <div class="daily-metric"><span>조회수</span><strong id="daily-views">-</strong></div>
@@ -398,13 +402,24 @@
       formats.forEach((format) => document.getElementById("format-filter").insertAdjacentHTML("beforeend", `<option value="${format}">${format}</option>`));
       topics.forEach((topic) => document.getElementById("topic-filter").insertAdjacentHTML("beforeend", `<option value="${topic}">${topic}</option>`));
 
-      const dailyDate = document.getElementById("daily-date");
-      dailyDate.min = data.period.start || "";
-      dailyDate.max = data.period.end || "";
-      dailyDate.value = data.period.end || dates[0] || "";
+      const dailyStartDate = document.getElementById("daily-start-date");
+      const dailyEndDate = document.getElementById("daily-end-date");
+      for (const input of [dailyStartDate, dailyEndDate]) {
+        input.min = data.period.start || "";
+        input.max = data.period.end || "";
+      }
+      dailyStartDate.value = data.period.start || dates.at(-1) || "";
+      dailyEndDate.value = data.period.end || dates[0] || "";
 
       function renderDailySummary() {
-        const rows = enriched.filter((video) => video.date === dailyDate.value);
+        if (dailyStartDate.value && dailyEndDate.value && dailyStartDate.value > dailyEndDate.value) {
+          if (document.activeElement === dailyStartDate) dailyEndDate.value = dailyStartDate.value;
+          else dailyStartDate.value = dailyEndDate.value;
+        }
+        const rows = enriched.filter((video) =>
+          (!dailyStartDate.value || video.date >= dailyStartDate.value) &&
+          (!dailyEndDate.value || video.date <= dailyEndDate.value)
+        );
         document.getElementById("daily-count").textContent = `${nf.format(rows.length)}개`;
         document.getElementById("daily-views").textContent = `${compact.format(rows.reduce((sum, video) => sum + (video.views || 0), 0))}회`;
         document.getElementById("daily-formats").textContent = formats.map((format) => `${format} ${rows.filter((video) => video.format === format).length}`).join(" · ");
@@ -455,7 +470,8 @@
 
       document.getElementById("creator-search").addEventListener("input", (event) => { state.creatorQuery = event.target.value; render(); });
       document.getElementById("title-search").addEventListener("input", (event) => { state.titleQuery = event.target.value; render(); });
-      dailyDate.addEventListener("change", renderDailySummary);
+      dailyStartDate.addEventListener("change", renderDailySummary);
+      dailyEndDate.addEventListener("change", renderDailySummary);
       document.getElementById("start-date").addEventListener("change", (event) => { state.startDate = event.target.value; render(); });
       document.getElementById("end-date").addEventListener("change", (event) => { state.endDate = event.target.value; render(); });
       document.getElementById("period-reset").addEventListener("click", () => {
