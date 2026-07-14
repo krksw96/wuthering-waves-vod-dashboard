@@ -26,6 +26,7 @@ if (!apiKey) throw new Error("YOUTUBE_API_KEY is not configured");
 const related = /명조|워더링\s*웨이브|wuthering\s*waves|\bwuwa\b|鳴潮/i;
 const aiUse = /\b(?:suno|udio|chatgpt)\b|인공지능|생성형\s*ai|ai\s*(?:생성|사용|커버|노래|그림|영상)/i;
 const korean = /[가-힣]/;
+const excludedChannelIds = new Set(["UCKuq0c-RXYaulECSuu5hFug"]); // @WW_KR_Official
 
 async function api(resource, params) {
   const url = new URL(`https://www.googleapis.com/youtube/v3/${resource}`);
@@ -107,7 +108,7 @@ const rows = details.flatMap((item) => {
   const text = [snippet.title, snippet.description, ...(snippet.tags || []), snippet.channelTitle].join(" ");
   const date = String(snippet.publishedAt || "").slice(0, 10);
   const koreanEvidence = korean.test(`${snippet.title || ""} ${snippet.channelTitle || ""}`) || /^ko(?:-|$)/i.test(snippet.defaultLanguage || snippet.defaultAudioLanguage || "");
-  if (date < start || date > end || !related.test(text) || !koreanEvidence || aiUse.test(text)) return [];
+  if (date < start || date > end || excludedChannelIds.has(snippet.channelId) || !related.test(text) || !koreanEvidence || aiUse.test(text)) return [];
   const seconds = durationSeconds(item.contentDetails?.duration);
   return [{
     title: snippet.title,
