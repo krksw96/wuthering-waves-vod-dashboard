@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "sync": "node scripts/sync-vod-data.mjs",
+    "apply-update": "node scripts/apply-youtube-update.mjs",
     "serve": "node scripts/serve.mjs"
   }
 }
