@@ -87,7 +87,7 @@ const videos = [...byId.values()].sort((a, b) => b.date.localeCompare(a.date) ||
 const payload = {
   ...current,
   generatedAt: new Date().toISOString(),
-  period: { start: current.period.start, end: update.meta.end },
+  period: { start: current.period.start, end: [current.period.end, update.meta.end].sort().at(-1) },
   videos,
 };
 await writeFile("data/videos.js", `window.VOD_DATA = ${JSON.stringify(payload, null, 2)};\n`, "utf8");
