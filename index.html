@@ -115,12 +115,22 @@
       .segment:last-child { border-right: 0; }
       .segment.active { background: var(--dark); color: #fff; }
 
-      .table-wrap { overflow: auto; }
+      .table-wrap {
+        max-height: 840px;
+        overflow: auto;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+      }
       table { width: 100%; min-width: 1080px; border-collapse: collapse; table-layout: fixed; }
       th { position: sticky; top: 0; z-index: 2; height: 42px; padding: 0 12px; background: #f1f4f5; color: #68727e; font-size: 11px; text-align: right; white-space: nowrap; }
       th:first-child, th:nth-child(2) { text-align: left; }
       td { height: 78px; border-top: 1px solid #e4e8eb; padding: 10px 12px; font-size: 12px; text-align: right; vertical-align: middle; }
-      tbody tr { cursor: pointer; transition: background .15s ease; }
+      tbody tr {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 78px;
+        cursor: pointer;
+        transition: background .15s ease;
+      }
       tbody tr:hover { background: #f5fbfc; }
       .rank { width: 54px; color: #8a939e; font-weight: 800; text-align: center; }
       .video-cell { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; align-items: center; text-align: left; }
@@ -144,7 +154,16 @@
       .empty strong { display: block; margin-bottom: 7px; color: var(--ink); }
 
       .mobile-list { display: none; }
-      .video-card { display: grid; grid-template-columns: 126px minmax(0, 1fr); gap: 12px; padding: 13px; border-bottom: 1px solid var(--line); cursor: pointer; }
+      .video-card {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 92px;
+        display: grid;
+        grid-template-columns: 126px minmax(0, 1fr);
+        gap: 12px;
+        padding: 13px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
       .video-card .thumb { width: 126px; }
       .video-card-stats { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 9px; color: var(--muted); font-size: 10px; }
 
@@ -210,7 +229,13 @@
         .segments { width: 100%; }
         .segment { flex: 1; padding: 0 6px; }
         .table-wrap { display: none; }
-        .mobile-list { display: block; }
+        .mobile-list {
+          display: block;
+          max-height: 920px;
+          overflow-y: auto;
+          overscroll-behavior: contain;
+          scrollbar-gutter: stable;
+        }
         .detail-stats { grid-template-columns: repeat(2, 1fr); }
         .collection-method { margin: 36px 0 40px; }
         .method-grid { grid-template-columns: 1fr; gap: 24px; }
