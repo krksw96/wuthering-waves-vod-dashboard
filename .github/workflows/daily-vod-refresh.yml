@@ -2,8 +2,8 @@ name: Daily VOD Refresh
 
 on:
   schedule:
-    # 08:00 Asia/Shanghai = 00:00 UTC.
-    - cron: "0 0 * * *"
+    # 08:00 Asia/Seoul = 23:00 UTC on the previous day.
+    - cron: "0 23 * * *"
   workflow_dispatch:
     inputs:
       target_date:
