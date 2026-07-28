@@ -57,8 +57,11 @@ async function api(resource, params) {
 const batches = (values, size = 50) => Array.from({ length: Math.ceil(values.length / size) }, (_, index) => values.slice(index * size, (index + 1) * size));
 const channelIds = new Map();
 let refreshed = 0;
+let videosListCalls = 0;
+let channelsListCalls = 0;
 for (const ids of batches([...byId.keys()])) {
   const result = await api("videos", { part: "snippet,statistics", id: ids.join(","), maxResults: "50" });
+  videosListCalls += 1;
   for (const item of result.items || []) {
     const video = byId.get(item.id);
     const stats = item.statistics || {};
@@ -76,6 +79,7 @@ for (const ids of batches([...byId.keys()])) {
 const subscribers = new Map();
 for (const ids of batches([...channelIds.keys()])) {
   const result = await api("channels", { part: "statistics", id: ids.join(","), maxResults: "50" });
+  channelsListCalls += 1;
   for (const item of result.items || []) subscribers.set(item.id, item.statistics?.hiddenSubscriberCount ? null : Number(item.statistics?.subscriberCount ?? 0));
 }
 for (const video of byId.values()) {
@@ -93,8 +97,19 @@ const videos = [...byId.values()].sort((a, b) => b.date.localeCompare(a.date) ||
 const payload = {
   ...current,
   generatedAt: new Date().toISOString(),
-  period: { start: current.period.start, end: [current.period.end, update.meta.end].sort().at(-1) },
+  period: {
+    start: [current.period.start, update.meta.start].filter(Boolean).sort().at(0),
+    end: [current.period.end, update.meta.end].filter(Boolean).sort().at(-1),
+  },
   videos,
 };
 await writeFile("data/videos.js", `window.VOD_DATA = ${JSON.stringify(payload, null, 2)};\n`, "utf8");
-console.log(JSON.stringify({ previous: current.videos.length, added: videos.length - current.videos.length, total: videos.length, refreshed }));
+console.log(JSON.stringify({
+  previous: current.videos.length,
+  added: videos.length - current.videos.length,
+  total: videos.length,
+  refreshed,
+  videosListCalls,
+  channelsListCalls,
+  generalCalls: videosListCalls + channelsListCalls,
+}));

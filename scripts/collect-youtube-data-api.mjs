@@ -17,14 +17,17 @@ const start = String(args.start || "2026-05-28");
 const end = String(args.end || "2026-07-13");
 const maxPages = Math.min(Number.parseInt(args.maxPages || "5", 10), 5);
 const windowDays = Number.parseInt(args.windowDays || "0", 10);
-const searchQueries = args.coreQueries ? queries.slice(0, 4) : queries;
+const requestedQueries = String(args.queries || "").split("|").map((query) => query.trim()).filter(Boolean);
+const searchQueries = requestedQueries.length ? requestedQueries : (args.coreQueries ? queries.slice(0, 4) : queries);
 const includeIds = String(args.includeIds || "").split(",").map((id) => id.trim()).filter(Boolean);
 const output = resolve(String(args.output || "../data/youtube_data_api_audit.json"));
 const apiKey = process.env.YOUTUBE_API_KEY;
 if (!apiKey) throw new Error("YOUTUBE_API_KEY is not configured");
 
 const related = /명조|워더링\s*웨이브|wuthering\s*waves|\bwuwa\b|鳴潮/i;
-const aiUse = /\b(?:suno|udio|chatgpt)\b|인공지능|생성형\s*ai|ai\s*(?:생성|사용|커버|노래|그림|영상)/i;
+const aiNamedTool = /\b(?:suno|udio|chatgpt|rvc|tts)\b|인공지능|생성형\s*ai/i;
+const aiInTitle = /(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$)/i;
+const aiDisclosure = /(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$).{0,40}(?:만들|제작|생성|변환|보정|활용|이용|도움|업스케일|보이스|음악|노래|이미지|영상|목소리)|(?:만들|제작|생성|변환|보정|활용|이용|도움|업스케일|보이스|음악|노래|이미지|영상|목소리).{0,40}(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$)|\busing\s+ai\b|ai[-\s]?(?:generated|made|voice|music|image|video|animation|art|cover)/is;
 const korean = /[가-힣]/;
 const excludedChannelIds = new Set(["UCKuq0c-RXYaulECSuu5hFug"]); // @WW_KR_Official
 const publishedDateInKorea = (value) => {
@@ -58,6 +61,8 @@ function durationSeconds(value = "") {
 
 const candidates = new Map();
 let searchCalls = 0;
+let videosListCalls = 0;
+let channelsListCalls = 0;
 const rangeStart = new Date(`${start}T00:00:00+09:00`);
 const endExclusive = new Date(new Date(`${end}T00:00:00+09:00`).getTime() + 86400000);
 const windows = [];
@@ -102,12 +107,14 @@ for (const id of includeIds) candidates.set(id, { query: "explicit video ID" });
 const details = [];
 for (const ids of batches([...candidates.keys()])) {
   const result = await api("videos", { part: "snippet,contentDetails,statistics,status", id: ids.join(","), maxResults: "50" });
+  videosListCalls += 1;
   details.push(...(result.items || []));
 }
 const channelIds = [...new Set(details.map((item) => item.snippet?.channelId).filter(Boolean))];
 const channels = new Map();
 for (const ids of batches(channelIds)) {
   const result = await api("channels", { part: "snippet,statistics", id: ids.join(","), maxResults: "50" });
+  channelsListCalls += 1;
   for (const item of result.items || []) channels.set(item.id, item);
 }
 
@@ -118,7 +125,8 @@ const rows = details.flatMap((item) => {
   const text = [snippet.title, snippet.description, ...(snippet.tags || []), snippet.channelTitle].join(" ");
   const date = publishedDateInKorea(snippet.publishedAt);
   const koreanEvidence = korean.test(`${snippet.title || ""} ${snippet.channelTitle || ""}`) || /^ko(?:-|$)/i.test(snippet.defaultLanguage || snippet.defaultAudioLanguage || "");
-  if (date < start || date > end || excludedChannelIds.has(snippet.channelId) || !related.test(text) || !koreanEvidence || aiUse.test(text)) return [];
+  const disclosedAiUse = aiNamedTool.test(text) || aiInTitle.test(snippet.title || "") || aiDisclosure.test(text) || /^dear\s+ai$/i.test(snippet.channelTitle || "");
+  if (date < start || date > end || excludedChannelIds.has(snippet.channelId) || !related.test(text) || !koreanEvidence || disclosedAiUse) return [];
   const seconds = durationSeconds(item.contentDetails?.duration);
   return [{
     title: snippet.title,
@@ -141,5 +149,6 @@ const rows = details.flatMap((item) => {
 }).sort((a, b) => b.date.localeCompare(a.date) || b.viewCount - a.viewCount);
 
 await mkdir(dirname(output), { recursive: true });
-await writeFile(output, `${JSON.stringify({ meta: { collectedAt: new Date().toISOString(), start, end, searchCalls, candidateCount: candidates.size, resultCount: rows.length }, rows }, null, 2)}\n`, "utf8");
-console.log(JSON.stringify({ output, searchCalls, candidates: candidates.size, rows: rows.length }));
+const generalCalls = videosListCalls + channelsListCalls;
+await writeFile(output, `${JSON.stringify({ meta: { collectedAt: new Date().toISOString(), start, end, searchCalls, videosListCalls, channelsListCalls, generalCalls, candidateCount: candidates.size, resultCount: rows.length }, rows }, null, 2)}\n`, "utf8");
+console.log(JSON.stringify({ output, searchCalls, videosListCalls, channelsListCalls, generalCalls, candidates: candidates.size, rows: rows.length }));
