@@ -27,6 +27,15 @@ const related = /명조|워더링\s*웨이브|wuthering\s*waves|\bwuwa\b|鳴潮/
 const aiUse = /\b(?:suno|udio|chatgpt)\b|인공지능|생성형\s*ai|ai\s*(?:생성|사용|커버|노래|그림|영상)/i;
 const korean = /[가-힣]/;
 const excludedChannelIds = new Set(["UCKuq0c-RXYaulECSuu5hFug"]); // @WW_KR_Official
+const publishedDateInKorea = (value) => {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date(value)).map((part) => [part.type, part.value]));
+  return `${parts.year}-${parts.month}-${parts.day}`;
+};
 
 async function api(resource, params) {
   const url = new URL(`https://www.googleapis.com/youtube/v3/${resource}`);
@@ -49,16 +58,17 @@ function durationSeconds(value = "") {
 
 const candidates = new Map();
 let searchCalls = 0;
-const endExclusive = new Date(new Date(`${end}T00:00:00Z`).getTime() + 86400000);
+const rangeStart = new Date(`${start}T00:00:00+09:00`);
+const endExclusive = new Date(new Date(`${end}T00:00:00+09:00`).getTime() + 86400000);
 const windows = [];
 if (windowDays > 0) {
-  for (let cursor = new Date(`${start}T00:00:00Z`); cursor < endExclusive;) {
+  for (let cursor = new Date(rangeStart); cursor < endExclusive;) {
     const windowStart = new Date(cursor);
     cursor = new Date(Math.min(cursor.getTime() + windowDays * 86400000, endExclusive.getTime()));
     windows.push({ after: windowStart.toISOString(), before: cursor.toISOString() });
   }
 } else {
-  windows.push({ after: `${start}T00:00:00Z`, before: endExclusive.toISOString() });
+  windows.push({ after: rangeStart.toISOString(), before: endExclusive.toISOString() });
 }
 for (const query of searchQueries) {
   for (const window of windows) {
@@ -106,7 +116,7 @@ const rows = details.flatMap((item) => {
   const stats = item.statistics || {};
   const channel = channels.get(snippet.channelId) || {};
   const text = [snippet.title, snippet.description, ...(snippet.tags || []), snippet.channelTitle].join(" ");
-  const date = String(snippet.publishedAt || "").slice(0, 10);
+  const date = publishedDateInKorea(snippet.publishedAt);
   const koreanEvidence = korean.test(`${snippet.title || ""} ${snippet.channelTitle || ""}`) || /^ko(?:-|$)/i.test(snippet.defaultLanguage || snippet.defaultAudioLanguage || "");
   if (date < start || date > end || excludedChannelIds.has(snippet.channelId) || !related.test(text) || !koreanEvidence || aiUse.test(text)) return [];
   const seconds = durationSeconds(item.contentDetails?.duration);

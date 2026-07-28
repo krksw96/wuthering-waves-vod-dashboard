@@ -80,6 +80,12 @@ for (const ids of batches([...channelIds.keys()])) {
 }
 for (const video of byId.values()) {
   if (video.channelId && subscribers.has(video.channelId)) video.subscribers = subscribers.get(video.channelId);
+  const creatorKey = normalize(video.creator);
+  video.isKoc = kocAliases.has(creatorKey);
+  video.kocName = kocAliases.get(creatorKey) || null;
+  video.isKol = kolAliases.has(creatorKey);
+  video.kolName = kolAliases.get(creatorKey) || null;
+  video.isAdTask = adIds.has(video.id);
   delete video.channelId;
 }
 
