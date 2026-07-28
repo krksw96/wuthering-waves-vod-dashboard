@@ -3,7 +3,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 
-const timeZone = "Asia/Shanghai";
+const timeZone = "Asia/Seoul";
 const dateParts = (date) => Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
   timeZone,
   year: "numeric",
@@ -15,7 +15,7 @@ const isoDate = (date) => {
   return `${parts.year}-${parts.month}-${parts.day}`;
 };
 const end = process.env.TARGET_DATE || isoDate(new Date());
-const endNoon = new Date(`${end}T12:00:00+08:00`);
+const endNoon = new Date(`${end}T12:00:00+09:00`);
 const start = isoDate(new Date(endNoon.getTime() - 86400000));
 const compactEnd = end.replaceAll("-", "");
 const updateFile = `data/youtube-update-${start}_${end}.json`;
