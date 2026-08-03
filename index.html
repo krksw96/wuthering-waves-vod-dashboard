@@ -529,7 +529,12 @@
           (!dailyEndDate.value || video.date <= dailyEndDate.value)
         );
         document.getElementById("daily-count").textContent = t("dailyCount", { count: nf.format(rows.length) });
-        document.getElementById("daily-views").textContent = t("dailyViews", { count: compact.format(rows.reduce((sum, video) => sum + (video.views || 0), 0)) });
+        document.getElementById("daily-views").textContent = formats.map((format) => {
+          const views = rows
+            .filter((video) => video.format === format)
+            .reduce((sum, video) => sum + (video.views || 0), 0);
+          return `${format} ${compact.format(views)}`;
+        }).join(" · ");
         document.getElementById("daily-formats").textContent = formats.map((format) => `${format} ${rows.filter((video) => video.format === format).length}`).join(" · ");
       }
 
