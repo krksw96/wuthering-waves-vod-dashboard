@@ -16,6 +16,13 @@
 npm.cmd run sync
 ```
 
+광고 과업 태그는 Feishu `0GfgFb` 탭의 영상 ID(B열) 또는 링크(G열)를 기준으로 매일 자동 동기화됩니다.
+수동 실행 시 `FEISHU_APP_ID`, `FEISHU_APP_SECRET`을 설정한 뒤 아래 명령을 사용합니다.
+
+```powershell
+npm.cmd run sync-ad-tags
+```
+
 ## 로컬 실행
 
 ```powershell

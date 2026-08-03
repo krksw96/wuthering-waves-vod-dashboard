@@ -34,6 +34,7 @@ await run("scripts/collect-youtube-data-api.mjs", [
   "--maxPages=2",
   `--output=${updateFile}`,
 ]);
+await run("scripts/sync-ad-task-tags.mjs", []);
 await run("scripts/apply-youtube-update.mjs", [updateFile]);
 
 const videosSource = await readFile("data/videos.js", "utf8");
