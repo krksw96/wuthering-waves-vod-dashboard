@@ -34,7 +34,11 @@ await run("scripts/collect-youtube-data-api.mjs", [
   "--maxPages=2",
   `--output=${updateFile}`,
 ]);
-await run("scripts/sync-ad-task-tags.mjs", []);
+if (process.env.FEISHU_APP_ID && process.env.FEISHU_APP_SECRET) {
+  await run("scripts/sync-ad-task-tags.mjs", []);
+} else {
+  console.warn("Skipping Feishu advertising-task sync: FEISHU_APP_ID/FEISHU_APP_SECRET are not configured");
+}
 await run("scripts/apply-youtube-update.mjs", [updateFile]);
 
 const videosSource = await readFile("data/videos.js", "utf8");
