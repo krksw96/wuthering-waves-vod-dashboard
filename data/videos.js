@@ -6681,7 +6681,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "GTz6euR_A-g",
@@ -42609,7 +42609,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "GB03XIR0RPE",

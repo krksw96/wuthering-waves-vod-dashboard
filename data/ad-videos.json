@@ -2,7 +2,7 @@
   "meta": {
     "start": "2026-05-28",
     "end": "2026-07-13",
-    "resultCount": 10
+    "resultCount": 16
   },
   "rows": [
     { "title": "내 아내를 향한 진심을 보여주마 [명조 토크]", "link": "https://www.youtube.com/watch?v=5yg_DKIsRDA", "youtubeId": "5yg_DKIsRDA", "channelTitle": "아라하시 타비 ARAHASHI TABI", "channelId": "UCAHVQ44O81aehLWfy9O6Elw", "subscriberCount": 247000, "date": "2026-07-01", "viewCount": 28275, "likeCount": 1162, "commentCount": 86, "durationSeconds": 1089, "format": "VOD", "sources": "user confirmed advertising task" },
@@ -72,6 +72,12 @@
       "searchPublishedText": "스트리밍 시간: 20시간 전",
       "searchViewText": "조회수 1,369회",
       "sources": "명조 광고 / this_week / continuation 1"
-    }
+    },
+    { "youtubeId": "8T4VrkFv4Rw", "link": "https://www.youtube.com/watch?v=8T4VrkFv4Rw", "channelTitle": "중년게이머 김실장", "title": "자동사냥#9 | 명조: 워더링 웨이브 사랑단", "sources": "Feishu advertising task sheet 0GfgFb" },
+    { "youtubeId": "i9y5S00eClQ", "link": "https://www.youtube.com/watch?v=i9y5S00eClQ", "channelTitle": "고뇨", "title": "도티님 엔코르님 명조 영업 성공했습니다", "sources": "Feishu advertising task sheet 0GfgFb" },
+    { "youtubeId": "w1M2PyiSncQ", "link": "https://www.youtube.com/watch?v=w1M2PyiSncQ", "channelTitle": "도티", "sources": "Feishu advertising task sheet 0GfgFb" },
+    { "youtubeId": "wt-3xwVBen8", "link": "https://www.youtube.com/watch?v=wt-3xwVBen8", "channelTitle": "엔코르 nCore", "sources": "Feishu advertising task sheet 0GfgFb" },
+    { "youtubeId": "IgZPJK9MjG0", "link": "https://www.youtube.com/watch?v=IgZPJK9MjG0", "channelTitle": "명떡", "sources": "Feishu advertising task sheet 0GfgFb" },
+    { "youtubeId": "7aGOvBnTu0s", "link": "https://www.youtube.com/watch?v=7aGOvBnTu0s", "channelTitle": "명떡", "sources": "Feishu advertising task sheet 0GfgFb" }
   ]
 }
