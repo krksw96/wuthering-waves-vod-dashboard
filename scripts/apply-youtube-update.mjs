@@ -15,6 +15,7 @@ const update = JSON.parse(await readFile(source, "utf8"));
 const kocList = JSON.parse(await readFile("data/koc-list.json", "utf8"));
 const kolList = JSON.parse(await readFile("data/kol-list.json", "utf8"));
 const adVideos = JSON.parse(await readFile("data/ad-videos.json", "utf8"));
+const statsOverrides = JSON.parse(await readFile("data/stats-overrides.json", "utf8").catch(() => "{}"));
 
 const normalize = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
 const aliases = (items) => new Map(items.flatMap((item) => item.aliases.map((alias) => [normalize(alias), item.name])));
@@ -84,6 +85,9 @@ for (const ids of batches([...channelIds.keys()])) {
 }
 for (const video of byId.values()) {
   if (video.channelId && subscribers.has(video.channelId)) video.subscribers = subscribers.get(video.channelId);
+  const override = statsOverrides[video.id];
+  if (override && Object.prototype.hasOwnProperty.call(override, "likes")) video.likes = override.likes;
+  if (override && Object.prototype.hasOwnProperty.call(override, "comments")) video.comments = override.comments;
   const creatorKey = normalize(video.creator);
   video.isKoc = kocAliases.has(creatorKey);
   video.kocName = kocAliases.get(creatorKey) || null;
