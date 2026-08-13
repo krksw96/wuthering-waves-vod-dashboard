@@ -1,5 +1,5 @@
 window.VOD_DATA = {
-  "generatedAt": "2026-08-13T03:48:06.491Z",
+  "generatedAt": "2026-08-13T03:52:11.532Z",
   "period": {
     "start": "2025-06-01",
     "end": "2026-08-13"
@@ -2955,7 +2955,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "w08Nx5oxwaM",
@@ -9705,7 +9705,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "nS8TrdQNesg",
