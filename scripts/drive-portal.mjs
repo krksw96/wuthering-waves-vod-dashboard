@@ -12,7 +12,7 @@ const translations = {
     quickLinksAria: "대시보드 바로가기", languageAria: "언어 변경", controlsAria: "조작 방법",
     startDescription: "비 내리는 네온 시티를 직접 운전해 명조, 이환, 젠레스 존 제로 구역을 찾아가세요. 빛나는 데이터 포털 안에 잠시 머무르면 해당 대시보드가 열립니다.",
     startButton: "시동 걸기", accelerator: "액셀", brakeReverse: "브레이크 · 후진", steering: "앞바퀴 조향",
-    boost: "부스터", resetCar: "차량 복귀", resetShort: "복귀", driveHint: "액셀·브레이크", cameraView: "드래그·휠 시야",
+    boost: "부스터", drift: "핸드브레이크 · 드리프트", driftShort: "드리프트", resetCar: "차량 복귀", resetShort: "복귀", driveHint: "액셀·브레이크", cameraView: "드래그·휠 시야",
     loadingCity: "데이터 시티를 불러오는 중…", loadingRequested: "준비되는 즉시 자동으로 출발합니다",
     ready: "준비 완료 · 시동을 걸어 출발하세요", departing: "출발합니다", loadingButton: "도시 불러오는 중…",
     nearestDistrict: "NEAREST DATA DISTRICT", calculating: "거리 계산 중", portalHint: "원 안에 머무르면 대시보드가 열립니다",
@@ -26,7 +26,7 @@ const translations = {
     quickLinksAria: "数据看板快捷入口", languageAria: "切换语言", controlsAria: "驾驶操作",
     startDescription: "驾驶汽车穿过雨夜霓虹都市，前往鸣潮、异环和绝区零数据区。在发光传送门内停留片刻即可打开相应数据看板。",
     startButton: "启动引擎", accelerator: "油门", brakeReverse: "刹车 · 倒车", steering: "前轮转向",
-    boost: "加速器", resetCar: "车辆复位", resetShort: "复位", driveHint: "油门·刹车", cameraView: "拖动·滚轮视角",
+    boost: "加速器", drift: "手刹漂移", driftShort: "漂移", resetCar: "车辆复位", resetShort: "复位", driveHint: "油门·刹车", cameraView: "拖动·滚轮视角",
     loadingCity: "正在加载数据城…", loadingRequested: "准备完成后将自动出发",
     ready: "准备完成 · 启动引擎即可出发", departing: "出发", loadingButton: "正在加载城市…",
     nearestDistrict: "最近的数据区域", calculating: "正在计算距离", portalHint: "停留在圆环内即可打开数据看板",
@@ -40,7 +40,7 @@ const translations = {
     quickLinksAria: "Dashboard shortcuts", languageAria: "Change language", controlsAria: "Driving controls",
     startDescription: "Drive through the rain-soaked neon city to the Wuthering Waves, NTE, and ZZZ districts. Stay inside a glowing portal to open its dashboard.",
     startButton: "START ENGINE", accelerator: "Accelerate", brakeReverse: "Brake · Reverse", steering: "Front-wheel steering",
-    boost: "Boost", resetCar: "Reset car", resetShort: "Reset", driveHint: "Accelerate·Brake", cameraView: "Drag·wheel view",
+    boost: "Boost", drift: "Handbrake drift", driftShort: "Drift", resetCar: "Reset car", resetShort: "Reset", driveHint: "Accelerate·Brake", cameraView: "Drag·wheel view",
     loadingCity: "Loading Data City…", loadingRequested: "Departure begins as soon as the city is ready",
     ready: "Ready · Start the engine to depart", departing: "Departing", loadingButton: "Loading city…",
     nearestDistrict: "NEAREST DATA DISTRICT", calculating: "Calculating distance", portalHint: "Stay inside the ring to open the dashboard",
@@ -304,7 +304,7 @@ function initDataCity(THREE) {
   buildSkyline();
   zones.forEach((zone, index) => buildDistrict(zone, index));
 
-  const { car, carBody, wheelSpins, frontWheelPivots, boostTrails } = buildCar();
+  const { car, carBody, wheelSpins, frontWheelPivots, boostTrails, driftSmoke } = buildCar();
   scene.add(car);
   const proximityFadeMeshes = [];
   const proximityFadeRayMeshes = [];
@@ -316,7 +316,7 @@ function initDataCity(THREE) {
   const directSightOccluders = new Set();
   prepareProximityFades();
 
-  const inputs = { forward: false, backward: false, left: false, right: false, boost: false };
+  const inputs = { forward: false, backward: false, left: false, right: false, boost: false, drift: false };
   const vehicle = {
     wheelBase: 2.27,
     trackWidth: 2.24,
@@ -332,6 +332,8 @@ function initDataCity(THREE) {
     speed: 0,
     yaw: 0,
     yawRate: 0,
+    lateralVelocity: 0,
+    driftFactor: 0,
     acceleration: 0,
     steeringAngle: 0,
     boostUntil: 0,
@@ -408,12 +410,22 @@ function initDataCity(THREE) {
       inputs[keyMap.get(event.code)] = true;
       event.preventDefault();
     }
+    if (event.code === "Space") {
+      if (state.started) inputs.drift = true;
+      else if (!event.repeat) startButton.click();
+      event.preventDefault();
+    }
     if (event.code === "KeyR" && !event.repeat) resetCar();
-    if ((event.code === "Enter" || event.code === "Space") && !state.started) startButton.click();
+    if (event.code === "Enter" && !state.started) startButton.click();
   });
   addEventListener("keyup", (event) => {
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
       inputs.boost = false;
+      event.preventDefault();
+      return;
+    }
+    if (event.code === "Space") {
+      inputs.drift = false;
       event.preventDefault();
       return;
     }
@@ -2006,7 +2018,27 @@ function initDataCity(THREE) {
       boostTrails.add(exhaustLight);
     });
     group.add(boostTrails);
-    return { car: group, carBody: bodyGroup, wheelSpins: allWheelSpins, frontWheelPivots: steerPivots, boostTrails };
+    const driftSmoke = new THREE.Group();
+    driftSmoke.visible = false;
+    [-1.02, 1.02].forEach((x) => {
+      for (let index = 0; index < 4; index += 1) {
+        const puff = new THREE.Mesh(
+          new THREE.SphereGeometry(0.28 + index * 0.08, 10, 7),
+          new THREE.MeshBasicMaterial({
+            color: 0xd6e9ee,
+            transparent: true,
+            opacity: 0.2,
+            depthWrite: false,
+          }),
+        );
+        puff.position.set(x, 0.28 + index * 0.08, 1.18 + index * 0.42);
+        puff.userData.baseOpacity = 0.2 - index * 0.032;
+        puff.userData.phase = index * 1.7 + (x > 0 ? 0.8 : 0);
+        driftSmoke.add(puff);
+      }
+    });
+    group.add(driftSmoke);
+    return { car: group, carBody: bodyGroup, wheelSpins: allWheelSpins, frontWheelPivots: steerPivots, boostTrails, driftSmoke };
   }
 
   function makeLabel(title, subtitle, color) {
@@ -2155,6 +2187,8 @@ function initDataCity(THREE) {
     state.speed = 0;
     state.yaw = 0;
     state.yawRate = 0;
+    state.lateralVelocity = 0;
+    state.driftFactor = 0;
     state.acceleration = 0;
     state.steeringAngle = 0;
     state.boostUntil = 0;
@@ -2179,12 +2213,14 @@ function initDataCity(THREE) {
     resetTrafficCones();
     zonePrompt.classList.remove("visible");
     zonePrompt.style.setProperty("--entry-progress", "0%");
-    document.body.classList.remove("boosting");
+    document.body.classList.remove("boosting", "drifting");
+    driftSmoke.visible = false;
   }
 
   function stepVehiclePhysics(step) {
     const steeringInput = Number(inputs.right) - Number(inputs.left);
     const boostActive = (inputs.boost || performance.now() < state.boostUntil) && inputs.forward && state.speed >= 0;
+    const handbrakeActive = inputs.drift && !state.airborne && state.speed > 3.5;
     let longitudinalForce = 0;
 
     if (inputs.forward) {
@@ -2206,6 +2242,7 @@ function initDataCity(THREE) {
 
     const rollingResistance = Math.abs(state.speed) > 0.02 ? Math.sign(state.speed) * 0.62 : 0;
     const aerodynamicDrag = state.speed * Math.abs(state.speed) * 0.028;
+    if (handbrakeActive) longitudinalForce -= 3.8;
     if (!boostActive && state.speed > vehicle.maxForwardSpeed) longitudinalForce -= (state.speed - vehicle.maxForwardSpeed) * 2.4;
     state.acceleration = longitudinalForce - rollingResistance - aerodynamicDrag;
     state.speed += state.acceleration * step;
@@ -2226,13 +2263,43 @@ function initDataCity(THREE) {
       1 - Math.exp(-steeringResponse * step),
     );
 
-    state.yawRate = Math.abs(state.speed) > 0.015
+    const baseYawRate = Math.abs(state.speed) > 0.015
       ? (state.speed / vehicle.wheelBase) * Math.tan(state.steeringAngle)
       : 0;
+    const targetDriftFactor = handbrakeActive && Math.abs(steeringInput) > 0.05
+      ? THREE.MathUtils.clamp((state.speed - 3.5) / 7.5, 0, 1)
+      : 0;
+    state.driftFactor = THREE.MathUtils.lerp(
+      state.driftFactor,
+      targetDriftFactor,
+      1 - Math.exp(-(targetDriftFactor > state.driftFactor ? 7.5 : 3.2) * step),
+    );
+    const targetYawRate = THREE.MathUtils.clamp(
+      baseYawRate * (1 + state.driftFactor * 0.58),
+      -2.35,
+      2.35,
+    );
+    state.yawRate = THREE.MathUtils.lerp(
+      state.yawRate,
+      targetYawRate,
+      1 - Math.exp(-(state.driftFactor > 0.05 ? 7 : 13) * step),
+    );
+    const targetLateralVelocity = -steeringInput * Math.abs(state.speed) * 0.38 * state.driftFactor;
+    if (!state.airborne) {
+      state.lateralVelocity = THREE.MathUtils.lerp(
+        state.lateralVelocity,
+        targetLateralVelocity,
+        1 - Math.exp(-(state.driftFactor > 0.05 ? 5.2 : 3.6) * step),
+      );
+    }
+    if (Math.abs(state.lateralVelocity) < 0.01 && state.driftFactor < 0.01) state.lateralVelocity = 0;
     const middleYaw = state.yaw + state.yawRate * step * 0.5;
     forward.set(Math.sin(middleYaw), 0, -Math.cos(middleYaw));
-    // A no-slip bicycle model: the rear axle can only move along its own heading.
+    right.set(Math.cos(middleYaw), 0, Math.sin(middleYaw));
+    // Normal driving stays on the bicycle-model heading; the handbrake alone
+    // releases rear grip and adds a controlled lateral slide.
     state.rearAxle.addScaledVector(forward, state.speed * step);
+    state.rearAxle.addScaledVector(right, state.lateralVelocity * step);
     state.yaw += state.yawRate * step;
     state.wheelRotation -= state.speed * step / vehicle.wheelRadius;
     checkTrafficConeCollisions();
@@ -2303,7 +2370,9 @@ function initDataCity(THREE) {
       state.physicsAccumulator -= vehicle.fixedStep;
     }
     const boostActive = (inputs.boost || performance.now() < state.boostUntil) && inputs.forward && state.speed > 0.2;
+    const driftActive = state.driftFactor > 0.08 && Math.abs(state.lateralVelocity) > 0.08 && !state.airborne;
     document.body.classList.toggle("boosting", boostActive);
+    document.body.classList.toggle("drifting", driftActive);
     boostTrails.visible = boostActive;
     if (boostActive) {
       const boostRatio = THREE.MathUtils.clamp(state.speed / vehicle.boostedMaxForwardSpeed, 0.2, 1);
@@ -2315,6 +2384,15 @@ function initDataCity(THREE) {
           trail.material.opacity = trail.userData.baseOpacity * (0.78 + boostRatio * 0.3);
         }
         if (trail.userData.boostLight) trail.intensity = 5 + boostRatio * 8 + Math.sin(state.elapsed * 25) * 1.2;
+      });
+    }
+    driftSmoke.visible = driftActive;
+    if (driftActive) {
+      const smokeStrength = THREE.MathUtils.clamp(state.driftFactor + Math.abs(state.lateralVelocity) / 9, 0.25, 1);
+      driftSmoke.children.forEach((puff) => {
+        const pulse = 0.82 + Math.sin(state.elapsed * 12 + puff.userData.phase) * 0.18;
+        puff.scale.setScalar((0.78 + smokeStrength * 0.72) * pulse);
+        puff.material.opacity = puff.userData.baseOpacity * smokeStrength * pulse;
       });
     }
 

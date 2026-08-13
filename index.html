@@ -228,6 +228,8 @@
       .gear { display: grid; place-items: center; width: 28px; height: 28px; margin-left: 4px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-size: 10px; font-weight: 950; backdrop-filter: blur(12px); }
       .boost-pill { display: none; align-items: center; height: 28px; border: 1px solid #7af7ec; border-radius: 8px; padding: 0 9px; background: rgba(61,224,214,.16); color: #bafffa; font-size: 8px; font-weight: 950; letter-spacing: .12em; box-shadow: 0 0 20px rgba(75,237,224,.26); }
       body.boosting .boost-pill { display: inline-flex; }
+      .drift-pill { display: none; align-items: center; height: 28px; border: 1px solid #bc8cff; border-radius: 8px; padding: 0 9px; background: rgba(140,87,255,.18); color: #eadcff; font-size: 8px; font-weight: 950; letter-spacing: .12em; box-shadow: 0 0 20px rgba(165,102,255,.3); }
+      body.drifting .drift-pill { display: inline-flex; }
 
       .control-hint {
         position: fixed;
@@ -372,6 +374,7 @@
           <div class="key-row"><kbd>S</kbd><kbd>↓</kbd><span data-i18n="brakeReverse">브레이크 · 후진</span></div>
           <div class="key-row"><kbd>A</kbd><kbd>D</kbd><kbd>←</kbd><kbd>→</kbd><span data-i18n="steering">앞바퀴 조향</span></div>
           <div class="key-row"><kbd>Shift</kbd><span data-i18n="boost">부스터</span></div>
+          <div class="key-row"><kbd>Space</kbd><span data-i18n="drift">핸드브레이크 · 드리프트</span></div>
           <div class="key-row"><kbd>R</kbd><span data-i18n="resetCar">차량 복귀</span></div>
           <div class="key-row"><kbd>Mouse</kbd><span data-i18n="cameraView">드래그·휠 시야</span></div>
         </div>
@@ -396,9 +399,9 @@
       </aside>
 
       <div class="speedometer" aria-label="차량 속도">
-        <strong class="speed-value" id="speed-value">00</strong><span class="speed-unit">KM/H</span><span class="gear" id="gear">N</span><span class="boost-pill">BOOST</span>
+        <strong class="speed-value" id="speed-value">00</strong><span class="speed-unit">KM/H</span><span class="gear" id="gear">N</span><span class="boost-pill">BOOST</span><span class="drift-pill">DRIFT</span>
       </div>
-      <div class="control-hint"><span><kbd>W/S</kbd> <span data-i18n="driveHint">액셀·브레이크</span></span><span>·</span><span><kbd>A/D</kbd> <span data-i18n="steering">앞바퀴 조향</span></span><span>·</span><span><kbd>Mouse</kbd> <span data-i18n="cameraView">드래그·휠 시야</span></span><span>·</span><span><kbd>Shift</kbd> <span data-i18n="boost">부스터</span></span><span>·</span><span><kbd>R</kbd> <span data-i18n="resetShort">복귀</span></span></div>
+      <div class="control-hint"><span><kbd>W/S</kbd> <span data-i18n="driveHint">액셀·브레이크</span></span><span>·</span><span><kbd>A/D</kbd> <span data-i18n="steering">앞바퀴 조향</span></span><span>·</span><span><kbd>Space</kbd> <span data-i18n="driftShort">드리프트</span></span><span>·</span><span><kbd>Mouse</kbd> <span data-i18n="cameraView">드래그·휠 시야</span></span><span>·</span><span><kbd>Shift</kbd> <span data-i18n="boost">부스터</span></span><span>·</span><span><kbd>R</kbd> <span data-i18n="resetShort">복귀</span></span></div>
     </div>
 
     <div class="zone-prompt" id="zone-prompt">
