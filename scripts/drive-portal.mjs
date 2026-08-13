@@ -165,7 +165,7 @@ function initDataCity(THREE) {
   scene.background = new THREE.Color(0x030c12);
   scene.fog = new THREE.FogExp2(0x07171d, 0.018);
 
-  const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, 0.1, 180);
+  const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 210);
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
   renderer.setSize(innerWidth, innerHeight, false);
@@ -298,8 +298,10 @@ function initDataCity(THREE) {
   const right = new THREE.Vector3();
 
   resetCar();
-  camera.position.set(0, 8.2, 16);
-  camera.lookAt(0, 1, 0);
+  cameraPosition.set(0, 11.8, 14);
+  cameraTarget.set(0, 0.9, -2.4);
+  camera.position.copy(cameraPosition);
+  camera.lookAt(cameraTarget);
   const launchDrive = () => {
     if (state.started) return;
     state.started = true;
@@ -357,8 +359,8 @@ function initDataCity(THREE) {
     resetCar();
     state.navigating = false;
     state.nearestZone = null;
-    cameraPosition.set(0, 8.2, 16);
-    cameraTarget.set(0, 1, 0);
+    cameraPosition.set(0, 11.8, 14);
+    cameraTarget.set(0, 0.9, -2.4);
     clock.getDelta();
     if (state.started && musicWanted) {
       stopMusic();
@@ -787,10 +789,12 @@ function initDataCity(THREE) {
     };
 
     const amberCar = displayCar(0xb7a51c, 0xe9ffff);
+    amberCar.scale.setScalar(0.74);
     amberCar.position.set(-5.1, 0.05, 4.6);
     amberCar.rotation.y = -0.2;
     world.add(amberCar);
     const silverCar = displayCar(0xb8c2cc, 0xff4e98);
+    silverCar.scale.setScalar(0.74);
     silverCar.position.set(5.15, 0.05, 4.4);
     silverCar.rotation.y = 0.22;
     world.add(silverCar);
@@ -1026,6 +1030,7 @@ function initDataCity(THREE) {
     [-6.5, 0, 6.5].forEach((z) => {
       const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(16.2, 0.48, 0.62), steel);
       crossBeam.position.set(0, 7.1, z + 4.2);
+      crossBeam.visible = false;
       crossBeam.castShadow = true;
       garage.add(crossBeam);
     });
@@ -1046,9 +1051,10 @@ function initDataCity(THREE) {
 
     const ceilingPanels = new THREE.Mesh(
       new THREE.BoxGeometry(15.5, 0.18, 15),
-      new THREE.MeshStandardMaterial({ color: 0x0a1116, roughness: 0.55, metalness: 0.68, transparent: true, opacity: 0.82 }),
+      new THREE.MeshStandardMaterial({ color: 0x0a1116, roughness: 0.55, metalness: 0.68, transparent: true, opacity: 0.07, depthWrite: false }),
     );
     ceilingPanels.position.set(0, 8.05, 4.8);
+    ceilingPanels.visible = false;
     garage.add(ceilingPanels);
 
     for (let x = -5.5; x <= 5.5; x += 3.65) {
@@ -1335,6 +1341,9 @@ function initDataCity(THREE) {
 
   function buildCar() {
     const group = new THREE.Group();
+    // Keep the driving footprint stable while making the on-screen vehicle
+    // closer to the compact, diorama-like proportions of the reference.
+    group.scale.setScalar(0.78);
     const bodyGroup = new THREE.Group();
     group.add(bodyGroup);
     const chassis = new THREE.Mesh(
@@ -1584,20 +1593,20 @@ function initDataCity(THREE) {
     right.set(Math.cos(state.yaw), 0, Math.sin(state.yaw));
     const speedRatio = Math.min(Math.abs(state.speed) / vehicle.boostedMaxForwardSpeed, 1);
     targetCameraPosition.copy(car.position)
-      .addScaledVector(forward, -THREE.MathUtils.lerp(7.8, 9.6, speedRatio))
-      .addScaledVector(right, -state.yawRate * 0.52)
-      .add(new THREE.Vector3(0, THREE.MathUtils.lerp(4.8, 5.35, speedRatio), 0));
+      .addScaledVector(forward, -THREE.MathUtils.lerp(6.8, 7.8, speedRatio))
+      .addScaledVector(right, -state.yawRate * 0.42)
+      .add(new THREE.Vector3(0, THREE.MathUtils.lerp(8, 8.8, speedRatio), 0));
     targetCameraLook.copy(car.position)
-      .addScaledVector(forward, THREE.MathUtils.lerp(4.2, 6.1, speedRatio))
-      .addScaledVector(right, state.yawRate * 1.05)
-      .add(new THREE.Vector3(0, 0.95, 0));
-    const positionDamping = 1 - Math.exp(-3.6 * delta);
-    const lookDamping = 1 - Math.exp(-5.2 * delta);
+      .addScaledVector(forward, THREE.MathUtils.lerp(2.4, 3.8, speedRatio))
+      .addScaledVector(right, state.yawRate * 0.82)
+      .add(new THREE.Vector3(0, 0.72, 0));
+    const positionDamping = 1 - Math.exp(-3.2 * delta);
+    const lookDamping = 1 - Math.exp(-4.6 * delta);
     cameraPosition.lerp(targetCameraPosition, positionDamping);
     cameraTarget.lerp(targetCameraLook, lookDamping);
     camera.position.copy(cameraPosition);
     camera.lookAt(cameraTarget);
-    camera.fov = THREE.MathUtils.lerp(camera.fov, 52 + speedRatio * 7, 1 - Math.exp(-3 * delta));
+    camera.fov = THREE.MathUtils.lerp(camera.fov, 55 + speedRatio * 4, 1 - Math.exp(-3 * delta));
     camera.updateProjectionMatrix();
   }
 
