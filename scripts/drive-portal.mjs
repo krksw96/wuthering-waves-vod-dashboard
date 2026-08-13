@@ -285,6 +285,7 @@ function initDataCity(THREE) {
 
   const world = new THREE.Group();
   const atmosphere = { rain: null, hologram: null, petals: null, lanterns: [], clouds: [] };
+  const trafficCones = [];
   // Keep the city sparse and low so architecture never overwhelms the car.
   // These heights are two thirds of the previous compact-diorama buildings.
   const architecture = { minHeight: 1.83, maxHeight: 2.5 };
@@ -692,6 +693,7 @@ function initDataCity(THREE) {
     buildRooftopGarden(random);
     buildNightCityDetails(random);
     buildStreetFurniture(random);
+    buildTrafficConeCourse();
     buildRain(random);
 
     const starGeometry = new THREE.BufferGeometry();
@@ -1506,6 +1508,182 @@ function initDataCity(THREE) {
     }
   }
 
+  function buildTrafficConeCourse() {
+    const rubberMaterial = new THREE.MeshStandardMaterial({ color: 0x17171b, roughness: 0.88, metalness: 0.08 });
+    const orangeMaterial = new THREE.MeshStandardMaterial({
+      color: 0xff5a16,
+      emissive: 0x7a1602,
+      emissiveIntensity: 0.42,
+      roughness: 0.62,
+      metalness: 0.08,
+    });
+    const reflectiveMaterial = new THREE.MeshStandardMaterial({
+      color: 0xfff4e8,
+      emissive: 0xffb88a,
+      emissiveIntensity: 0.95,
+      roughness: 0.38,
+      metalness: 0.1,
+    });
+    const conePositions = [
+      [3.5, 6], [7, 6], [10.5, 6],
+      [5.2, 10], [8.7, 10],
+      [3.5, 14], [7, 14], [10.5, 14],
+    ];
+
+    conePositions.forEach(([x, z], index) => {
+      const cone = new THREE.Group();
+      cone.name = `KnockableTrafficCone-${index + 1}`;
+      cone.position.set(x, driveSurfaceHeightAt(x, z), z);
+
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.66, 0.13, 8), rubberMaterial);
+      base.position.y = 0.065;
+      base.scale.z = 0.86;
+      base.castShadow = true;
+      cone.add(base);
+
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.43, 1.12, 16), orangeMaterial);
+      body.position.y = 0.67;
+      body.castShadow = true;
+      cone.add(body);
+
+      [0.5, 0.82].forEach((y, stripeIndex) => {
+        const stripeRadius = stripeIndex ? 0.23 : 0.33;
+        const stripe = new THREE.Mesh(
+          new THREE.CylinderGeometry(stripeRadius - 0.035, stripeRadius + 0.035, 0.16, 16, 1, true),
+          reflectiveMaterial,
+        );
+        stripe.position.y = y;
+        cone.add(stripe);
+      });
+
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.1, 10), orangeMaterial);
+      cap.position.y = 1.28;
+      cone.add(cap);
+      cone.userData.disableProximityFade = true;
+      cone.userData.physics = {
+        homeX: x,
+        homeZ: z,
+        homeY: cone.position.y,
+        knocked: false,
+        velocityX: 0,
+        velocityZ: 0,
+        lift: 0,
+        liftVelocity: 0,
+        fallDirection: 0,
+        tilt: 0,
+        tiltVelocity: 0,
+        spin: 0,
+        spinVelocity: 0,
+        hitCooldown: 0,
+      };
+      trafficCones.push(cone);
+      world.add(cone);
+    });
+  }
+
+  function knockTrafficCone(cone, impactForwardX, impactForwardZ, impactSpeed, lateralPush) {
+    const physics = cone.userData.physics;
+    const speedStrength = THREE.MathUtils.clamp(Math.abs(impactSpeed), 1.5, 18);
+    const pushLength = Math.hypot(impactForwardX, impactForwardZ) || 1;
+    const directionX = impactForwardX / pushLength;
+    const directionZ = impactForwardZ / pushLength;
+    const sideX = directionZ;
+    const sideZ = -directionX;
+    const sideStrength = THREE.MathUtils.clamp(lateralPush * 0.5, -0.75, 0.75);
+    const fallX = directionX + sideX * sideStrength;
+    const fallZ = directionZ + sideZ * sideStrength;
+
+    physics.knocked = true;
+    physics.hitCooldown = 0.22;
+    physics.velocityX += fallX * (1.25 + speedStrength * 0.13);
+    physics.velocityZ += fallZ * (1.25 + speedStrength * 0.13);
+    physics.liftVelocity = Math.max(physics.liftVelocity, 0.75 + speedStrength * 0.055);
+    physics.fallDirection = Math.atan2(fallX, fallZ);
+    physics.tiltVelocity = Math.max(physics.tiltVelocity, 3.2 + speedStrength * 0.12);
+    physics.spinVelocity += (lateralPush >= 0 ? -1 : 1) * (1.5 + speedStrength * 0.08);
+  }
+
+  function checkTrafficConeCollisions() {
+    if (Math.abs(state.speed) < 0.35) return;
+    const directionSign = state.speed >= 0 ? 1 : -1;
+    const impactForwardX = forward.x * directionSign;
+    const impactForwardZ = forward.z * directionSign;
+    const centerX = state.rearAxle.x + forward.x * vehicle.rearAxleOffset;
+    const centerZ = state.rearAxle.z + forward.z * vehicle.rearAxleOffset;
+    const rightX = Math.cos(state.yaw);
+    const rightZ = Math.sin(state.yaw);
+    let hitCount = 0;
+
+    trafficCones.forEach((cone) => {
+      const physics = cone.userData.physics;
+      if (physics.hitCooldown > 0) return;
+      const dx = cone.position.x - centerX;
+      const dz = cone.position.z - centerZ;
+      const longitudinal = dx * forward.x + dz * forward.z;
+      const lateral = dx * rightX + dz * rightZ;
+      if (Math.abs(longitudinal) > 1.72 || Math.abs(lateral) > 1.22) return;
+      knockTrafficCone(cone, impactForwardX, impactForwardZ, state.speed, lateral);
+      hitCount += 1;
+    });
+    if (hitCount) state.speed *= Math.pow(0.95, hitCount);
+  }
+
+  function updateTrafficCones(delta) {
+    trafficCones.forEach((cone) => {
+      const physics = cone.userData.physics;
+      physics.hitCooldown = Math.max(0, physics.hitCooldown - delta);
+      if (!physics.knocked) return;
+
+      physics.liftVelocity -= 7.8 * delta;
+      physics.lift = Math.max(0, physics.lift + physics.liftVelocity * delta);
+      if (physics.lift === 0 && physics.liftVelocity < 0) {
+        physics.liftVelocity *= -0.18;
+        if (Math.abs(physics.liftVelocity) < 0.16) physics.liftVelocity = 0;
+      }
+
+      cone.position.x += physics.velocityX * delta;
+      cone.position.z += physics.velocityZ * delta;
+      cone.position.y = driveSurfaceHeightAt(cone.position.x, cone.position.z) + physics.lift;
+      const slideDamping = Math.exp(-(physics.lift > 0 ? 1.1 : 3.1) * delta);
+      physics.velocityX *= slideDamping;
+      physics.velocityZ *= slideDamping;
+
+      if (physics.tilt < 1.47) {
+        physics.tiltVelocity += 5.8 * delta;
+        physics.tilt = Math.min(1.47, physics.tilt + physics.tiltVelocity * delta);
+        if (physics.tilt >= 1.47) physics.tiltVelocity *= -0.18;
+      } else {
+        physics.tilt = THREE.MathUtils.lerp(physics.tilt, 1.47, 1 - Math.exp(-10 * delta));
+      }
+      physics.spin += physics.spinVelocity * delta;
+      physics.spinVelocity *= Math.exp(-2.4 * delta);
+      cone.rotation.x = Math.cos(physics.fallDirection) * physics.tilt;
+      cone.rotation.z = -Math.sin(physics.fallDirection) * physics.tilt;
+      cone.rotation.y = physics.spin;
+    });
+  }
+
+  function resetTrafficCones() {
+    trafficCones.forEach((cone) => {
+      const physics = cone.userData.physics;
+      cone.position.set(physics.homeX, physics.homeY, physics.homeZ);
+      cone.rotation.set(0, 0, 0);
+      Object.assign(physics, {
+        knocked: false,
+        velocityX: 0,
+        velocityZ: 0,
+        lift: 0,
+        liftVelocity: 0,
+        fallDirection: 0,
+        tilt: 0,
+        tiltVelocity: 0,
+        spin: 0,
+        spinVelocity: 0,
+        hitCooldown: 0,
+      });
+    });
+  }
+
   function buildRain(random) {
     const positions = [];
     for (let index = 0; index < 850; index += 1) {
@@ -1808,6 +1986,7 @@ function initDataCity(THREE) {
     if ((!object.isMesh && !object.isSprite)
       || !object.visible
       || object.userData.disableProximityFade
+      || object.parent?.userData.disableProximityFade
       || object.userData.proximityFade
       || Array.isArray(object.material)) return;
     const material = object.material;
@@ -1905,6 +2084,7 @@ function initDataCity(THREE) {
     carBody.position.set(0, 0, 0);
     carBody.rotation.set(0, 0, 0);
     frontWheelPivots.forEach((pivot) => { pivot.rotation.y = 0; });
+    resetTrafficCones();
     zonePrompt.classList.remove("visible");
     zonePrompt.style.setProperty("--entry-progress", "0%");
     document.body.classList.remove("boosting");
@@ -1963,6 +2143,7 @@ function initDataCity(THREE) {
     state.rearAxle.addScaledVector(forward, state.speed * step);
     state.yaw += state.yawRate * step;
     state.wheelRotation -= state.speed * step / vehicle.wheelRadius;
+    checkTrafficConeCollisions();
 
     state.jumpCooldown = Math.max(0, state.jumpCooldown - step);
     const rampWest = jumpRampConfig.centerX - jumpRampConfig.halfLength;
@@ -2052,6 +2233,7 @@ function initDataCity(THREE) {
     // The physics heading is clockwise-positive, while Three.js rotates Y counter-clockwise.
     car.rotation.y = -state.yaw;
     car.rotation.x = state.terrainPitch;
+    updateTrafficCones(delta);
 
     const absoluteSteering = Math.abs(state.steeringAngle);
     let leftWheelAngle = state.steeringAngle;
