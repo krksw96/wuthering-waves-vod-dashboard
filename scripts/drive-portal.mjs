@@ -250,8 +250,8 @@ function initDataCity(THREE) {
     stairOuterZ: 17.5,
   };
   const skyGardenTerrainConfig = {
-    centerX: -15,
-    centerZ: 10,
+    centerX: -30,
+    centerZ: 28,
     halfWidth: 9.5,
     halfDepth: 10.5,
     plateauRadius: 0.34,
@@ -1525,9 +1525,9 @@ function initDataCity(THREE) {
       metalness: 0.1,
     });
     const conePositions = [
-      [3.5, 6], [7, 6], [10.5, 6],
-      [5.2, 10], [8.7, 10],
-      [3.5, 14], [7, 14], [10.5, 14],
+      [26.5, 23], [30, 23], [33.5, 23],
+      [28.2, 27], [31.7, 27],
+      [26.5, 31], [30, 31], [33.5, 31],
     ];
 
     conePositions.forEach(([x, z], index) => {
