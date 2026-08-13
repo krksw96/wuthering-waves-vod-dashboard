@@ -2220,7 +2220,7 @@ function initDataCity(THREE) {
   function stepVehiclePhysics(step) {
     const steeringInput = Number(inputs.right) - Number(inputs.left);
     const boostActive = (inputs.boost || performance.now() < state.boostUntil) && inputs.forward && state.speed >= 0;
-    const handbrakeActive = inputs.drift && !state.airborne && state.speed > 3.5;
+    const handbrakeActive = inputs.drift && !state.airborne && state.speed > 2.2;
     let longitudinalForce = 0;
 
     if (inputs.forward) {
@@ -2256,7 +2256,7 @@ function initDataCity(THREE) {
     const speedRatio = Math.min(Math.abs(state.speed) / vehicle.maxForwardSpeed, 1);
     const steeringLimit = THREE.MathUtils.lerp(0.6, 0.18, Math.pow(speedRatio, 0.68));
     const targetSteering = steeringInput * steeringLimit;
-    const steeringResponse = steeringInput ? 5.8 : 8.5;
+    const steeringResponse = handbrakeActive ? 28 : steeringInput ? 5.8 : 8.5;
     state.steeringAngle = THREE.MathUtils.lerp(
       state.steeringAngle,
       targetSteering,
@@ -2266,30 +2266,43 @@ function initDataCity(THREE) {
     const baseYawRate = Math.abs(state.speed) > 0.015
       ? (state.speed / vehicle.wheelBase) * Math.tan(state.steeringAngle)
       : 0;
-    const targetDriftFactor = handbrakeActive && Math.abs(steeringInput) > 0.05
-      ? THREE.MathUtils.clamp((state.speed - 3.5) / 7.5, 0, 1)
+    const driftRequested = handbrakeActive && Math.abs(steeringInput) > 0.05;
+    const targetDriftFactor = driftRequested
+      ? 0.62 + THREE.MathUtils.clamp((state.speed - 2.2) / 10, 0, 1) * 0.38
       : 0;
+    if (driftRequested) state.driftFactor = Math.max(state.driftFactor, 0.42);
     state.driftFactor = THREE.MathUtils.lerp(
       state.driftFactor,
       targetDriftFactor,
-      1 - Math.exp(-(targetDriftFactor > state.driftFactor ? 7.5 : 3.2) * step),
+      1 - Math.exp(-(targetDriftFactor > state.driftFactor ? 22 : 8) * step),
     );
+    const driftYawRate = steeringInput
+      * Math.sign(state.speed || 1)
+      * THREE.MathUtils.lerp(0.82, 2.15, speedRatio);
     const targetYawRate = THREE.MathUtils.clamp(
-      baseYawRate * (1 + state.driftFactor * 0.58),
+      driftRequested ? driftYawRate : baseYawRate,
       -2.35,
       2.35,
     );
+    const changingDriftDirection = driftRequested
+      && Math.abs(state.yawRate) > 0.08
+      && Math.sign(state.yawRate) !== Math.sign(targetYawRate);
     state.yawRate = THREE.MathUtils.lerp(
       state.yawRate,
       targetYawRate,
-      1 - Math.exp(-(state.driftFactor > 0.05 ? 7 : 13) * step),
+      1 - Math.exp(-(changingDriftDirection ? 38 : driftRequested ? 24 : 13) * step),
     );
-    const targetLateralVelocity = -steeringInput * Math.abs(state.speed) * 0.38 * state.driftFactor;
+    const targetLateralVelocity = driftRequested
+      ? -steeringInput * Math.abs(state.speed) * (0.44 + state.driftFactor * 0.16)
+      : 0;
+    const changingSlideDirection = driftRequested
+      && Math.abs(state.lateralVelocity) > 0.08
+      && Math.sign(state.lateralVelocity) !== Math.sign(targetLateralVelocity);
     if (!state.airborne) {
       state.lateralVelocity = THREE.MathUtils.lerp(
         state.lateralVelocity,
         targetLateralVelocity,
-        1 - Math.exp(-(state.driftFactor > 0.05 ? 5.2 : 3.6) * step),
+        1 - Math.exp(-(changingSlideDirection ? 42 : driftRequested ? 25 : 8) * step),
       );
     }
     if (Math.abs(state.lateralVelocity) < 0.01 && state.driftFactor < 0.01) state.lateralVelocity = 0;
@@ -2418,8 +2431,9 @@ function initDataCity(THREE) {
         rightWheelAngle = -outer;
       }
     }
-    frontWheelPivots[0].rotation.y = THREE.MathUtils.lerp(frontWheelPivots[0].rotation.y, -leftWheelAngle, 1 - Math.exp(-12 * delta));
-    frontWheelPivots[1].rotation.y = THREE.MathUtils.lerp(frontWheelPivots[1].rotation.y, -rightWheelAngle, 1 - Math.exp(-12 * delta));
+    const wheelSteeringResponse = state.driftFactor > 0.08 ? 26 : 12;
+    frontWheelPivots[0].rotation.y = THREE.MathUtils.lerp(frontWheelPivots[0].rotation.y, -leftWheelAngle, 1 - Math.exp(-wheelSteeringResponse * delta));
+    frontWheelPivots[1].rotation.y = THREE.MathUtils.lerp(frontWheelPivots[1].rotation.y, -rightWheelAngle, 1 - Math.exp(-wheelSteeringResponse * delta));
     wheelSpins.forEach((wheel) => { wheel.rotation.x = state.wheelRotation; });
 
     const lateralLoad = THREE.MathUtils.clamp(state.yawRate * Math.abs(state.speed) / 22, -1, 1);
