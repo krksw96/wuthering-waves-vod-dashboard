@@ -234,6 +234,12 @@ function initDataCity(THREE) {
     [new THREE.Vector3(-28, 0, -12), new THREE.Vector3(28, 0, -12)],
     [new THREE.Vector3(0, 0, -49.5), new THREE.Vector3(0, 0, 33)],
   ];
+  const jumpRampConfig = {
+    centerX: -13.25,
+    centerZ: -9,
+    halfLength: 3,
+    halfWidth: 2.75,
+  };
 
   const zoneName = (zone) => {
     const gameName = copy().games[zone.id];
@@ -1070,11 +1076,13 @@ function initDataCity(THREE) {
       0, 2, 5, 0, 5, 3,
     ]);
     rampGeometry.computeVertexNormals();
+    const rampLocalX = jumpRampConfig.centerX - garden.position.x;
+    const rampLocalZ = jumpRampConfig.centerZ - garden.position.z;
     const jumpRamp = new THREE.Mesh(
       rampGeometry,
       new THREE.MeshStandardMaterial({ color: 0x182a2e, roughness: 0.32, metalness: 0.78, side: THREE.DoubleSide }),
     );
-    jumpRamp.position.set(10.25, 0.08, 0);
+    jumpRamp.position.set(rampLocalX, 0.08, rampLocalZ);
     jumpRamp.castShadow = true;
     jumpRamp.receiveShadow = true;
     garden.add(jumpRamp);
@@ -1085,7 +1093,7 @@ function initDataCity(THREE) {
         new THREE.BoxGeometry(6.1, 0.12, 0.13),
         new THREE.MeshStandardMaterial({ color: 0xb8ffff, emissive: 0x39dbe5, emissiveIntensity: 3.5, roughness: 0.2 }),
       );
-      rail.position.set(10.25, 0.73, z);
+      rail.position.set(rampLocalX, 0.73, rampLocalZ + z);
       rail.rotation.z = rampAngle;
       garden.add(rail);
     });
@@ -1095,7 +1103,7 @@ function initDataCity(THREE) {
         new THREE.MeshBasicMaterial({ color: 0x95fff7, transparent: true, opacity: 0.88 }),
       );
       const rampProgress = (3 - x) / 6;
-      launchStripe.position.set(10.25 + x, 0.14 + rampProgress * 1.25, 0);
+      launchStripe.position.set(rampLocalX + x, 0.14 + rampProgress * 1.25, rampLocalZ);
       launchStripe.rotation.z = rampAngle;
       garden.add(launchStripe);
     });
@@ -1803,10 +1811,10 @@ function initDataCity(THREE) {
     state.wheelRotation -= state.speed * step / vehicle.wheelRadius;
 
     state.jumpCooldown = Math.max(0, state.jumpCooldown - step);
-    const rampWest = -20.75;
-    const rampEast = -14.75;
+    const rampWest = jumpRampConfig.centerX - jumpRampConfig.halfLength;
+    const rampEast = jumpRampConfig.centerX + jumpRampConfig.halfLength;
     const insideRamp = state.rearAxle.x >= rampWest && state.rearAxle.x <= rampEast
-      && Math.abs(state.rearAxle.z + 12) <= 2.95;
+      && Math.abs(state.rearAxle.z - jumpRampConfig.centerZ) <= jumpRampConfig.halfWidth + 0.2;
     const movingTowardGarden = forward.x < -0.25 && state.speed > 2;
     if (!state.airborne && insideRamp) {
       const rampProgress = THREE.MathUtils.clamp((rampEast - state.rearAxle.x) / (rampEast - rampWest), 0, 1);
