@@ -1,4 +1,4 @@
-name: Daily VOD Refresh
+name: Daily Multi-game VOD Refresh
 
 on:
   schedule:
@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: daily-vod-refresh
+  group: daily-multi-game-vod-refresh
   cancel-in-progress: false
 
 jobs:
@@ -31,6 +31,7 @@ jobs:
       FEISHU_SPREADSHEET_TOKEN: V9C1sSLU4hOweEtvDRdcBnENnMh
       FEISHU_AD_SHEET_ID: 0GfgFb
       FEISHU_AD_RANGE: B:K
+      AD_TASK_DATA_URL: https://api.github.com/repos/krksw96/wuthering-waves-kol-dashboard/contents/data/ad-task-video-ids.json?ref=main
       TARGET_DATE: ${{ inputs.target_date }}
     steps:
       - uses: actions/checkout@v4
@@ -39,8 +40,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Refresh VOD data
-        run: node scripts/daily-refresh.mjs
+      - name: Refresh game VOD data
+        run: |
+          node scripts/daily-refresh.mjs
+          node scripts/daily-zenless-refresh.mjs
       - name: Commit refreshed data
         run: |
           if git diff --quiet; then
@@ -49,6 +52,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ad-videos.json data/videos.js data/youtube-update-*.json index.html
-          git commit -m "Daily VOD refresh $(date -u +%Y-%m-%d)"
+          git add data/ad-videos.json data/wuthering-waves.js data/zenless-zone-zero.js data/youtube-update-*.json data/zenless-youtube-update-*.json dashboard.html
+          git commit -m "Daily multi-game VOD refresh $(date -u +%Y-%m-%d)"
           git push origin main

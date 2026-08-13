@@ -4,15 +4,15 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { readGameDataset, writeGameDataset } from "./game-dataset.mjs";
 
-const source = resolve(process.argv[2] || "data/youtube-update-2026-07-14_2026-07-16.json");
+const source = resolve(process.argv[2] || "data/zenless-youtube-update-2026-08-01_2026-08-31.json");
 const apiKey = process.env.YOUTUBE_API_KEY;
 if (!apiKey) throw new Error("YOUTUBE_API_KEY is not configured");
 
-const current = await readGameDataset("wuthering-waves");
+const current = await readGameDataset("zenless-zone-zero");
 const update = JSON.parse(await readFile(source, "utf8"));
-const kocList = JSON.parse(await readFile("data/koc-list.json", "utf8"));
-const kolList = JSON.parse(await readFile("data/kol-list.json", "utf8"));
-const adVideos = JSON.parse(await readFile("data/ad-videos.json", "utf8"));
+const kocList = JSON.parse(await readFile("data/koc-list.json", "utf8").catch(() => "[]"));
+const kolList = JSON.parse(await readFile("data/kol-list.json", "utf8").catch(() => "[]"));
+const adVideos = JSON.parse(await readFile("data/ad-videos.json", "utf8").catch(() => '{"rows":[]}'));
 const statsOverrides = JSON.parse(await readFile("data/stats-overrides.json", "utf8").catch(() => "{}"));
 
 const normalize = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
@@ -20,7 +20,7 @@ const aliases = (items) => new Map(items.flatMap((item) => item.aliases.map((ali
 const kocAliases = aliases(kocList);
 const kolAliases = aliases(kolList);
 const adIds = new Set(adVideos.rows.map((row) => row.youtubeId));
-const byId = new Map(current.videos.map((video) => [video.id, video]));
+const byId = new Map();
 
 for (const row of update.rows) {
   const creatorKey = normalize(row.channelTitle);
@@ -41,6 +41,7 @@ for (const row of update.rows) {
     isKol: kolAliases.has(creatorKey),
     kolName: kolAliases.get(creatorKey) || null,
     isAdTask: adIds.has(row.youtubeId),
+    searchKeyword: row.searchKeyword || "",
   });
 }
 
@@ -100,12 +101,12 @@ const payload = {
   ...current,
   generatedAt: new Date().toISOString(),
   period: {
-    start: [current.period.start, update.meta.start].filter(Boolean).sort().at(0),
-    end: [current.period.end, update.meta.end].filter(Boolean).sort().at(-1),
+    start: update.meta.start,
+    end: update.meta.end,
   },
   videos,
 };
-await writeGameDataset("wuthering-waves", payload);
+await writeGameDataset("zenless-zone-zero", payload);
 console.log(JSON.stringify({
   previous: current.videos.length,
   added: videos.length - current.videos.length,

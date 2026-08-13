@@ -1,12 +1,10 @@
 #!/usr/bin/env node
 
 import { writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { readGameDataset } from "./game-dataset.mjs";
 
-globalThis.window = {};
-await import(`${pathToFileURL(resolve("data/videos.js")).href}?v=${Date.now()}`);
-const data = window.VOD_DATA;
+const game = process.env.GAME || "wuthering-waves";
+const data = await readGameDataset(game);
 const quote = (value) => {
   const text = value == null ? "" : String(value);
   return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;

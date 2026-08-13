@@ -1,11 +1,12 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { writeGameDataset } from "./game-dataset.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(here, "..");
 const source = resolve(projectRoot, "..", "data", "youtube_myeongjo_2026-05-28_2026-07-13.filtered.json");
-const output = resolve(projectRoot, "data", "videos.js");
+const output = resolve(projectRoot, "data", "wuthering-waves.js");
 const kocSource = resolve(projectRoot, "data", "koc-list.json");
 const kolSource = resolve(projectRoot, "data", "kol-list.json");
 const kolVideosSource = resolve(projectRoot, "data", "kol-videos.json");
@@ -62,5 +63,5 @@ const payload = {
 };
 
 await mkdir(dirname(output), { recursive: true });
-await writeFile(output, `window.VOD_DATA = ${JSON.stringify(payload, null, 2)};\n`, "utf8");
+await writeGameDataset("wuthering-waves", payload);
 console.log(`Synced ${videos.length} videos to ${output}`);
