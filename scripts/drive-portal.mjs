@@ -1,7 +1,127 @@
 const fatalError = document.querySelector("#fatal-error");
 const bootStartButton = document.querySelector("#start-button");
 const bootLoadingCopy = document.querySelector("#loading-copy");
+const musicToggle = document.querySelector("#music-toggle");
+const youtubeAudio = document.querySelector("#youtube-audio");
+const MUSIC_VIDEO_ID = "eg_yMhrRD0A";
+const translations = {
+  ko: {
+    title: "DATA DRIVE — 게임 YouTube 데이터 시티",
+    description: "자동차를 운전해 명조, 이환, 젠레스 존 제로 YouTube 데이터 구역을 탐험하세요.",
+    worldAria: "세 게임의 데이터 구역을 자동차로 탐험하는 3D 화면",
+    quickLinksAria: "대시보드 바로가기", languageAria: "언어 변경", controlsAria: "조작 방법",
+    startDescription: "비 내리는 네온 시티를 직접 운전해 명조, 이환, 젠레스 존 제로 구역을 찾아가세요. 빛나는 데이터 포털 안에 잠시 머무르면 해당 대시보드가 열립니다.",
+    startButton: "시동 걸기", accelerator: "액셀", brakeReverse: "브레이크 · 후진", steering: "앞바퀴 조향",
+    boost: "부스터", resetCar: "차량 복귀", resetShort: "복귀", driveHint: "액셀·브레이크",
+    loadingCity: "데이터 시티를 불러오는 중…", loadingRequested: "준비되는 즉시 자동으로 출발합니다",
+    ready: "준비 완료 · 시동을 걸어 출발하세요", departing: "출발합니다", loadingButton: "도시 불러오는 중…",
+    nearestDistrict: "NEAREST DATA DISTRICT", calculating: "거리 계산 중", portalHint: "원 안에 머무르면 대시보드가 열립니다",
+    musicOn: "배경 음악 켜짐", musicOff: "배경 음악 꺼짐",
+    games: { "wuthering-waves": "명조", "neverness-to-everness": "이환", "zenless-zone-zero": "젠레스" },
+  },
+  zh: {
+    title: "DATA DRIVE — 游戏 YouTube 数据城",
+    description: "驾驶汽车探索鸣潮、异环和绝区零的 YouTube 数据区域。",
+    worldAria: "驾驶汽车探索三个游戏数据区域的 3D 场景",
+    quickLinksAria: "数据看板快捷入口", languageAria: "切换语言", controlsAria: "驾驶操作",
+    startDescription: "驾驶汽车穿过雨夜霓虹都市，前往鸣潮、异环和绝区零数据区。在发光传送门内停留片刻即可打开相应数据看板。",
+    startButton: "启动引擎", accelerator: "油门", brakeReverse: "刹车 · 倒车", steering: "前轮转向",
+    boost: "加速器", resetCar: "车辆复位", resetShort: "复位", driveHint: "油门·刹车",
+    loadingCity: "正在加载数据城…", loadingRequested: "准备完成后将自动出发",
+    ready: "准备完成 · 启动引擎即可出发", departing: "出发", loadingButton: "正在加载城市…",
+    nearestDistrict: "最近的数据区域", calculating: "正在计算距离", portalHint: "停留在圆环内即可打开数据看板",
+    musicOn: "背景音乐已开启", musicOff: "背景音乐已关闭",
+    games: { "wuthering-waves": "鸣潮", "neverness-to-everness": "异环", "zenless-zone-zero": "绝区零" },
+  },
+  en: {
+    title: "DATA DRIVE — Game YouTube Data City",
+    description: "Drive through the YouTube data districts for Wuthering Waves, NTE, and ZZZ.",
+    worldAria: "A 3D driving world connecting three game data districts",
+    quickLinksAria: "Dashboard shortcuts", languageAria: "Change language", controlsAria: "Driving controls",
+    startDescription: "Drive through the rain-soaked neon city to the Wuthering Waves, NTE, and ZZZ districts. Stay inside a glowing portal to open its dashboard.",
+    startButton: "START ENGINE", accelerator: "Accelerate", brakeReverse: "Brake · Reverse", steering: "Front-wheel steering",
+    boost: "Boost", resetCar: "Reset car", resetShort: "Reset", driveHint: "Accelerate·Brake",
+    loadingCity: "Loading Data City…", loadingRequested: "Departure begins as soon as the city is ready",
+    ready: "Ready · Start the engine to depart", departing: "Departing", loadingButton: "Loading city…",
+    nearestDistrict: "NEAREST DATA DISTRICT", calculating: "Calculating distance", portalHint: "Stay inside the ring to open the dashboard",
+    musicOn: "Background music on", musicOff: "Background music off",
+    games: { "wuthering-waves": "Wuthering Waves", "neverness-to-everness": "NTE", "zenless-zone-zero": "ZZZ" },
+  },
+};
+let currentLanguage = readPreference("data-city-language", "ko");
+let musicWanted = readPreference("data-city-music", "on") !== "off";
 const bootState = { launch: null, requested: false };
+
+function readPreference(key, fallback) {
+  try { return localStorage.getItem(key) || fallback; } catch { return fallback; }
+}
+
+function writePreference(key, value) {
+  try { localStorage.setItem(key, value); } catch { /* Storage can be unavailable in private contexts. */ }
+}
+
+function copy() {
+  return translations[currentLanguage] || translations.ko;
+}
+
+function updateMusicButton() {
+  if (!musicToggle) return;
+  musicToggle.textContent = musicWanted ? "♫ ON" : "♫ OFF";
+  musicToggle.classList.toggle("muted", !musicWanted);
+  musicToggle.setAttribute("aria-pressed", String(musicWanted));
+  musicToggle.setAttribute("aria-label", musicWanted ? copy().musicOn : copy().musicOff);
+}
+
+function startMusic() {
+  if (!musicWanted || !youtubeAudio || youtubeAudio.src) return;
+  const origin = encodeURIComponent(location.origin);
+  youtubeAudio.src = `https://www.youtube-nocookie.com/embed/${MUSIC_VIDEO_ID}?autoplay=1&loop=1&playlist=${MUSIC_VIDEO_ID}&controls=0&playsinline=1&rel=0&origin=${origin}`;
+}
+
+function stopMusic() {
+  if (youtubeAudio) youtubeAudio.removeAttribute("src");
+}
+
+function applyLanguage(language, persist = true) {
+  currentLanguage = translations[language] ? language : "ko";
+  const languageCopy = copy();
+  document.documentElement.lang = currentLanguage === "zh" ? "zh-CN" : currentLanguage;
+  document.title = languageCopy.title;
+  document.querySelector('meta[name="description"]')?.setAttribute("content", languageCopy.description);
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const value = languageCopy[element.dataset.i18n];
+    if (value) element.textContent = value;
+  });
+  document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
+    const value = languageCopy[element.dataset.i18nAria];
+    if (value) element.setAttribute("aria-label", value);
+  });
+  document.querySelectorAll("[data-game-label]").forEach((element) => {
+    element.textContent = languageCopy.games[element.dataset.gameLabel];
+  });
+  document.querySelectorAll("[data-lang]").forEach((button) => {
+    const active = button.dataset.lang === currentLanguage;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  updateMusicButton();
+  if (persist) writePreference("data-city-language", currentLanguage);
+  dispatchEvent(new CustomEvent("datacitylanguagechange", { detail: { language: currentLanguage } }));
+}
+
+document.querySelectorAll("[data-lang]").forEach((button) => {
+  button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+});
+
+musicToggle?.addEventListener("click", () => {
+  musicWanted = !musicWanted;
+  writePreference("data-city-music", musicWanted ? "on" : "off");
+  updateMusicButton();
+  if (musicWanted && document.body.classList.contains("started")) startMusic();
+  else stopMusic();
+});
+
+applyLanguage(currentLanguage, false);
 
 bootStartButton?.addEventListener("click", () => {
   if (bootState.launch) {
@@ -9,9 +129,9 @@ bootStartButton?.addEventListener("click", () => {
     return;
   }
   bootState.requested = true;
-  bootStartButton.textContent = "도시 불러오는 중…";
+  bootStartButton.textContent = copy().loadingButton;
   bootStartButton.setAttribute("aria-busy", "true");
-  if (bootLoadingCopy) bootLoadingCopy.textContent = "준비되는 즉시 자동으로 출발합니다";
+  if (bootLoadingCopy) bootLoadingCopy.textContent = copy().loadingRequested;
 });
 
 try {
@@ -75,7 +195,7 @@ function initDataCity(THREE) {
   const zones = [
     {
       id: "wuthering-waves",
-      shortName: "명조",
+      shortName: copy().games["wuthering-waves"],
       name: "명조 데이터 구역",
       position: new THREE.Vector3(-28, 0, -12),
       color: 0x65e8de,
@@ -85,7 +205,7 @@ function initDataCity(THREE) {
     },
     {
       id: "neverness-to-everness",
-      shortName: "이환",
+      shortName: copy().games["neverness-to-everness"],
       name: "이환 데이터 구역",
       position: new THREE.Vector3(28, 0, -12),
       color: 0xff5c9f,
@@ -95,7 +215,7 @@ function initDataCity(THREE) {
     },
     {
       id: "zenless-zone-zero",
-      shortName: "젠레스",
+      shortName: copy().games["zenless-zone-zero"],
       name: "젠레스 존 제로 데이터 구역",
       position: new THREE.Vector3(0, 0, 33),
       color: 0xffd84d,
@@ -104,6 +224,31 @@ function initDataCity(THREE) {
       symbol: "HOLLOW DEPOT",
     },
   ];
+
+  const zoneName = (zone) => {
+    const gameName = copy().games[zone.id];
+    if (currentLanguage === "zh") return `${gameName}数据区`;
+    if (currentLanguage === "en") return `${gameName} Data District`;
+    return `${gameName}${zone.id === "zenless-zone-zero" ? " 존 제로" : ""} 데이터 구역`;
+  };
+  const distanceCopy = (distance) => {
+    const meters = Math.max(0, Math.round(distance * 10));
+    if (currentLanguage === "zh") return `剩余 ${meters}m`;
+    if (currentLanguage === "en") return `${meters}m remaining`;
+    return `${meters}m 남음`;
+  };
+  const portalCopy = (zone, opening = false) => {
+    const name = zoneName(zone);
+    if (currentLanguage === "zh") return opening ? `正在打开${name}…` : `正在进入${name}传送门`;
+    if (currentLanguage === "en") return opening ? `Opening ${name}…` : `Entering ${name} portal`;
+    return opening ? `${name} 여는 중…` : `${name} 포털 진입 중`;
+  };
+  const nearestCopy = (zone) => {
+    const name = zoneName(zone);
+    if (currentLanguage === "zh") return `最近目的地已变更为${name}。`;
+    if (currentLanguage === "en") return `Nearest destination changed to ${name}.`;
+    return `가장 가까운 목적지가 ${name}(으)로 변경되었습니다.`;
+  };
 
   const world = new THREE.Group();
   const atmosphere = { rain: null, hologram: null, petals: null, lanterns: [], clouds: [] };
@@ -115,13 +260,14 @@ function initDataCity(THREE) {
   const { car, carBody, wheelSpins, frontWheelPivots } = buildCar();
   scene.add(car);
 
-  const inputs = { forward: false, backward: false, left: false, right: false };
+  const inputs = { forward: false, backward: false, left: false, right: false, boost: false };
   const vehicle = {
     wheelBase: 2.27,
     trackWidth: 2.24,
     rearAxleOffset: 1.12,
     wheelRadius: 0.42,
     maxForwardSpeed: 18,
+    boostedMaxForwardSpeed: 30,
     maxReverseSpeed: 7,
     fixedStep: 1 / 120,
   };
@@ -132,6 +278,7 @@ function initDataCity(THREE) {
     yawRate: 0,
     acceleration: 0,
     steeringAngle: 0,
+    boostUntil: 0,
     reverseHold: 0,
     wheelRotation: 0,
     physicsAccumulator: 0,
@@ -159,13 +306,14 @@ function initDataCity(THREE) {
     document.body.classList.add("started");
     startScreen.classList.add("hidden");
     startButton.removeAttribute("aria-busy");
+    startMusic();
     canvas.focus();
     clock.getDelta();
   };
   bootState.launch = launchDrive;
   startButton.disabled = false;
   startButton.removeAttribute("aria-busy");
-  loadingCopy.textContent = bootState.requested ? "출발합니다" : "준비 완료 · 시동을 걸어 출발하세요";
+  loadingCopy.textContent = bootState.requested ? copy().departing : copy().ready;
   if (bootState.requested) launchDrive();
 
   const keyMap = new Map([
@@ -176,6 +324,11 @@ function initDataCity(THREE) {
   ]);
 
   addEventListener("keydown", (event) => {
+    if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+      inputs.boost = true;
+      state.boostUntil = performance.now() + 280;
+      event.preventDefault();
+    }
     if (keyMap.has(event.code)) {
       inputs[keyMap.get(event.code)] = true;
       event.preventDefault();
@@ -184,6 +337,11 @@ function initDataCity(THREE) {
     if ((event.code === "Enter" || event.code === "Space") && !state.started) startButton.click();
   });
   addEventListener("keyup", (event) => {
+    if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+      inputs.boost = false;
+      event.preventDefault();
+      return;
+    }
     if (!keyMap.has(event.code)) return;
     inputs[keyMap.get(event.code)] = false;
     event.preventDefault();
@@ -192,6 +350,36 @@ function initDataCity(THREE) {
   document.addEventListener("visibilitychange", () => {
     clearInputs();
     clock.getDelta();
+  });
+  addEventListener("pageshow", (event) => {
+    if (!event.persisted && !state.navigating) return;
+    clearInputs();
+    resetCar();
+    state.navigating = false;
+    state.nearestZone = null;
+    cameraPosition.set(0, 8.2, 16);
+    cameraTarget.set(0, 1, 0);
+    clock.getDelta();
+    if (state.started && musicWanted) {
+      stopMusic();
+      startMusic();
+    }
+  });
+  addEventListener("datacitylanguagechange", () => {
+    loadingCopy.textContent = state.started ? copy().departing : copy().ready;
+    zones.forEach((zone) => {
+      zone.shortName = copy().games[zone.id];
+      if (zone.label && zone.district) {
+        zone.district.remove(zone.label);
+        zone.label.material.map?.dispose();
+        zone.label.material.dispose();
+        zone.label = makeLabel(zone.shortName, zone.symbol, zone.cssColor);
+        zone.label.position.set(0, 7.2, 0);
+        zone.label.scale.set(8.4, 2.5, 1);
+        zone.district.add(zone.label);
+      }
+    });
+    state.nearestZone = null;
   });
 
   document.querySelectorAll("[data-control]").forEach((button) => {
@@ -1050,6 +1238,7 @@ function initDataCity(THREE) {
     const district = new THREE.Group();
     district.position.copy(zone.position);
     world.add(district);
+    zone.district = district;
 
     const color = new THREE.Color(zone.color);
     const platform = new THREE.Mesh(
@@ -1101,6 +1290,7 @@ function initDataCity(THREE) {
     label.position.set(0, 7.2, 0);
     label.scale.set(8.4, 2.5, 1);
     district.add(label);
+    zone.label = label;
 
     const baseMaterial = new THREE.MeshStandardMaterial({ color: color.clone().multiplyScalar(0.24), roughness: 0.55, metalness: 0.45 });
     const edgeMaterial = new THREE.MeshStandardMaterial({ color: zone.color, emissive: zone.color, emissiveIntensity: 1.4, roughness: 0.35 });
@@ -1271,11 +1461,14 @@ function initDataCity(THREE) {
     state.yawRate = 0;
     state.acceleration = 0;
     state.steeringAngle = 0;
+    state.boostUntil = 0;
     state.reverseHold = 0;
     state.wheelRotation = 0;
     state.physicsAccumulator = 0;
     state.entryProgress = 0;
     state.activePortal = null;
+    state.nearestZone = null;
+    state.navigating = false;
     state.rearAxle.set(0, 0, vehicle.rearAxleOffset);
     car.position.set(0, 0, 0);
     car.rotation.set(0, 0, 0);
@@ -1284,15 +1477,18 @@ function initDataCity(THREE) {
     frontWheelPivots.forEach((pivot) => { pivot.rotation.y = 0; });
     zonePrompt.classList.remove("visible");
     zonePrompt.style.setProperty("--entry-progress", "0%");
+    document.body.classList.remove("boosting");
   }
 
   function stepVehiclePhysics(step) {
     const steeringInput = Number(inputs.right) - Number(inputs.left);
+    const boostActive = (inputs.boost || performance.now() < state.boostUntil) && inputs.forward && state.speed >= 0;
     let longitudinalForce = 0;
 
     if (inputs.forward) {
       state.reverseHold = 0;
       if (state.speed < -0.12) longitudinalForce = 25;
+      else if (boostActive) longitudinalForce = 22;
       else longitudinalForce = 11.4 * (1 - Math.max(0, state.speed) / (vehicle.maxForwardSpeed * 1.45));
     } else if (inputs.backward) {
       if (state.speed > 0.12) {
@@ -1308,9 +1504,10 @@ function initDataCity(THREE) {
 
     const rollingResistance = Math.abs(state.speed) > 0.02 ? Math.sign(state.speed) * 0.62 : 0;
     const aerodynamicDrag = state.speed * Math.abs(state.speed) * 0.028;
+    if (!boostActive && state.speed > vehicle.maxForwardSpeed) longitudinalForce -= (state.speed - vehicle.maxForwardSpeed) * 2.4;
     state.acceleration = longitudinalForce - rollingResistance - aerodynamicDrag;
     state.speed += state.acceleration * step;
-    state.speed = THREE.MathUtils.clamp(state.speed, -vehicle.maxReverseSpeed, vehicle.maxForwardSpeed);
+    state.speed = THREE.MathUtils.clamp(state.speed, -vehicle.maxReverseSpeed, vehicle.boostedMaxForwardSpeed);
     if (!inputs.forward && !inputs.backward) state.speed *= Math.exp(-0.48 * step);
     if (Math.abs(state.speed) < 0.035 && Math.abs(longitudinalForce) < 0.01) {
       state.speed = 0;
@@ -1347,6 +1544,8 @@ function initDataCity(THREE) {
       stepVehiclePhysics(vehicle.fixedStep);
       state.physicsAccumulator -= vehicle.fixedStep;
     }
+    const boostActive = (inputs.boost || performance.now() < state.boostUntil) && inputs.forward && state.speed > 0.2;
+    document.body.classList.toggle("boosting", boostActive);
 
     forward.set(Math.sin(state.yaw), 0, -Math.cos(state.yaw));
     car.position.copy(state.rearAxle).addScaledVector(forward, vehicle.rearAxleOffset);
@@ -1383,7 +1582,7 @@ function initDataCity(THREE) {
   function updateCamera(delta) {
     forward.set(Math.sin(state.yaw), 0, -Math.cos(state.yaw));
     right.set(Math.cos(state.yaw), 0, Math.sin(state.yaw));
-    const speedRatio = Math.min(Math.abs(state.speed) / vehicle.maxForwardSpeed, 1);
+    const speedRatio = Math.min(Math.abs(state.speed) / vehicle.boostedMaxForwardSpeed, 1);
     targetCameraPosition.copy(car.position)
       .addScaledVector(forward, -THREE.MathUtils.lerp(7.8, 9.6, speedRatio))
       .addScaledVector(right, -state.yawRate * 0.52)
@@ -1419,12 +1618,12 @@ function initDataCity(THREE) {
 
     if (nearest !== state.nearestZone) {
       state.nearestZone = nearest;
-      liveStatus.textContent = `가장 가까운 목적지가 ${nearest.name}(으)로 변경되었습니다.`;
+      liveStatus.textContent = nearestCopy(nearest);
     }
     missionCard.style.setProperty("--zone-color", nearest.cssColor);
     missionCard.style.setProperty("--distance-progress", `${Math.max(3, 100 - nearestDistance * 2.1)}%`);
-    missionName.textContent = nearest.name;
-    missionDistance.textContent = `${Math.max(0, Math.round(nearestDistance * 10))}m 남음`;
+    missionName.textContent = zoneName(nearest);
+    missionDistance.textContent = distanceCopy(nearestDistance);
 
     const portal = nearestDistance < 3.8 ? nearest : null;
     if (portal && state.started && !state.navigating) {
@@ -1435,10 +1634,10 @@ function initDataCity(THREE) {
       zonePrompt.classList.add("visible");
       zonePrompt.style.setProperty("--prompt-color", portal.cssColor);
       zonePrompt.style.setProperty("--entry-progress", `${state.entryProgress * 100}%`);
-      zonePromptTitle.textContent = `${portal.name} 포털 진입 중`;
+      zonePromptTitle.textContent = portalCopy(portal);
       if (state.entryProgress >= 1) {
         state.navigating = true;
-        zonePromptTitle.textContent = `${portal.name} 여는 중…`;
+        zonePromptTitle.textContent = portalCopy(portal, true);
         location.assign(portal.href);
       }
     } else {

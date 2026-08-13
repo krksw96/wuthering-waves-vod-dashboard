@@ -57,7 +57,7 @@
         top: 0;
         left: 0;
         right: 0;
-        z-index: 10;
+        z-index: 30;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -81,7 +81,8 @@
       }
       .brand-copy strong { display: block; font-size: 13px; letter-spacing: .16em; }
       .brand-copy span { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; letter-spacing: .13em; }
-      .quick-links { display: flex; align-items: center; gap: 7px; pointer-events: auto; }
+      .header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; pointer-events: auto; }
+      .quick-links { display: flex; align-items: center; gap: 7px; }
       .quick-link {
         display: inline-flex;
         align-items: center;
@@ -101,6 +102,31 @@
       }
       .quick-link::before { width: 6px; height: 6px; border-radius: 50%; content: ""; background: var(--dot); box-shadow: 0 0 12px var(--dot); }
       .quick-link:hover, .quick-link:focus-visible { transform: translateY(-2px); border-color: var(--dot); background: rgba(20,24,48,.86); outline: none; }
+      .language-switcher { display: flex; overflow: hidden; border: 1px solid var(--line); border-radius: 999px; background: rgba(8,10,25,.68); backdrop-filter: blur(12px); }
+      .language-button, .music-toggle {
+        min-width: 34px;
+        height: 34px;
+        border: 0;
+        background: transparent;
+        color: #858da2;
+        cursor: pointer;
+        font-size: 9px;
+        font-weight: 900;
+        transition: color .18s ease, background .18s ease, box-shadow .18s ease;
+      }
+      .language-button + .language-button { border-left: 1px solid rgba(255,255,255,.08); }
+      .language-button.active { background: #f6f7fb; color: #111425; }
+      .language-button:focus-visible, .music-toggle:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+      .music-toggle {
+        width: 62px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(8,10,25,.68);
+        color: #b9f8f1;
+        backdrop-filter: blur(12px);
+      }
+      .music-toggle.muted { color: #7e8596; }
+      .youtube-audio { position: fixed; width: 1px; height: 1px; left: -10px; bottom: -10px; opacity: .001; pointer-events: none; }
 
       .start-screen {
         position: fixed;
@@ -147,7 +173,7 @@
       .start-button:hover, .start-button:focus-visible { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(255,255,255,.5), 0 20px 52px rgba(112,94,255,.48); outline: none; }
       .start-button::after { position: absolute; inset: 0; content: ""; background: linear-gradient(100deg, transparent 20%, rgba(154,124,255,.25), transparent 80%); transform: translateX(-100%); animation: buttonSweep 2.8s infinite; }
       @keyframes buttonSweep { 70%, 100% { transform: translateX(100%); } }
-      .start-controls { display: flex; justify-content: center; gap: 20px; margin-top: 22px; color: #8f97aa; font-size: 10px; }
+      .start-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 18px; margin-top: 22px; color: #8f97aa; font-size: 10px; }
       .key-row { display: inline-flex; align-items: center; gap: 5px; }
       kbd { min-width: 24px; height: 24px; display: inline-grid; place-items: center; border: 1px solid rgba(255,255,255,.22); border-bottom-width: 3px; border-radius: 6px; background: rgba(255,255,255,.06); color: #dbe0eb; font: 800 10px/1 inherit; }
       .loading-copy { margin-top: 14px; color: #7c849b; font-size: 10px; }
@@ -198,6 +224,8 @@
       .speed-value { min-width: 64px; font-size: 37px; font-weight: 950; line-height: .85; letter-spacing: -.07em; font-variant-numeric: tabular-nums; }
       .speed-unit { color: #949caf; font-size: 8px; font-weight: 900; letter-spacing: .14em; }
       .gear { display: grid; place-items: center; width: 28px; height: 28px; margin-left: 4px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-size: 10px; font-weight: 950; backdrop-filter: blur(12px); }
+      .boost-pill { display: none; align-items: center; height: 28px; border: 1px solid #7af7ec; border-radius: 8px; padding: 0 9px; background: rgba(61,224,214,.16); color: #bafffa; font-size: 8px; font-weight: 950; letter-spacing: .12em; box-shadow: 0 0 20px rgba(75,237,224,.26); }
+      body.boosting .boost-pill { display: inline-flex; }
 
       .control-hint {
         position: fixed;
@@ -270,8 +298,12 @@
       @media (max-width: 760px) {
         .site-header { padding-inline: 16px; }
         .brand-copy span { display: none; }
+        .header-actions { gap: 5px; }
         .quick-link { width: 30px; min-height: 30px; justify-content: center; padding: 0; font-size: 0; }
         .quick-link::before { width: 8px; height: 8px; }
+        .language-button { min-width: 28px; height: 30px; }
+        .music-toggle { width: 34px; height: 30px; font-size: 0; }
+        .music-toggle::before { content: "♫"; font-size: 13px; }
         .start-panel { border-radius: 24px; padding: 30px 22px; }
         .start-panel h1 { font-size: clamp(48px, 18vw, 68px); }
         .start-controls { flex-direction: column; align-items: center; gap: 8px; }
@@ -303,7 +335,7 @@
     </style>
   </head>
   <body>
-    <canvas id="world" aria-label="세 게임의 데이터 구역을 자동차로 탐험하는 3D 화면"></canvas>
+    <canvas id="world" aria-label="세 게임의 데이터 구역을 자동차로 탐험하는 3D 화면" data-i18n-aria="worldAria"></canvas>
     <div class="noise"></div>
     <div class="vignette"></div>
 
@@ -312,54 +344,63 @@
         <div class="brand-mark">DD</div>
         <div class="brand-copy"><strong>DATA DRIVE</strong><span>KOREAN YOUTUBE INTELLIGENCE CITY</span></div>
       </div>
-      <nav class="quick-links" aria-label="대시보드 바로가기">
-        <a class="quick-link" style="--dot:#65e8de" href="dashboard.html?game=wuthering-waves">명조</a>
-        <a class="quick-link" style="--dot:#ff5c9f" href="dashboard.html?game=neverness-to-everness">이환</a>
-        <a class="quick-link" style="--dot:#ffd84d" href="dashboard.html?game=zenless-zone-zero">젠레스</a>
-      </nav>
+      <div class="header-actions">
+        <nav class="quick-links" aria-label="대시보드 바로가기" data-i18n-aria="quickLinksAria">
+          <a class="quick-link" style="--dot:#65e8de" href="dashboard.html?game=wuthering-waves" data-game-label="wuthering-waves">명조</a>
+          <a class="quick-link" style="--dot:#ff5c9f" href="dashboard.html?game=neverness-to-everness" data-game-label="neverness-to-everness">이환</a>
+          <a class="quick-link" style="--dot:#ffd84d" href="dashboard.html?game=zenless-zone-zero" data-game-label="zenless-zone-zero">젠레스</a>
+        </nav>
+        <div class="language-switcher" role="group" aria-label="언어 변경" data-i18n-aria="languageAria">
+          <button class="language-button active" type="button" data-lang="ko" aria-pressed="true">한</button>
+          <button class="language-button" type="button" data-lang="zh" aria-pressed="false">中</button>
+          <button class="language-button" type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="music-toggle muted" id="music-toggle" type="button" aria-pressed="false">♫ OFF</button>
+      </div>
     </header>
 
     <section class="start-screen" id="start-screen">
       <div class="start-panel">
         <p class="start-kicker">THREE GAMES · ONE DATA CITY</p>
         <h1>DRIVE <span>TO DATA</span></h1>
-        <p class="start-description">비 내리는 네온 시티를 직접 운전해 명조, 이환, 젠레스 존 제로 구역을 찾아가세요. 빛나는 데이터 포털 안에 잠시 머무르면 해당 대시보드가 열립니다.</p>
-        <button class="start-button" id="start-button" type="button" aria-describedby="loading-copy">시동 걸기</button>
-        <div class="start-controls" aria-label="조작 방법">
-          <div class="key-row"><kbd>W</kbd><kbd>↑</kbd><span>액셀</span></div>
-          <div class="key-row"><kbd>S</kbd><kbd>↓</kbd><span>브레이크 · 후진</span></div>
-          <div class="key-row"><kbd>A</kbd><kbd>D</kbd><kbd>←</kbd><kbd>→</kbd><span>앞바퀴 조향</span></div>
-          <div class="key-row"><kbd>R</kbd><span>차량 복귀</span></div>
+        <p class="start-description" data-i18n="startDescription">비 내리는 네온 시티를 직접 운전해 명조, 이환, 젠레스 존 제로 구역을 찾아가세요. 빛나는 데이터 포털 안에 잠시 머무르면 해당 대시보드가 열립니다.</p>
+        <button class="start-button" id="start-button" type="button" aria-describedby="loading-copy" data-i18n="startButton">시동 걸기</button>
+        <div class="start-controls" aria-label="조작 방법" data-i18n-aria="controlsAria">
+          <div class="key-row"><kbd>W</kbd><kbd>↑</kbd><span data-i18n="accelerator">액셀</span></div>
+          <div class="key-row"><kbd>S</kbd><kbd>↓</kbd><span data-i18n="brakeReverse">브레이크 · 후진</span></div>
+          <div class="key-row"><kbd>A</kbd><kbd>D</kbd><kbd>←</kbd><kbd>→</kbd><span data-i18n="steering">앞바퀴 조향</span></div>
+          <div class="key-row"><kbd>Shift</kbd><span data-i18n="boost">부스터</span></div>
+          <div class="key-row"><kbd>R</kbd><span data-i18n="resetCar">차량 복귀</span></div>
         </div>
-        <div class="loading-copy" id="loading-copy">데이터 시티를 불러오는 중…</div>
+        <div class="loading-copy" id="loading-copy" data-i18n="loadingCity">데이터 시티를 불러오는 중…</div>
       </div>
     </section>
 
     <div class="hud" aria-live="polite">
       <aside class="mission-card" id="mission-card">
-        <div class="hud-label">NEAREST DATA DISTRICT</div>
+        <div class="hud-label" data-i18n="nearestDistrict">NEAREST DATA DISTRICT</div>
         <div class="mission-name"><span class="mission-dot"></span><span id="mission-name">명조 데이터 구역</span></div>
         <div class="mission-distance" id="mission-distance">거리 계산 중</div>
         <div class="mission-track"><span></span></div>
       </aside>
 
       <aside class="minimap" aria-label="데이터 시티 미니맵">
-        <span class="map-label" style="left:26%;top:44%;--map-color:#65e8de">명조</span>
-        <span class="map-label" style="left:74%;top:44%;--map-color:#ff5c9f">이환</span>
-        <span class="map-label" style="left:50%;top:79%;--map-color:#ffd84d">젠레스</span>
+        <span class="map-label" style="left:26%;top:44%;--map-color:#65e8de" data-game-label="wuthering-waves">명조</span>
+        <span class="map-label" style="left:74%;top:44%;--map-color:#ff5c9f" data-game-label="neverness-to-everness">이환</span>
+        <span class="map-label" style="left:50%;top:79%;--map-color:#ffd84d" data-game-label="zenless-zone-zero">젠레스</span>
         <span class="map-car" id="map-car"></span>
         <span class="map-title">DATA CITY MAP</span>
       </aside>
 
       <div class="speedometer" aria-label="차량 속도">
-        <strong class="speed-value" id="speed-value">00</strong><span class="speed-unit">KM/H</span><span class="gear" id="gear">N</span>
+        <strong class="speed-value" id="speed-value">00</strong><span class="speed-unit">KM/H</span><span class="gear" id="gear">N</span><span class="boost-pill">BOOST</span>
       </div>
-      <div class="control-hint"><span><kbd>W/S</kbd> 액셀·브레이크</span><span>·</span><span><kbd>A/D</kbd> 앞바퀴 조향</span><span>·</span><span><kbd>R</kbd> 복귀</span></div>
+      <div class="control-hint"><span><kbd>W/S</kbd> <span data-i18n="driveHint">액셀·브레이크</span></span><span>·</span><span><kbd>A/D</kbd> <span data-i18n="steering">앞바퀴 조향</span></span><span>·</span><span><kbd>Shift</kbd> <span data-i18n="boost">부스터</span></span><span>·</span><span><kbd>R</kbd> <span data-i18n="resetShort">복귀</span></span></div>
     </div>
 
     <div class="zone-prompt" id="zone-prompt">
       <strong id="zone-prompt-title">명조 데이터 포털 진입 중</strong>
-      <p>원 안에 머무르면 대시보드가 열립니다</p>
+      <p data-i18n="portalHint">원 안에 머무르면 대시보드가 열립니다</p>
       <div class="zone-progress"><span></span></div>
     </div>
 
@@ -386,6 +427,7 @@
       </div>
     </div>
     <div class="sr-only" id="live-status" aria-live="polite"></div>
+    <iframe class="youtube-audio" id="youtube-audio" title="YouTube background music" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe>
 
     <noscript>
       <style>#fatal-error{display:grid}</style>
