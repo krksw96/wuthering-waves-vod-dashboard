@@ -112,14 +112,26 @@ function initDataCity(THREE) {
   buildSkyline();
   zones.forEach((zone, index) => buildDistrict(zone, index));
 
-  const { car, wheels, frontWheelPivots } = buildCar();
+  const { car, carBody, wheelSpins, frontWheelPivots } = buildCar();
   scene.add(car);
 
   const inputs = { forward: false, backward: false, left: false, right: false };
+  const vehicle = {
+    wheelBase: 2.27,
+    trackWidth: 2.24,
+    rearAxleOffset: 1.12,
+    wheelRadius: 0.42,
+    maxForwardSpeed: 18,
+    maxReverseSpeed: 7,
+  };
   const state = {
     started: false,
     speed: 0,
     yaw: 0,
+    yawRate: 0,
+    acceleration: 0,
+    steeringAngle: 0,
+    rearAxle: new THREE.Vector3(0, 0, vehicle.rearAxleOffset),
     elapsed: 0,
     entryProgress: 0,
     activePortal: null,
@@ -132,6 +144,7 @@ function initDataCity(THREE) {
   const forward = new THREE.Vector3();
   const targetCameraPosition = new THREE.Vector3();
   const targetCameraLook = new THREE.Vector3();
+  const right = new THREE.Vector3();
 
   resetCar();
   camera.position.set(0, 8.2, 16);
@@ -328,6 +341,9 @@ function initDataCity(THREE) {
     }
 
     buildElevatedRail();
+    buildCentralBoulevard(random);
+    buildServiceGarage();
+    buildNightCityDetails(random);
     buildStreetFurniture(random);
     buildRain(random);
 
@@ -358,6 +374,225 @@ function initDataCity(THREE) {
       pillar.position.set(x, 3.65, -34);
       pillar.castShadow = true;
       world.add(pillar);
+    }
+  }
+
+  function buildCentralBoulevard(random) {
+    const boulevard = new THREE.Group();
+    const wetRoad = new THREE.Mesh(
+      new THREE.BoxGeometry(9.4, 0.11, 48),
+      new THREE.MeshStandardMaterial({ color: 0x071116, roughness: 0.14, metalness: 0.86 }),
+    );
+    wetRoad.position.set(0, 0.105, -25.5);
+    wetRoad.receiveShadow = true;
+    boulevard.add(wetRoad);
+
+    const sidewalkMaterial = new THREE.MeshStandardMaterial({ color: 0x1a292d, roughness: 0.48, metalness: 0.48 });
+    [-5.55, 5.55].forEach((x) => {
+      const sidewalk = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.22, 48), sidewalkMaterial);
+      sidewalk.position.set(x, 0.15, -25.5);
+      sidewalk.receiveShadow = true;
+      boulevard.add(sidewalk);
+    });
+
+    const laneMaterial = new THREE.MeshBasicMaterial({ color: 0xb6e9ec, transparent: true, opacity: 0.5 });
+    for (let z = -6; z > -49; z -= 5.4) {
+      const lane = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.025, 2.3), laneMaterial);
+      lane.position.set(0, 0.18, z);
+      boulevard.add(lane);
+    }
+
+    const drainMaterial = new THREE.MeshStandardMaterial({ color: 0x080d10, roughness: 0.65, metalness: 0.8 });
+    [-4.55, 4.55].forEach((x) => {
+      const drain = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.035, 47), drainMaterial);
+      drain.position.set(x, 0.19, -25.5);
+      boulevard.add(drain);
+    });
+
+    const shopBodyMaterials = [0x122027, 0x1c1c29, 0x152b2f].map((color) => new THREE.MeshStandardMaterial({ color, roughness: 0.42, metalness: 0.55 }));
+    const glowMaterials = [
+      new THREE.MeshStandardMaterial({ color: 0xb5ffff, emissive: 0x44dae5, emissiveIntensity: 3.5, roughness: 0.18 }),
+      new THREE.MeshStandardMaterial({ color: 0xff9ac6, emissive: 0xff397f, emissiveIntensity: 3.2, roughness: 0.18 }),
+      new THREE.MeshStandardMaterial({ color: 0xffdf8d, emissive: 0xff9d32, emissiveIntensity: 2.8, roughness: 0.2 }),
+    ];
+    for (let index = 0; index < 11; index += 1) {
+      [-1, 1].forEach((side) => {
+        const width = 3.4 + random() * 1.5;
+        const height = 3.3 + random() * 5.5;
+        const depth = 3.8 + random() * 2.5;
+        const z = -7.5 - index * 4.25;
+        const shop = new THREE.Group();
+        const body = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), shopBodyMaterials[(index + (side > 0 ? 1 : 0)) % shopBodyMaterials.length]);
+        body.position.y = height / 2;
+        body.castShadow = true;
+        body.receiveShadow = true;
+        shop.add(body);
+
+        const facade = new THREE.Mesh(new THREE.BoxGeometry(width * 0.78, 1.15, 0.06), glowMaterials[(index + (side > 0 ? 1 : 0)) % glowMaterials.length]);
+        facade.position.set(0, 1.55, side > 0 ? -depth / 2 - 0.035 : depth / 2 + 0.035);
+        shop.add(facade);
+        const canopy = new THREE.Mesh(new THREE.BoxGeometry(width * 0.92, 0.12, 0.72), sidewalkMaterial);
+        canopy.position.set(0, 2.45, side > 0 ? -depth / 2 - 0.35 : depth / 2 + 0.35);
+        shop.add(canopy);
+        for (let floor = 3.35; floor < height - 0.3; floor += 1.25) {
+          const windowStrip = new THREE.Mesh(new THREE.BoxGeometry(width * 0.72, 0.08, 0.035), glowMaterials[(index + floor) % 2 | 0]);
+          windowStrip.position.set(0, floor, side > 0 ? -depth / 2 - 0.025 : depth / 2 + 0.025);
+          shop.add(windowStrip);
+        }
+        shop.position.set(side * (8.1 + width * 0.22), 0, z);
+        shop.rotation.y = side > 0 ? 0 : Math.PI;
+        boulevard.add(shop);
+      });
+    }
+
+    const roadGlow = new THREE.PointLight(0x61e9ef, 12, 28, 1.7);
+    roadGlow.position.set(-1.8, 4.2, -19);
+    boulevard.add(roadGlow);
+    const marketGlow = new THREE.PointLight(0xff4d91, 10, 27, 1.8);
+    marketGlow.position.set(3, 4.5, -31);
+    boulevard.add(marketGlow);
+    world.add(boulevard);
+  }
+
+  function buildServiceGarage() {
+    const garage = new THREE.Group();
+    const steel = new THREE.MeshStandardMaterial({ color: 0x111a20, roughness: 0.34, metalness: 0.82 });
+    const darkSteel = new THREE.MeshStandardMaterial({ color: 0x070d11, roughness: 0.5, metalness: 0.65 });
+    const cyanLight = new THREE.MeshStandardMaterial({ color: 0xa6ffff, emissive: 0x55deeb, emissiveIntensity: 3.8, roughness: 0.18 });
+    const violetLight = new THREE.MeshStandardMaterial({ color: 0xf1c7ff, emissive: 0xa764ff, emissiveIntensity: 3, roughness: 0.2 });
+
+    [-7.6, 7.6].forEach((x) => {
+      [-1.2, 5.2, 11.2].forEach((z) => {
+        const column = new THREE.Mesh(new THREE.BoxGeometry(0.58, 7.2, 0.72), steel);
+        column.position.set(x, 3.6, z);
+        column.castShadow = true;
+        garage.add(column);
+        const columnLight = new THREE.Mesh(new THREE.BoxGeometry(0.08, 4.6, 0.76), cyanLight);
+        columnLight.position.set(x + (x < 0 ? 0.31 : -0.31), 3.7, z);
+        garage.add(columnLight);
+      });
+    });
+
+    [-6.5, 0, 6.5].forEach((z) => {
+      const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(16.2, 0.48, 0.62), steel);
+      crossBeam.position.set(0, 7.1, z + 4.2);
+      crossBeam.castShadow = true;
+      garage.add(crossBeam);
+    });
+
+    [-5.3, 5.3].forEach((x, index) => {
+      const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 17.5, 10), darkSteel);
+      pipe.position.set(x, 7.55, 4.4);
+      pipe.rotation.x = Math.PI / 2;
+      garage.add(pipe);
+      const connectorMaterial = index ? violetLight : cyanLight;
+      for (let z = -3; z <= 11; z += 3.5) {
+        const connector = new THREE.Mesh(new THREE.TorusGeometry(0.23, 0.045, 7, 18), connectorMaterial);
+        connector.position.set(x, 7.55, z);
+        connector.rotation.x = Math.PI / 2;
+        garage.add(connector);
+      }
+    });
+
+    const ceilingPanels = new THREE.Mesh(
+      new THREE.BoxGeometry(15.5, 0.18, 15),
+      new THREE.MeshStandardMaterial({ color: 0x0a1116, roughness: 0.55, metalness: 0.68, transparent: true, opacity: 0.82 }),
+    );
+    ceilingPanels.position.set(0, 8.05, 4.8);
+    garage.add(ceilingPanels);
+
+    for (let x = -5.5; x <= 5.5; x += 3.65) {
+      const ceilingLamp = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.06, 0.18), x < 0 ? cyanLight : violetLight);
+      ceilingLamp.position.set(x, 7.92, 0.1);
+      garage.add(ceilingLamp);
+    }
+
+    const serviceRing = new THREE.Mesh(
+      new THREE.RingGeometry(3.1, 3.22, 64),
+      new THREE.MeshBasicMaterial({ color: 0x78f4ff, transparent: true, opacity: 0.48, side: THREE.DoubleSide, blending: THREE.AdditiveBlending }),
+    );
+    serviceRing.rotation.x = -Math.PI / 2;
+    serviceRing.position.set(0, 0.19, 0);
+    garage.add(serviceRing);
+
+    const diagnosticFrame = new THREE.Mesh(new THREE.TorusGeometry(2.65, 0.04, 7, 48), violetLight);
+    diagnosticFrame.position.set(0, 3.2, -7.4);
+    diagnosticFrame.scale.x = 1.3;
+    garage.add(diagnosticFrame);
+
+    const garageSign = makeLabel("DATA GARAGE", "NIGHT SHIFT · SYSTEM ONLINE", "#67e7ee");
+    garageSign.position.set(0, 6.45, -8.1);
+    garageSign.scale.set(6.2, 1.8, 1);
+    garage.add(garageSign);
+
+    const serviceGlow = new THREE.PointLight(0x5debf4, 13, 19, 1.8);
+    serviceGlow.position.set(0, 5.4, 2.2);
+    garage.add(serviceGlow);
+    world.add(garage);
+  }
+
+  function buildNightCityDetails(random) {
+    const metal = new THREE.MeshStandardMaterial({ color: 0x10181d, roughness: 0.45, metalness: 0.7 });
+    const pink = new THREE.MeshStandardMaterial({ color: 0xff9cc8, emissive: 0xff3d86, emissiveIntensity: 3.4, roughness: 0.2 });
+    const cyan = new THREE.MeshStandardMaterial({ color: 0xb6ffff, emissive: 0x45dbe8, emissiveIntensity: 3.5, roughness: 0.18 });
+    const amber = new THREE.MeshStandardMaterial({ color: 0xffdda2, emissive: 0xff9c32, emissiveIntensity: 2.7, roughness: 0.2 });
+
+    const arch = new THREE.Group();
+    [-8.3, 8.3].forEach((x) => {
+      const pillar = new THREE.Mesh(new THREE.BoxGeometry(1.2, 10.5, 1.6), metal);
+      pillar.position.set(x, 5.25, -19);
+      pillar.castShadow = true;
+      arch.add(pillar);
+    });
+    const bridge = new THREE.Mesh(new THREE.BoxGeometry(17.8, 1.25, 2), metal);
+    bridge.position.set(0, 9.8, -19);
+    bridge.castShadow = true;
+    arch.add(bridge);
+    const archLight = new THREE.Mesh(new THREE.BoxGeometry(14.4, 0.11, 0.1), pink);
+    archLight.position.set(0, 9.15, -17.95);
+    arch.add(archLight);
+    const archSign = makeLabel("MIDNIGHT DATA", "THREE DISTRICTS · ONE SIGNAL", "#ff74ae");
+    archSign.position.set(0, 11.6, -18.8);
+    archSign.scale.set(8.7, 2.5, 1);
+    arch.add(archSign);
+    world.add(arch);
+
+    const signData = [
+      [-14, 7.2, -10, "SYNC", "RESONANCE", "#66f0ed"],
+      [14, 6.4, -9, "DREAM", "NEON CROSSING", "#ff6aa6"],
+      [-8.5, 9.5, 18, "24H", "DATA MARKET", "#ffca59"],
+      [9, 8.5, 20, "SIGNAL", "OPEN ALL NIGHT", "#8c7dff"],
+    ];
+    signData.forEach(([x, y, z, title, subtitle, color], index) => {
+      const sign = makeLabel(title, subtitle, color);
+      sign.position.set(x, y, z);
+      sign.scale.set(index < 2 ? 4.9 : 5.5, index < 2 ? 1.5 : 1.7, 1);
+      sign.material.rotation = index % 2 ? 0.04 : -0.04;
+      world.add(sign);
+    });
+
+    for (let index = 0; index < 18; index += 1) {
+      const side = index % 2 ? -1 : 1;
+      const x = side * (10.5 + random() * 4.2);
+      const z = -24 + index * 2.9;
+      const vending = new THREE.Group();
+      const cabinet = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.8, 0.55), metal);
+      cabinet.position.y = 0.9;
+      vending.add(cabinet);
+      const screen = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.72, 0.03), index % 3 === 0 ? amber : index % 2 ? pink : cyan);
+      screen.position.set(0, 1.08, side > 0 ? -0.29 : 0.29);
+      vending.add(screen);
+      vending.position.set(x, 0, z);
+      vending.rotation.y = side > 0 ? 0 : Math.PI;
+      world.add(vending);
+    }
+
+    for (let index = 0; index < 14; index += 1) {
+      const cableGeometry = new THREE.TorusGeometry(4 + (index % 3), 0.025, 5, 28, Math.PI * 0.72);
+      const cable = new THREE.Mesh(cableGeometry, metal);
+      cable.position.set((index % 2 ? -1 : 1) * (8 + index * 0.5), 8 + (index % 4), -30 + index * 4.5);
+      cable.rotation.set(Math.PI / 2, 0, index % 2 ? 0.4 : -0.4);
+      world.add(cable);
     }
   }
 
@@ -522,13 +757,15 @@ function initDataCity(THREE) {
 
   function buildCar() {
     const group = new THREE.Group();
+    const bodyGroup = new THREE.Group();
+    group.add(bodyGroup);
     const chassis = new THREE.Mesh(
       new THREE.BoxGeometry(2.1, 0.48, 3.7),
       new THREE.MeshStandardMaterial({ color: 0xf3f5ff, roughness: 0.34, metalness: 0.42 }),
     );
     chassis.position.y = 0.72;
     chassis.castShadow = true;
-    group.add(chassis);
+    bodyGroup.add(chassis);
 
     const cabin = new THREE.Mesh(
       new THREE.BoxGeometry(1.72, 0.72, 1.72),
@@ -537,31 +774,33 @@ function initDataCity(THREE) {
     cabin.position.set(0, 1.25, 0.2);
     cabin.rotation.x = -0.03;
     cabin.castShadow = true;
-    group.add(cabin);
+    bodyGroup.add(cabin);
 
     const bumperMaterial = new THREE.MeshStandardMaterial({ color: 0x111425, roughness: 0.52, metalness: 0.72 });
     [-1.78, 1.78].forEach((z) => {
       const bumper = new THREE.Mesh(new THREE.BoxGeometry(2.18, 0.18, 0.2), bumperMaterial);
       bumper.position.set(0, 0.55, z);
-      group.add(bumper);
+      bodyGroup.add(bumper);
     });
 
     const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x080912, roughness: 0.84 });
     const hubMaterial = new THREE.MeshStandardMaterial({ color: 0x8b93ad, roughness: 0.3, metalness: 0.78 });
-    const allWheels = [];
+    const allWheelSpins = [];
     const steerPivots = [];
     [[-1.12, -1.15], [1.12, -1.15], [-1.12, 1.12], [1.12, 1.12]].forEach(([x, z], index) => {
       const pivot = new THREE.Group();
       pivot.position.set(x, 0.54, z);
+      const spin = new THREE.Group();
       const tire = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.3, 16), wheelMaterial);
       tire.rotation.z = Math.PI / 2;
       tire.castShadow = true;
       const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 0.32, 12), hubMaterial);
       hub.rotation.z = Math.PI / 2;
       tire.add(hub);
-      pivot.add(tire);
+      spin.add(tire);
+      pivot.add(spin);
       group.add(pivot);
-      allWheels.push(tire);
+      allWheelSpins.push(spin);
       if (index < 2) steerPivots.push(pivot);
     });
 
@@ -570,15 +809,15 @@ function initDataCity(THREE) {
     [-0.67, 0.67].forEach((x) => {
       const headlight = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.16, 0.07), headlightMaterial);
       headlight.position.set(x, 0.77, -1.87);
-      group.add(headlight);
+      bodyGroup.add(headlight);
       const taillight = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.16, 0.07), taillightMaterial);
       taillight.position.set(x, 0.77, 1.87);
-      group.add(taillight);
+      bodyGroup.add(taillight);
     });
     const underglow = new THREE.PointLight(0x8c78ff, 4.5, 7, 2.2);
     underglow.position.set(0, 0.36, 0);
     group.add(underglow);
-    return { car: group, wheels: allWheels, frontWheelPivots: steerPivots };
+    return { car: group, carBody: bodyGroup, wheelSpins: allWheelSpins, frontWheelPivots: steerPivots };
   }
 
   function makeLabel(title, subtitle, color) {
@@ -641,53 +880,111 @@ function initDataCity(THREE) {
   function resetCar() {
     state.speed = 0;
     state.yaw = 0;
+    state.yawRate = 0;
+    state.acceleration = 0;
+    state.steeringAngle = 0;
     state.entryProgress = 0;
     state.activePortal = null;
+    state.rearAxle.set(0, 0, vehicle.rearAxleOffset);
     car.position.set(0, 0, 0);
     car.rotation.set(0, 0, 0);
+    carBody.position.set(0, 0, 0);
+    carBody.rotation.set(0, 0, 0);
+    frontWheelPivots.forEach((pivot) => { pivot.rotation.y = 0; });
     zonePrompt.classList.remove("visible");
     zonePrompt.style.setProperty("--entry-progress", "0%");
   }
 
   function updateCar(delta) {
-    const throttle = Number(inputs.forward) - Number(inputs.backward);
-    const steering = Number(inputs.right) - Number(inputs.left);
-    const maxForward = 17;
-    const maxReverse = -7.5;
+    const steeringInput = Number(inputs.right) - Number(inputs.left);
+    const movingForward = state.speed >= -0.15;
+    let driveForce = 0;
+    if (inputs.forward) driveForce += movingForward ? 10.8 * (1 - Math.max(0, state.speed) / 34) : 22;
+    if (inputs.backward) driveForce -= state.speed > 0.35 ? 24 : 7.8 * (1 - Math.abs(Math.min(0, state.speed)) / 15);
 
-    if (throttle > 0) state.speed += (state.speed < 0 ? 20 : 10.5) * delta;
-    else if (throttle < 0) state.speed -= (state.speed > 0 ? 21 : 8) * delta;
-    else state.speed *= Math.exp(-2.15 * delta);
-    state.speed = THREE.MathUtils.clamp(state.speed, maxReverse, maxForward);
-    if (Math.abs(state.speed) < 0.025) state.speed = 0;
+    const rollingResistance = state.speed === 0 ? 0 : Math.sign(state.speed) * 0.72;
+    const aerodynamicDrag = state.speed * Math.abs(state.speed) * 0.026;
+    state.acceleration = driveForce - rollingResistance - aerodynamicDrag;
+    if (!inputs.forward && !inputs.backward && Math.abs(state.speed) < 0.18) {
+      state.speed = 0;
+      state.acceleration = 0;
+    } else {
+      state.speed += state.acceleration * delta;
+    }
+    state.speed = THREE.MathUtils.clamp(state.speed, -vehicle.maxReverseSpeed, vehicle.maxForwardSpeed);
 
-    const speedRatio = Math.min(Math.abs(state.speed) / maxForward, 1);
-    const turnStrength = (0.9 + speedRatio * 1.3) * Math.sign(state.speed || 1);
-    if (Math.abs(state.speed) > 0.08) state.yaw += steering * turnStrength * delta;
+    const speedRatio = Math.min(Math.abs(state.speed) / vehicle.maxForwardSpeed, 1);
+    const steeringLimit = THREE.MathUtils.lerp(0.58, 0.19, Math.pow(speedRatio, 0.72));
+    const targetSteering = steeringInput * steeringLimit;
+    const steeringResponse = steeringInput ? 7.2 : 10.5;
+    state.steeringAngle = THREE.MathUtils.lerp(
+      state.steeringAngle,
+      targetSteering,
+      1 - Math.exp(-steeringResponse * delta),
+    );
 
+    state.yawRate = Math.abs(state.speed) > 0.015
+      ? (state.speed / vehicle.wheelBase) * Math.tan(state.steeringAngle)
+      : 0;
+    const middleYaw = state.yaw + state.yawRate * delta * 0.5;
+    forward.set(Math.sin(middleYaw), 0, -Math.cos(middleYaw));
+    state.rearAxle.addScaledVector(forward, state.speed * delta);
+    state.yaw += state.yawRate * delta;
+
+    state.rearAxle.x = THREE.MathUtils.clamp(state.rearAxle.x, -54, 54);
+    state.rearAxle.z = THREE.MathUtils.clamp(state.rearAxle.z, -54, 54);
     forward.set(Math.sin(state.yaw), 0, -Math.cos(state.yaw));
-    car.position.addScaledVector(forward, state.speed * delta);
-    car.position.x = THREE.MathUtils.clamp(car.position.x, -54, 54);
-    car.position.z = THREE.MathUtils.clamp(car.position.z, -54, 54);
-    car.rotation.y = state.yaw;
-    car.rotation.z = THREE.MathUtils.lerp(car.rotation.z, -steering * speedRatio * 0.06, 1 - Math.exp(-8 * delta));
+    car.position.copy(state.rearAxle).addScaledVector(forward, vehicle.rearAxleOffset);
+    // The physics heading is clockwise-positive, while Three.js rotates Y counter-clockwise.
+    car.rotation.y = -state.yaw;
 
-    frontWheelPivots.forEach((pivot) => {
-      pivot.rotation.y = THREE.MathUtils.lerp(pivot.rotation.y, steering * 0.42, 1 - Math.exp(-10 * delta));
-    });
-    wheels.forEach((wheel) => { wheel.rotation.x -= state.speed * delta / 0.42; });
+    const absoluteSteering = Math.abs(state.steeringAngle);
+    let leftWheelAngle = state.steeringAngle;
+    let rightWheelAngle = state.steeringAngle;
+    if (absoluteSteering > 0.001) {
+      const turnRadius = vehicle.wheelBase / Math.tan(absoluteSteering);
+      const inner = Math.atan(vehicle.wheelBase / Math.max(0.35, turnRadius - vehicle.trackWidth / 2));
+      const outer = Math.atan(vehicle.wheelBase / (turnRadius + vehicle.trackWidth / 2));
+      if (state.steeringAngle > 0) {
+        leftWheelAngle = outer;
+        rightWheelAngle = inner;
+      } else {
+        leftWheelAngle = -inner;
+        rightWheelAngle = -outer;
+      }
+    }
+    frontWheelPivots[0].rotation.y = THREE.MathUtils.lerp(frontWheelPivots[0].rotation.y, -leftWheelAngle, 1 - Math.exp(-12 * delta));
+    frontWheelPivots[1].rotation.y = THREE.MathUtils.lerp(frontWheelPivots[1].rotation.y, -rightWheelAngle, 1 - Math.exp(-12 * delta));
+    wheelSpins.forEach((wheel) => { wheel.rotation.x -= state.speed * delta / vehicle.wheelRadius; });
+
+    const lateralLoad = THREE.MathUtils.clamp(state.yawRate * Math.abs(state.speed) / 22, -1, 1);
+    const targetRoll = lateralLoad * 0.095;
+    const targetPitch = THREE.MathUtils.clamp(state.acceleration / 42, -0.055, 0.055);
+    carBody.rotation.z = THREE.MathUtils.lerp(carBody.rotation.z, targetRoll, 1 - Math.exp(-6.5 * delta));
+    carBody.rotation.x = THREE.MathUtils.lerp(carBody.rotation.x, targetPitch, 1 - Math.exp(-7.5 * delta));
+    carBody.position.y = Math.sin(state.elapsed * 13) * Math.min(0.018, Math.abs(state.speed) * 0.0015);
   }
 
   function updateCamera(delta) {
     forward.set(Math.sin(state.yaw), 0, -Math.cos(state.yaw));
-    targetCameraPosition.copy(car.position).addScaledVector(forward, -8.5).add(new THREE.Vector3(0, 5.7, 0));
-    targetCameraLook.copy(car.position).addScaledVector(forward, 4.1).add(new THREE.Vector3(0, 1.05, 0));
-    const positionDamping = 1 - Math.exp(-4.3 * delta);
-    const lookDamping = 1 - Math.exp(-5.7 * delta);
+    right.set(Math.cos(state.yaw), 0, Math.sin(state.yaw));
+    const speedRatio = Math.min(Math.abs(state.speed) / vehicle.maxForwardSpeed, 1);
+    targetCameraPosition.copy(car.position)
+      .addScaledVector(forward, -THREE.MathUtils.lerp(7.8, 9.6, speedRatio))
+      .addScaledVector(right, -state.yawRate * 0.52)
+      .add(new THREE.Vector3(0, THREE.MathUtils.lerp(4.8, 5.35, speedRatio), 0));
+    targetCameraLook.copy(car.position)
+      .addScaledVector(forward, THREE.MathUtils.lerp(4.2, 6.1, speedRatio))
+      .addScaledVector(right, state.yawRate * 1.05)
+      .add(new THREE.Vector3(0, 0.95, 0));
+    const positionDamping = 1 - Math.exp(-3.6 * delta);
+    const lookDamping = 1 - Math.exp(-5.2 * delta);
     cameraPosition.lerp(targetCameraPosition, positionDamping);
     cameraTarget.lerp(targetCameraLook, lookDamping);
     camera.position.copy(cameraPosition);
     camera.lookAt(cameraTarget);
+    camera.fov = THREE.MathUtils.lerp(camera.fov, 52 + speedRatio * 7, 1 - Math.exp(-3 * delta));
+    camera.updateProjectionMatrix();
   }
 
   function updatePortals(delta) {
