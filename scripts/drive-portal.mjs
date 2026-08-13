@@ -240,6 +240,21 @@ function initDataCity(THREE) {
     halfLength: 3,
     halfWidth: 2.75,
   };
+  const skyGardenTerrainConfig = {
+    centerX: -28,
+    centerZ: -12,
+    halfWidth: 12.5,
+    frontZ: 11.55,
+    summitZ: -5.25,
+    backZ: -12.5,
+    entryHeight: 0.72,
+    summitHeight: 2.5,
+    sideSlopeStart: 8.4,
+    stairHalfWidth: 4.8,
+    stairCount: 7,
+    stairDepth: 0.85,
+    stairOuterZ: 17.5,
+  };
 
   const zoneName = (zone) => {
     const gameName = copy().games[zone.id];
@@ -318,6 +333,7 @@ function initDataCity(THREE) {
     navigating: false,
     airborne: false,
     onRamp: false,
+    terrainPitch: 0,
     verticalVelocity: 0,
     jumpCooldown: 0,
   };
@@ -1056,13 +1072,69 @@ function initDataCity(THREE) {
 
   function buildRooftopGarden(random) {
     const garden = new THREE.Group();
-    garden.position.set(-28, 0, -12);
+    garden.position.set(skyGardenTerrainConfig.centerX, 0, skyGardenTerrainConfig.centerZ);
     const stone = new THREE.MeshStandardMaterial({ color: 0x1a2728, roughness: 0.68, metalness: 0.28 });
     const darkStone = new THREE.MeshStandardMaterial({ color: 0x0e1718, roughness: 0.75, metalness: 0.2 });
     const foliage = new THREE.MeshStandardMaterial({ color: 0x163e34, emissive: 0x0a392d, emissiveIntensity: 0.52, roughness: 0.86 });
     const bark = new THREE.MeshStandardMaterial({ color: 0x31261f, roughness: 0.9 });
     const stepLight = new THREE.MeshStandardMaterial({ color: 0xffedbf, emissive: 0xffc35c, emissiveIntensity: 3.2, roughness: 0.22 });
     const waterMaterial = new THREE.MeshStandardMaterial({ color: 0x153e45, emissive: 0x0a8796, emissiveIntensity: 0.6, roughness: 0.08, metalness: 0.68, transparent: true, opacity: 0.88 });
+
+    const hillGeometry = new THREE.BufferGeometry();
+    const hillSegmentsX = 32;
+    const hillSegmentsZ = 36;
+    const hillVertices = [];
+    const hillIndices = [];
+    for (let zIndex = 0; zIndex <= hillSegmentsZ; zIndex += 1) {
+      const z = THREE.MathUtils.lerp(skyGardenTerrainConfig.backZ, skyGardenTerrainConfig.frontZ, zIndex / hillSegmentsZ);
+      for (let xIndex = 0; xIndex <= hillSegmentsX; xIndex += 1) {
+        const x = THREE.MathUtils.lerp(-skyGardenTerrainConfig.halfWidth, skyGardenTerrainConfig.halfWidth, xIndex / hillSegmentsX);
+        hillVertices.push(x, skyGardenHillHeightLocal(x, z), z);
+      }
+    }
+    for (let zIndex = 0; zIndex < hillSegmentsZ; zIndex += 1) {
+      for (let xIndex = 0; xIndex < hillSegmentsX; xIndex += 1) {
+        const row = hillSegmentsX + 1;
+        const a = zIndex * row + xIndex;
+        const b = a + 1;
+        const c = a + row;
+        const d = c + 1;
+        hillIndices.push(a, c, b, b, c, d);
+      }
+    }
+    hillGeometry.setAttribute("position", new THREE.Float32BufferAttribute(hillVertices, 3));
+    hillGeometry.setIndex(hillIndices);
+    hillGeometry.computeVertexNormals();
+
+    const climbableHill = new THREE.Mesh(
+      hillGeometry,
+      new THREE.MeshStandardMaterial({
+        color: 0x142d2b,
+        emissive: 0x082a28,
+        emissiveIntensity: 0.48,
+        roughness: 0.78,
+        metalness: 0.18,
+        side: THREE.DoubleSide,
+      }),
+    );
+    climbableHill.name = "SkyGardenClimbableHill";
+    climbableHill.userData.disableProximityFade = true;
+    climbableHill.castShadow = true;
+    climbableHill.receiveShadow = true;
+    garden.add(climbableHill);
+
+    const hillGrid = new THREE.Mesh(
+      hillGeometry,
+      new THREE.MeshBasicMaterial({
+        color: 0x64e7dd,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.075,
+        depthWrite: false,
+      }),
+    );
+    hillGrid.position.y = 0.018;
+    garden.add(hillGrid);
 
     const rampGeometry = new THREE.BufferGeometry();
     rampGeometry.setAttribute("position", new THREE.Float32BufferAttribute([
@@ -1108,13 +1180,9 @@ function initDataCity(THREE) {
       garden.add(launchStripe);
     });
 
-    const terrace = new THREE.Mesh(new THREE.BoxGeometry(25, 0.48, 25), stone);
-    terrace.position.y = -0.12;
-    terrace.receiveShadow = true;
-    garden.add(terrace);
     const pond = new THREE.Mesh(new THREE.CircleGeometry(3.3, 40), waterMaterial);
     pond.rotation.x = -Math.PI / 2;
-    pond.position.set(-5.5, 0.2, 4.8);
+    pond.position.set(-5.5, skyGardenHillHeightLocal(-5.5, 4.8) + 0.035, 4.8);
     garden.add(pond);
     const pondRing = new THREE.Mesh(new THREE.RingGeometry(3.3, 3.7, 40), darkStone);
     pondRing.rotation.x = -Math.PI / 2;
@@ -1123,8 +1191,9 @@ function initDataCity(THREE) {
 
     const treePositions = [[-8, -5], [7.5, -5.5], [-7.4, 7.4], [7.8, 6.3]];
     treePositions.forEach(([x, z], index) => {
+      const terrainHeight = skyGardenHillHeightLocal(x, z);
       const planter = new THREE.Mesh(new THREE.CylinderGeometry(1.65, 1.9, 0.75, 12), darkStone);
-      planter.position.set(x, 0.38, z);
+      planter.position.set(x, terrainHeight + 0.38, z);
       garden.add(planter);
       const tree = new THREE.Group();
       const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.28, 3.7, 7), bark);
@@ -1137,26 +1206,101 @@ function initDataCity(THREE) {
         crown.scale.set(1.5, 0.58, 1.05);
         tree.add(crown);
       }
-      tree.position.set(x, 0.35, z);
+      tree.position.set(x, terrainHeight + 0.35, z);
       garden.add(tree);
     });
 
-    for (let step = 0; step < 5; step += 1) {
-      const stair = new THREE.Mesh(new THREE.BoxGeometry(8.5, 0.3, 1.2), stone);
-      stair.position.set(0, 0.15 + step * 0.28, 11.5 + step * 0.82);
-      garden.add(stair);
-      const light = new THREE.Mesh(new THREE.BoxGeometry(7.3, 0.055, 0.08), stepLight);
-      light.position.set(0, 0.32 + step * 0.28, 10.88 + step * 0.82);
-      garden.add(light);
+    const stairs = new THREE.Group();
+    stairs.name = "SkyGardenEntryStairs";
+    for (let step = 0; step < skyGardenTerrainConfig.stairCount; step += 1) {
+      const topHeight = skyGardenStairHeight(step);
+      const stepZ = skyGardenTerrainConfig.stairOuterZ - (step + 0.5) * skyGardenTerrainConfig.stairDepth;
+      const stair = new THREE.Mesh(
+        new THREE.BoxGeometry(skyGardenTerrainConfig.stairHalfWidth * 2, topHeight, skyGardenTerrainConfig.stairDepth + 0.08),
+        stone,
+      );
+      stair.position.set(0, topHeight / 2, stepZ);
+      stair.castShadow = true;
+      stair.receiveShadow = true;
+      const light = new THREE.Mesh(new THREE.BoxGeometry(8.35, 0.055, 0.085), stepLight);
+      light.position.set(0, topHeight + 0.035, stepZ + skyGardenTerrainConfig.stairDepth / 2 - 0.045);
+      stairs.add(stair, light);
     }
+    garden.add(stairs);
     const gardenSign = makeLabel("SKY GARDEN", "QUIET ABOVE THE SIGNAL", "#83eee3");
-    gardenSign.position.set(0, 4.55, 10.6);
+    gardenSign.position.set(0, 4.9, 10.35);
     gardenSign.scale.set(7.2, 2, 1);
     garden.add(gardenSign);
     const gardenGlow = new THREE.PointLight(0x55dfd0, 10, 20, 1.8);
     gardenGlow.position.set(0, 5, 2);
     garden.add(gardenGlow);
     world.add(garden);
+  }
+
+  function skyGardenStairHeight(stepIndex) {
+    return skyGardenTerrainConfig.entryHeight * (stepIndex + 1) / skyGardenTerrainConfig.stairCount;
+  }
+
+  function skyGardenHillHeightLocal(localX, localZ) {
+    if (Math.abs(localX) > skyGardenTerrainConfig.halfWidth
+      || localZ < skyGardenTerrainConfig.backZ
+      || localZ > skyGardenTerrainConfig.frontZ) return 0;
+
+    const riseProgress = THREE.MathUtils.clamp(
+      (skyGardenTerrainConfig.frontZ - localZ) / (skyGardenTerrainConfig.frontZ - skyGardenTerrainConfig.summitZ),
+      0,
+      1,
+    );
+    const easedRise = riseProgress * riseProgress * (3 - 2 * riseProgress);
+    const backProgress = THREE.MathUtils.clamp(
+      (localZ - skyGardenTerrainConfig.backZ) / (skyGardenTerrainConfig.summitZ - skyGardenTerrainConfig.backZ),
+      0,
+      1,
+    );
+    const easedBack = backProgress * backProgress * (3 - 2 * backProgress);
+    const sideProgress = THREE.MathUtils.clamp(
+      (skyGardenTerrainConfig.halfWidth - Math.abs(localX))
+        / (skyGardenTerrainConfig.halfWidth - skyGardenTerrainConfig.sideSlopeStart),
+      0,
+      1,
+    );
+    const easedSide = sideProgress * sideProgress * (3 - 2 * sideProgress);
+    const height = THREE.MathUtils.lerp(
+      skyGardenTerrainConfig.entryHeight,
+      skyGardenTerrainConfig.summitHeight,
+      easedRise,
+    );
+    return height * easedBack * easedSide;
+  }
+
+  function skyGardenTerrainHeightAt(worldX, worldZ) {
+    const localX = worldX - skyGardenTerrainConfig.centerX;
+    const localZ = worldZ - skyGardenTerrainConfig.centerZ;
+    const stairInnerZ = skyGardenTerrainConfig.stairOuterZ
+      - skyGardenTerrainConfig.stairCount * skyGardenTerrainConfig.stairDepth;
+    if (Math.abs(localX) <= skyGardenTerrainConfig.stairHalfWidth
+      && localZ >= stairInnerZ
+      && localZ <= skyGardenTerrainConfig.stairOuterZ) {
+      const stepFromOutside = THREE.MathUtils.clamp(
+        Math.floor((skyGardenTerrainConfig.stairOuterZ - localZ) / skyGardenTerrainConfig.stairDepth),
+        0,
+        skyGardenTerrainConfig.stairCount - 1,
+      );
+      return skyGardenStairHeight(stepFromOutside);
+    }
+    return skyGardenHillHeightLocal(localX, localZ);
+  }
+
+  function jumpRampHeightAt(worldX, worldZ) {
+    const rampWest = jumpRampConfig.centerX - jumpRampConfig.halfLength;
+    const rampEast = jumpRampConfig.centerX + jumpRampConfig.halfLength;
+    if (worldX < rampWest || worldX > rampEast
+      || Math.abs(worldZ - jumpRampConfig.centerZ) > jumpRampConfig.halfWidth + 0.2) return 0;
+    return THREE.MathUtils.clamp((rampEast - worldX) / (rampEast - rampWest), 0, 1) * 1.25;
+  }
+
+  function driveSurfaceHeightAt(worldX, worldZ) {
+    return Math.max(skyGardenTerrainHeightAt(worldX, worldZ), jumpRampHeightAt(worldX, worldZ));
   }
 
   function buildServiceGarage() {
@@ -1656,7 +1800,11 @@ function initDataCity(THREE) {
   }
 
   function registerProximityFade(object) {
-    if ((!object.isMesh && !object.isSprite) || !object.visible || object.userData.proximityFade || Array.isArray(object.material)) return;
+    if ((!object.isMesh && !object.isSprite)
+      || !object.visible
+      || object.userData.disableProximityFade
+      || object.userData.proximityFade
+      || Array.isArray(object.material)) return;
     const material = object.material;
     if (!material) return;
 
@@ -1743,6 +1891,7 @@ function initDataCity(THREE) {
     state.navigating = false;
     state.airborne = false;
     state.onRamp = false;
+    state.terrainPitch = 0;
     state.verticalVelocity = 0;
     state.jumpCooldown = 0;
     state.rearAxle.set(0, 0, vehicle.rearAxleOffset);
@@ -1816,9 +1965,10 @@ function initDataCity(THREE) {
     const insideRamp = state.rearAxle.x >= rampWest && state.rearAxle.x <= rampEast
       && Math.abs(state.rearAxle.z - jumpRampConfig.centerZ) <= jumpRampConfig.halfWidth + 0.2;
     const movingTowardGarden = forward.x < -0.25 && state.speed > 2;
+    const terrainHeight = skyGardenTerrainHeightAt(state.rearAxle.x, state.rearAxle.z);
     if (!state.airborne && insideRamp) {
       const rampProgress = THREE.MathUtils.clamp((rampEast - state.rearAxle.x) / (rampEast - rampWest), 0, 1);
-      state.rearAxle.y = rampProgress * 1.25;
+      state.rearAxle.y = Math.max(terrainHeight, rampProgress * 1.25);
       state.onRamp = true;
       if (rampProgress > 0.66 && movingTowardGarden && state.jumpCooldown <= 0) {
         state.speed = THREE.MathUtils.clamp(Math.max(state.speed * 1.06, 9), 9, 16);
@@ -1830,14 +1980,40 @@ function initDataCity(THREE) {
     } else if (state.airborne) {
       state.verticalVelocity -= 10.5 * step;
       state.rearAxle.y += state.verticalVelocity * step;
-      if (state.rearAxle.y <= 0) {
-        state.rearAxle.y = 0;
+      const landingHeight = driveSurfaceHeightAt(state.rearAxle.x, state.rearAxle.z);
+      if (state.rearAxle.y <= landingHeight) {
+        state.rearAxle.y = landingHeight;
         state.verticalVelocity = 0;
         state.airborne = false;
       }
     } else {
       state.onRamp = false;
-      state.rearAxle.y = Math.max(0, state.rearAxle.y - step * 4.5);
+      const dropHeight = state.rearAxle.y - terrainHeight;
+      if (dropHeight > 0.38 && Math.abs(state.speed) > 0.8) {
+        state.airborne = true;
+        state.verticalVelocity = 0;
+      } else {
+        state.rearAxle.y = terrainHeight;
+      }
+    }
+
+    if (!state.airborne) {
+      const surfaceBehind = driveSurfaceHeightAt(
+        state.rearAxle.x - forward.x * vehicle.wheelBase * 0.35,
+        state.rearAxle.z - forward.z * vehicle.wheelBase * 0.35,
+      );
+      const surfaceAhead = driveSurfaceHeightAt(
+        state.rearAxle.x + forward.x * vehicle.wheelBase * 0.65,
+        state.rearAxle.z + forward.z * vehicle.wheelBase * 0.65,
+      );
+      const targetTerrainPitch = Math.atan2(surfaceAhead - surfaceBehind, vehicle.wheelBase);
+      state.terrainPitch = THREE.MathUtils.lerp(
+        state.terrainPitch,
+        THREE.MathUtils.clamp(targetTerrainPitch, -0.34, 0.34),
+        1 - Math.exp(-10 * step),
+      );
+    } else {
+      state.terrainPitch = THREE.MathUtils.lerp(state.terrainPitch, 0, 1 - Math.exp(-4 * step));
     }
 
     state.rearAxle.x = THREE.MathUtils.clamp(state.rearAxle.x, -54, 54);
@@ -1870,6 +2046,7 @@ function initDataCity(THREE) {
     car.position.copy(state.rearAxle).addScaledVector(forward, vehicle.rearAxleOffset);
     // The physics heading is clockwise-positive, while Three.js rotates Y counter-clockwise.
     car.rotation.y = -state.yaw;
+    car.rotation.x = state.terrainPitch;
 
     const absoluteSteering = Math.abs(state.steeringAngle);
     let leftWheelAngle = state.steeringAngle;
