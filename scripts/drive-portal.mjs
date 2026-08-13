@@ -239,6 +239,9 @@ function initDataCity(THREE) {
     centerZ: -9,
     halfLength: 3,
     halfWidth: 2.75,
+    height: 1.25,
+    directionX: -1,
+    directionZ: 0,
   };
   const skyGardenConfig = {
     centerX: -28,
@@ -257,6 +260,13 @@ function initDataCity(THREE) {
     plateauRadius: 0.34,
     summitHeight: 2.15,
   };
+  const hillJumpRampConfigs = [
+    { id: "east", centerX: -18, centerZ: 28, halfLength: 3, halfWidth: 2.3, height: 1.35, directionX: -1, directionZ: 0 },
+    { id: "west", centerX: -42, centerZ: 28, halfLength: 3, halfWidth: 2.3, height: 1.35, directionX: 1, directionZ: 0 },
+    { id: "north", centerX: -30, centerZ: 14.5, halfLength: 3, halfWidth: 2.3, height: 1.35, directionX: 0, directionZ: 1 },
+    { id: "south", centerX: -30, centerZ: 41.5, halfLength: 3, halfWidth: 2.3, height: 1.35, directionX: 0, directionZ: -1 },
+  ];
+  const allJumpRampConfigs = [jumpRampConfig, ...hillJumpRampConfigs];
 
   const zoneName = (zone) => {
     const gameName = copy().games[zone.id];
@@ -1146,6 +1156,63 @@ function initDataCity(THREE) {
     hillGrid.position.y = 0.018;
     garden.add(hillGrid);
 
+    const hillRampSurface = new THREE.MeshStandardMaterial({
+      color: 0x182a2e,
+      roughness: 0.3,
+      metalness: 0.8,
+      side: THREE.DoubleSide,
+    });
+    const hillRampGlow = new THREE.MeshStandardMaterial({
+      color: 0xd8ffff,
+      emissive: 0x39dbe5,
+      emissiveIntensity: 3.8,
+      roughness: 0.18,
+    });
+    hillJumpRampConfigs.forEach((config) => {
+      const length = config.halfLength * 2;
+      const width = config.halfWidth * 2;
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute([
+        -config.halfWidth, 0, config.halfLength,
+        -config.halfWidth, config.height, -config.halfLength,
+        config.halfWidth, 0, config.halfLength,
+        config.halfWidth, config.height, -config.halfLength,
+      ], 3));
+      geometry.setIndex([0, 1, 2, 2, 1, 3]);
+      geometry.computeVertexNormals();
+
+      const rampGroup = new THREE.Group();
+      rampGroup.name = `HillJumpRamp-${config.id}`;
+      rampGroup.userData.disableProximityFade = true;
+      rampGroup.position.set(
+        config.centerX - garden.position.x,
+        0.06,
+        config.centerZ - garden.position.z,
+      );
+      rampGroup.rotation.y = Math.atan2(-config.directionX, -config.directionZ);
+
+      const surface = new THREE.Mesh(geometry, hillRampSurface);
+      surface.castShadow = true;
+      surface.receiveShadow = true;
+      rampGroup.add(surface);
+
+      const slopeAngle = Math.atan2(config.height, length);
+      [-config.halfWidth + 0.12, config.halfWidth - 0.12].forEach((x) => {
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.12, length + 0.1), hillRampGlow);
+        rail.position.set(x, config.height / 2 + 0.1, 0);
+        rail.rotation.x = slopeAngle;
+        rampGroup.add(rail);
+      });
+      [-1.45, 0, 1.45].forEach((z) => {
+        const progress = (config.halfLength - z) / length;
+        const stripe = new THREE.Mesh(new THREE.BoxGeometry(width * 0.72, 0.04, 0.13), hillRampGlow);
+        stripe.position.set(0, progress * config.height + 0.07, z);
+        stripe.rotation.x = slopeAngle;
+        rampGroup.add(stripe);
+      });
+      garden.add(rampGroup);
+    });
+
     const rampGeometry = new THREE.BufferGeometry();
     rampGeometry.setAttribute("position", new THREE.Float32BufferAttribute([
       -3, 0, -2.75, -3, 1.25, -2.75, 3, 0, -2.75,
@@ -1298,12 +1365,37 @@ function initDataCity(THREE) {
   }
 
   function jumpRampHeightAt(worldX, worldZ) {
-    const rampWest = jumpRampConfig.centerX - jumpRampConfig.halfLength;
-    const rampEast = jumpRampConfig.centerX + jumpRampConfig.halfLength;
-    if (worldX < rampWest || worldX > rampEast
-      || Math.abs(worldZ - jumpRampConfig.centerZ) > jumpRampConfig.halfWidth + 0.2) return 0;
-    const rampBaseHeight = skyGardenHillHeightAt(rampEast, jumpRampConfig.centerZ);
-    return rampBaseHeight + THREE.MathUtils.clamp((rampEast - worldX) / (rampEast - rampWest), 0, 1) * 1.25;
+    return allJumpRampConfigs.reduce((height, config) => {
+      const contact = jumpRampContactAt(config, worldX, worldZ);
+      return contact ? Math.max(height, contact.height) : height;
+    }, 0);
+  }
+
+  function jumpRampContactAt(config, worldX, worldZ) {
+    const relativeX = worldX - config.centerX;
+    const relativeZ = worldZ - config.centerZ;
+    const forwardDistance = relativeX * config.directionX + relativeZ * config.directionZ;
+    const lateralDistance = relativeX * -config.directionZ + relativeZ * config.directionX;
+    if (Math.abs(forwardDistance) > config.halfLength
+      || Math.abs(lateralDistance) > config.halfWidth + 0.2) return null;
+    const progress = THREE.MathUtils.clamp(
+      (forwardDistance + config.halfLength) / (config.halfLength * 2),
+      0,
+      1,
+    );
+    const lowX = config.centerX - config.directionX * config.halfLength;
+    const lowZ = config.centerZ - config.directionZ * config.halfLength;
+    const baseHeight = skyGardenHillHeightAt(lowX, lowZ);
+    return { config, progress, height: baseHeight + progress * config.height };
+  }
+
+  function activeJumpRampAt(worldX, worldZ) {
+    let activeContact = null;
+    allJumpRampConfigs.forEach((config) => {
+      const contact = jumpRampContactAt(config, worldX, worldZ);
+      if (contact && (!activeContact || contact.height > activeContact.height)) activeContact = contact;
+    });
+    return activeContact;
   }
 
   function driveSurfaceHeightAt(worldX, worldZ) {
@@ -2146,17 +2238,15 @@ function initDataCity(THREE) {
     checkTrafficConeCollisions();
 
     state.jumpCooldown = Math.max(0, state.jumpCooldown - step);
-    const rampWest = jumpRampConfig.centerX - jumpRampConfig.halfLength;
-    const rampEast = jumpRampConfig.centerX + jumpRampConfig.halfLength;
-    const insideRamp = state.rearAxle.x >= rampWest && state.rearAxle.x <= rampEast
-      && Math.abs(state.rearAxle.z - jumpRampConfig.centerZ) <= jumpRampConfig.halfWidth + 0.2;
-    const movingTowardGarden = forward.x < -0.25 && state.speed > 2;
+    const rampContact = activeJumpRampAt(state.rearAxle.x, state.rearAxle.z);
+    const movingTowardRamp = rampContact
+      && forward.x * rampContact.config.directionX + forward.z * rampContact.config.directionZ > 0.25
+      && state.speed > 2;
     const terrainHeight = skyGardenTerrainHeightAt(state.rearAxle.x, state.rearAxle.z);
-    if (!state.airborne && insideRamp) {
-      const rampProgress = THREE.MathUtils.clamp((rampEast - state.rearAxle.x) / (rampEast - rampWest), 0, 1);
-      state.rearAxle.y = Math.max(terrainHeight, jumpRampHeightAt(state.rearAxle.x, state.rearAxle.z));
+    if (!state.airborne && rampContact) {
+      state.rearAxle.y = Math.max(terrainHeight, rampContact.height);
       state.onRamp = true;
-      if (rampProgress > 0.66 && movingTowardGarden && state.jumpCooldown <= 0) {
+      if (rampContact.progress > 0.66 && movingTowardRamp && state.jumpCooldown <= 0) {
         state.speed = THREE.MathUtils.clamp(Math.max(state.speed * 1.06, 9), 9, 16);
         state.airborne = true;
         state.onRamp = false;
