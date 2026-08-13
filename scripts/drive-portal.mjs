@@ -310,6 +310,10 @@ function initDataCity(THREE) {
     activePortal: null,
     nearestZone: null,
     navigating: false,
+    airborne: false,
+    onRamp: false,
+    verticalVelocity: 0,
+    jumpCooldown: 0,
   };
   const clock = new THREE.Clock();
   const cameraPosition = new THREE.Vector3();
@@ -1054,6 +1058,48 @@ function initDataCity(THREE) {
     const stepLight = new THREE.MeshStandardMaterial({ color: 0xffedbf, emissive: 0xffc35c, emissiveIntensity: 3.2, roughness: 0.22 });
     const waterMaterial = new THREE.MeshStandardMaterial({ color: 0x153e45, emissive: 0x0a8796, emissiveIntensity: 0.6, roughness: 0.08, metalness: 0.68, transparent: true, opacity: 0.88 });
 
+    const rampGeometry = new THREE.BufferGeometry();
+    rampGeometry.setAttribute("position", new THREE.Float32BufferAttribute([
+      -3, 0, -2, -3, 1.25, -2, 3, 0, -2,
+      -3, 0, 2, -3, 1.25, 2, 3, 0, 2,
+    ], 3));
+    rampGeometry.setIndex([
+      1, 4, 5, 1, 5, 2,
+      0, 3, 4, 0, 4, 1,
+      0, 1, 2, 3, 5, 4,
+      0, 2, 5, 0, 5, 3,
+    ]);
+    rampGeometry.computeVertexNormals();
+    const jumpRamp = new THREE.Mesh(
+      rampGeometry,
+      new THREE.MeshStandardMaterial({ color: 0x182a2e, roughness: 0.32, metalness: 0.78, side: THREE.DoubleSide }),
+    );
+    jumpRamp.position.set(10.25, 0.08, 0);
+    jumpRamp.castShadow = true;
+    jumpRamp.receiveShadow = true;
+    garden.add(jumpRamp);
+
+    const rampAngle = -Math.atan2(1.25, 6);
+    [-1.88, 1.88].forEach((z) => {
+      const rail = new THREE.Mesh(
+        new THREE.BoxGeometry(6.1, 0.12, 0.13),
+        new THREE.MeshStandardMaterial({ color: 0xb8ffff, emissive: 0x39dbe5, emissiveIntensity: 3.5, roughness: 0.2 }),
+      );
+      rail.position.set(10.25, 0.73, z);
+      rail.rotation.z = rampAngle;
+      garden.add(rail);
+    });
+    [-1.7, 0, 1.7].forEach((x) => {
+      const launchStripe = new THREE.Mesh(
+        new THREE.BoxGeometry(0.18, 0.035, 2.7),
+        new THREE.MeshBasicMaterial({ color: 0x95fff7, transparent: true, opacity: 0.88 }),
+      );
+      const rampProgress = (3 - x) / 6;
+      launchStripe.position.set(10.25 + x, 0.14 + rampProgress * 1.25, 0);
+      launchStripe.rotation.z = rampAngle;
+      garden.add(launchStripe);
+    });
+
     const terrace = new THREE.Mesh(new THREE.BoxGeometry(25, 0.48, 25), stone);
     terrace.position.y = -0.12;
     terrace.receiveShadow = true;
@@ -1687,6 +1733,10 @@ function initDataCity(THREE) {
     state.activePortal = null;
     state.nearestZone = null;
     state.navigating = false;
+    state.airborne = false;
+    state.onRamp = false;
+    state.verticalVelocity = 0;
+    state.jumpCooldown = 0;
     state.rearAxle.set(0, 0, vehicle.rearAxleOffset);
     car.position.set(0, 0, 0);
     car.rotation.set(0, 0, 0);
@@ -1752,6 +1802,36 @@ function initDataCity(THREE) {
     state.yaw += state.yawRate * step;
     state.wheelRotation -= state.speed * step / vehicle.wheelRadius;
 
+    state.jumpCooldown = Math.max(0, state.jumpCooldown - step);
+    const rampWest = -20.75;
+    const rampEast = -14.75;
+    const insideRamp = state.rearAxle.x >= rampWest && state.rearAxle.x <= rampEast
+      && Math.abs(state.rearAxle.z + 12) <= 2.05;
+    const movingTowardGarden = forward.x < -0.55 && state.speed > 4.5;
+    if (!state.airborne && insideRamp) {
+      const rampProgress = THREE.MathUtils.clamp((rampEast - state.rearAxle.x) / (rampEast - rampWest), 0, 1);
+      state.rearAxle.y = rampProgress * 1.25;
+      state.onRamp = true;
+      if (rampProgress > 0.92 && movingTowardGarden && state.jumpCooldown <= 0) {
+        state.speed = Math.min(state.speed, 14);
+        state.airborne = true;
+        state.onRamp = false;
+        state.verticalVelocity = 3.8;
+        state.jumpCooldown = 0.8;
+      }
+    } else if (state.airborne) {
+      state.verticalVelocity -= 10.5 * step;
+      state.rearAxle.y += state.verticalVelocity * step;
+      if (state.rearAxle.y <= 0) {
+        state.rearAxle.y = 0;
+        state.verticalVelocity = 0;
+        state.airborne = false;
+      }
+    } else {
+      state.onRamp = false;
+      state.rearAxle.y = Math.max(0, state.rearAxle.y - step * 4.5);
+    }
+
     state.rearAxle.x = THREE.MathUtils.clamp(state.rearAxle.x, -54, 54);
     state.rearAxle.z = THREE.MathUtils.clamp(state.rearAxle.z, -54, 54);
   }
@@ -1804,7 +1884,8 @@ function initDataCity(THREE) {
 
     const lateralLoad = THREE.MathUtils.clamp(state.yawRate * Math.abs(state.speed) / 22, -1, 1);
     const targetRoll = lateralLoad * 0.095;
-    const targetPitch = THREE.MathUtils.clamp(state.acceleration / 42, -0.055, 0.055);
+    const jumpPitch = state.airborne ? THREE.MathUtils.clamp(-state.verticalVelocity * 0.045, -0.16, 0.13) : 0;
+    const targetPitch = THREE.MathUtils.clamp(state.acceleration / 42, -0.055, 0.055) + jumpPitch;
     carBody.rotation.z = THREE.MathUtils.lerp(carBody.rotation.z, targetRoll, 1 - Math.exp(-6.5 * delta));
     carBody.rotation.x = THREE.MathUtils.lerp(carBody.rotation.x, targetPitch, 1 - Math.exp(-7.5 * delta));
     carBody.position.y = Math.sin(state.elapsed * 13) * Math.min(0.018, Math.abs(state.speed) * 0.0015);
