@@ -224,6 +224,16 @@ function initDataCity(THREE) {
       symbol: "HOLLOW DEPOT",
     },
   ];
+  const roadIntersection = new THREE.Vector3(0, 0, -12);
+  const roadNetwork = [
+    { start: new THREE.Vector3(-28, 0, -12), end: new THREE.Vector3(-3.25, 0, -12), color: zones[0].color },
+    { start: new THREE.Vector3(3.25, 0, -12), end: new THREE.Vector3(28, 0, -12), color: zones[1].color },
+    { start: new THREE.Vector3(0, 0, -8.75), end: new THREE.Vector3(0, 0, 33), color: zones[2].color },
+  ];
+  const roadCenterlines = [
+    [new THREE.Vector3(-28, 0, -12), new THREE.Vector3(28, 0, -12)],
+    [new THREE.Vector3(0, 0, -49.5), new THREE.Vector3(0, 0, 33)],
+  ];
 
   const zoneName = (zone) => {
     const gameName = copy().games[zone.id];
@@ -516,8 +526,31 @@ function initDataCity(THREE) {
     center.receiveShadow = true;
     world.add(center);
 
-    zones.forEach((zone) => {
-      buildRoad(new THREE.Vector3(0, 0, 2), zone.position, zone.color);
+    roadNetwork.forEach(({ start, end, color }) => buildRoad(start, end, color));
+
+    const intersection = new THREE.Mesh(
+      new THREE.BoxGeometry(6.5, 0.1, 6.5),
+      new THREE.MeshStandardMaterial({ color: 0x0b151c, roughness: 0.24, metalness: 0.78 }),
+    );
+    intersection.position.copy(roadIntersection);
+    intersection.position.y = 0.075;
+    intersection.receiveShadow = true;
+    world.add(intersection);
+
+    const crossingMaterial = new THREE.MeshBasicMaterial({ color: 0xd8ffff, transparent: true, opacity: 0.46 });
+    [-2.45, 2.45].forEach((zOffset) => {
+      for (let index = -2; index <= 2; index += 1) {
+        const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.035, 0.22), crossingMaterial);
+        stripe.position.set(roadIntersection.x + index * 0.82, 0.145, roadIntersection.z + zOffset);
+        world.add(stripe);
+      }
+    });
+    [-2.45, 2.45].forEach((xOffset) => {
+      for (let index = -2; index <= 2; index += 1) {
+        const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.035, 0.5), crossingMaterial);
+        stripe.position.set(roadIntersection.x + xOffset, 0.145, roadIntersection.z + index * 0.82);
+        world.add(stripe);
+      }
     });
 
     const centerRing = new THREE.Mesh(
@@ -569,7 +602,9 @@ function initDataCity(THREE) {
       const puddle = new THREE.Mesh(new THREE.PlaneGeometry(1.5 + (index % 2), 0.65), puddleMaterial);
       puddle.position.lerpVectors(start, end, index / 5);
       puddle.position.y = 0.15;
-      puddle.position.x += index % 2 ? 1.45 : -1.35;
+      const puddleOffset = new THREE.Vector3(Math.cos(road.rotation.y), 0, -Math.sin(road.rotation.y))
+        .multiplyScalar(index % 2 ? 1.45 : -1.35);
+      puddle.position.add(puddleOffset);
       puddle.rotation.x = -Math.PI / 2;
       puddle.rotation.z = -road.rotation.y;
       world.add(puddle);
@@ -1534,7 +1569,7 @@ function initDataCity(THREE) {
   }
 
   function distanceToAnyRoad(x, z) {
-    return Math.min(...zones.map((zone) => pointToSegmentDistance(x, z, 0, 2, zone.position.x, zone.position.z)));
+    return Math.min(...roadCenterlines.map(([start, end]) => pointToSegmentDistance(x, z, start.x, start.z, end.x, end.z)));
   }
 
   function pointToSegmentDistance(px, pz, ax, az, bx, bz) {
