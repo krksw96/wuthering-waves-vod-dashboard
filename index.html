@@ -35,6 +35,8 @@
       a { color: inherit; }
 
       #world { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; }
+      body.started #world { cursor: grab; }
+      body.camera-dragging #world { cursor: grabbing; }
       .noise {
         position: fixed;
         inset: 0;
@@ -371,6 +373,7 @@
           <div class="key-row"><kbd>A</kbd><kbd>D</kbd><kbd>←</kbd><kbd>→</kbd><span data-i18n="steering">앞바퀴 조향</span></div>
           <div class="key-row"><kbd>Shift</kbd><span data-i18n="boost">부스터</span></div>
           <div class="key-row"><kbd>R</kbd><span data-i18n="resetCar">차량 복귀</span></div>
+          <div class="key-row"><kbd>Mouse</kbd><span data-i18n="cameraView">드래그·휠 시야</span></div>
         </div>
         <div class="loading-copy" id="loading-copy" data-i18n="loadingCity">데이터 시티를 불러오는 중…</div>
       </div>
@@ -395,7 +398,7 @@
       <div class="speedometer" aria-label="차량 속도">
         <strong class="speed-value" id="speed-value">00</strong><span class="speed-unit">KM/H</span><span class="gear" id="gear">N</span><span class="boost-pill">BOOST</span>
       </div>
-      <div class="control-hint"><span><kbd>W/S</kbd> <span data-i18n="driveHint">액셀·브레이크</span></span><span>·</span><span><kbd>A/D</kbd> <span data-i18n="steering">앞바퀴 조향</span></span><span>·</span><span><kbd>Shift</kbd> <span data-i18n="boost">부스터</span></span><span>·</span><span><kbd>R</kbd> <span data-i18n="resetShort">복귀</span></span></div>
+      <div class="control-hint"><span><kbd>W/S</kbd> <span data-i18n="driveHint">액셀·브레이크</span></span><span>·</span><span><kbd>A/D</kbd> <span data-i18n="steering">앞바퀴 조향</span></span><span>·</span><span><kbd>Mouse</kbd> <span data-i18n="cameraView">드래그·휠 시야</span></span><span>·</span><span><kbd>Shift</kbd> <span data-i18n="boost">부스터</span></span><span>·</span><span><kbd>R</kbd> <span data-i18n="resetShort">복귀</span></span></div>
     </div>
 
     <div class="zone-prompt" id="zone-prompt">

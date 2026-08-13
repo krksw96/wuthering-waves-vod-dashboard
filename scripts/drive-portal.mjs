@@ -12,7 +12,7 @@ const translations = {
     quickLinksAria: "대시보드 바로가기", languageAria: "언어 변경", controlsAria: "조작 방법",
     startDescription: "비 내리는 네온 시티를 직접 운전해 명조, 이환, 젠레스 존 제로 구역을 찾아가세요. 빛나는 데이터 포털 안에 잠시 머무르면 해당 대시보드가 열립니다.",
     startButton: "시동 걸기", accelerator: "액셀", brakeReverse: "브레이크 · 후진", steering: "앞바퀴 조향",
-    boost: "부스터", resetCar: "차량 복귀", resetShort: "복귀", driveHint: "액셀·브레이크",
+    boost: "부스터", resetCar: "차량 복귀", resetShort: "복귀", driveHint: "액셀·브레이크", cameraView: "드래그·휠 시야",
     loadingCity: "데이터 시티를 불러오는 중…", loadingRequested: "준비되는 즉시 자동으로 출발합니다",
     ready: "준비 완료 · 시동을 걸어 출발하세요", departing: "출발합니다", loadingButton: "도시 불러오는 중…",
     nearestDistrict: "NEAREST DATA DISTRICT", calculating: "거리 계산 중", portalHint: "원 안에 머무르면 대시보드가 열립니다",
@@ -26,7 +26,7 @@ const translations = {
     quickLinksAria: "数据看板快捷入口", languageAria: "切换语言", controlsAria: "驾驶操作",
     startDescription: "驾驶汽车穿过雨夜霓虹都市，前往鸣潮、异环和绝区零数据区。在发光传送门内停留片刻即可打开相应数据看板。",
     startButton: "启动引擎", accelerator: "油门", brakeReverse: "刹车 · 倒车", steering: "前轮转向",
-    boost: "加速器", resetCar: "车辆复位", resetShort: "复位", driveHint: "油门·刹车",
+    boost: "加速器", resetCar: "车辆复位", resetShort: "复位", driveHint: "油门·刹车", cameraView: "拖动·滚轮视角",
     loadingCity: "正在加载数据城…", loadingRequested: "准备完成后将自动出发",
     ready: "准备完成 · 启动引擎即可出发", departing: "出发", loadingButton: "正在加载城市…",
     nearestDistrict: "最近的数据区域", calculating: "正在计算距离", portalHint: "停留在圆环内即可打开数据看板",
@@ -40,7 +40,7 @@ const translations = {
     quickLinksAria: "Dashboard shortcuts", languageAria: "Change language", controlsAria: "Driving controls",
     startDescription: "Drive through the rain-soaked neon city to the Wuthering Waves, NTE, and ZZZ districts. Stay inside a glowing portal to open its dashboard.",
     startButton: "START ENGINE", accelerator: "Accelerate", brakeReverse: "Brake · Reverse", steering: "Front-wheel steering",
-    boost: "Boost", resetCar: "Reset car", resetShort: "Reset", driveHint: "Accelerate·Brake",
+    boost: "Boost", resetCar: "Reset car", resetShort: "Reset", driveHint: "Accelerate·Brake", cameraView: "Drag·wheel view",
     loadingCity: "Loading Data City…", loadingRequested: "Departure begins as soon as the city is ready",
     ready: "Ready · Start the engine to depart", departing: "Departing", loadingButton: "Loading city…",
     nearestDistrict: "NEAREST DATA DISTRICT", calculating: "Calculating distance", portalHint: "Stay inside the ring to open the dashboard",
@@ -300,6 +300,15 @@ function initDataCity(THREE) {
   const targetCameraPosition = new THREE.Vector3();
   const targetCameraLook = new THREE.Vector3();
   const right = new THREE.Vector3();
+  const cameraOrbit = {
+    yawOffset: 0,
+    pitch: 0.866,
+    distance: 10.5,
+    dragging: false,
+    pointerId: null,
+    lastX: 0,
+    lastY: 0,
+  };
 
   resetCar();
   cameraPosition.set(0, 11.8, 14);
@@ -352,7 +361,52 @@ function initDataCity(THREE) {
     inputs[keyMap.get(event.code)] = false;
     event.preventDefault();
   });
-  addEventListener("blur", clearInputs);
+  canvas.addEventListener("pointerdown", (event) => {
+    if (!state.started || event.button !== 0) return;
+    cameraOrbit.dragging = true;
+    cameraOrbit.pointerId = event.pointerId;
+    cameraOrbit.lastX = event.clientX;
+    cameraOrbit.lastY = event.clientY;
+    canvas.setPointerCapture?.(event.pointerId);
+    document.body.classList.add("camera-dragging");
+    event.preventDefault();
+  });
+  canvas.addEventListener("pointermove", (event) => {
+    if (!cameraOrbit.dragging || event.pointerId !== cameraOrbit.pointerId) return;
+    const movementX = event.clientX - cameraOrbit.lastX;
+    const movementY = event.clientY - cameraOrbit.lastY;
+    cameraOrbit.lastX = event.clientX;
+    cameraOrbit.lastY = event.clientY;
+    cameraOrbit.yawOffset -= movementX * 0.006;
+    cameraOrbit.yawOffset = Math.atan2(Math.sin(cameraOrbit.yawOffset), Math.cos(cameraOrbit.yawOffset));
+    cameraOrbit.pitch = THREE.MathUtils.clamp(cameraOrbit.pitch + movementY * 0.0045, 0.28, 1.22);
+    event.preventDefault();
+  });
+  const releaseCameraDrag = (event) => {
+    if (!cameraOrbit.dragging || event.pointerId !== cameraOrbit.pointerId) return;
+    cameraOrbit.dragging = false;
+    cameraOrbit.pointerId = null;
+    document.body.classList.remove("camera-dragging");
+  };
+  canvas.addEventListener("pointerup", releaseCameraDrag);
+  canvas.addEventListener("pointercancel", releaseCameraDrag);
+  canvas.addEventListener("lostpointercapture", releaseCameraDrag);
+  canvas.addEventListener("wheel", (event) => {
+    if (!state.started) return;
+    cameraOrbit.distance = THREE.MathUtils.clamp(cameraOrbit.distance + event.deltaY * 0.008, 7.5, 18);
+    event.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener("dblclick", () => {
+    cameraOrbit.yawOffset = 0;
+    cameraOrbit.pitch = 0.866;
+    cameraOrbit.distance = 10.5;
+  });
+  addEventListener("blur", () => {
+    clearInputs();
+    cameraOrbit.dragging = false;
+    cameraOrbit.pointerId = null;
+    document.body.classList.remove("camera-dragging");
+  });
   document.addEventListener("visibilitychange", () => {
     clearInputs();
     clock.getDelta();
@@ -363,6 +417,9 @@ function initDataCity(THREE) {
     resetCar();
     state.navigating = false;
     state.nearestZone = null;
+    cameraOrbit.yawOffset = 0;
+    cameraOrbit.pitch = 0.866;
+    cameraOrbit.distance = 10.5;
     cameraPosition.set(0, 11.8, 14);
     cameraTarget.set(0, 0.9, -2.4);
     clock.getDelta();
@@ -1697,15 +1754,19 @@ function initDataCity(THREE) {
     forward.set(Math.sin(state.yaw), 0, -Math.cos(state.yaw));
     right.set(Math.cos(state.yaw), 0, Math.sin(state.yaw));
     const speedRatio = Math.min(Math.abs(state.speed) / vehicle.boostedMaxForwardSpeed, 1);
-    targetCameraPosition.copy(car.position)
-      .addScaledVector(forward, -THREE.MathUtils.lerp(6.8, 7.8, speedRatio))
-      .addScaledVector(right, -state.yawRate * 0.42)
-      .add(new THREE.Vector3(0, THREE.MathUtils.lerp(8, 8.8, speedRatio), 0));
+    const orbitDistance = cameraOrbit.distance + speedRatio * 1.2;
+    const horizontalDistance = Math.cos(cameraOrbit.pitch) * orbitDistance;
+    const orbitAngle = -state.yaw + cameraOrbit.yawOffset;
+    targetCameraPosition.copy(car.position).add(new THREE.Vector3(
+      Math.sin(orbitAngle) * horizontalDistance,
+      Math.sin(cameraOrbit.pitch) * orbitDistance,
+      Math.cos(orbitAngle) * horizontalDistance,
+    ));
     targetCameraLook.copy(car.position)
       .addScaledVector(forward, THREE.MathUtils.lerp(2.4, 3.8, speedRatio))
       .addScaledVector(right, state.yawRate * 0.82)
       .add(new THREE.Vector3(0, 0.72, 0));
-    const positionDamping = 1 - Math.exp(-3.2 * delta);
+    const positionDamping = 1 - Math.exp(-(cameraOrbit.dragging ? 10 : 4.2) * delta);
     const lookDamping = 1 - Math.exp(-4.6 * delta);
     cameraPosition.lerp(targetCameraPosition, positionDamping);
     cameraTarget.lerp(targetCameraLook, lookDamping);
