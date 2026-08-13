@@ -252,6 +252,9 @@ function initDataCity(THREE) {
 
   const world = new THREE.Group();
   const atmosphere = { rain: null, hologram: null, petals: null, lanterns: [], clouds: [] };
+  // The rendered car is about 1.25 world units tall. Keep architecture within
+  // roughly two to three car heights so the city reads as a compact diorama.
+  const architecture = { minHeight: 2.75, maxHeight: 3.75 };
   scene.add(world);
   buildGround();
   buildSkyline();
@@ -260,8 +263,13 @@ function initDataCity(THREE) {
   const { car, carBody, wheelSpins, frontWheelPivots, boostTrails } = buildCar();
   scene.add(car);
   const proximityFadeMeshes = [];
+  const proximityFadeRayMeshes = [];
   const fadeWorldPosition = new THREE.Vector3();
   const fadeWorldScale = new THREE.Vector3();
+  const fadeRayTarget = new THREE.Vector3();
+  const fadeRayDirection = new THREE.Vector3();
+  const fadeRaycaster = new THREE.Raycaster();
+  const directSightOccluders = new Set();
   prepareProximityFades();
 
   const inputs = { forward: false, backward: false, left: false, right: false, boost: false };
@@ -578,7 +586,7 @@ function initDataCity(THREE) {
       if (Math.hypot(x, z) < 13.5 || Math.hypot(x - 14.5, z + 51) < 11 || distanceToAnyRoad(x, z) < 5.7 || zones.some((zone) => Math.hypot(x - zone.position.x, z - zone.position.z) < 11.5)) continue;
       const width = 2.4 + random() * 4.8;
       const depth = 2.4 + random() * 4.6;
-      const height = 5 + random() * 19;
+      const height = architecture.minHeight + random() * (architecture.maxHeight - architecture.minHeight);
       const building = new THREE.Group();
       const body = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), buildingMaterials[index % buildingMaterials.length]);
       body.position.y = height / 2;
@@ -588,7 +596,7 @@ function initDataCity(THREE) {
 
       const neon = neonColors[index % neonColors.length];
       const stripMaterial = new THREE.MeshStandardMaterial({ color: neon, emissive: neon, emissiveIntensity: 2.3, roughness: 0.25 });
-      const floorCount = Math.min(6, Math.max(2, Math.floor(height / 3.2)));
+      const floorCount = 2;
       for (let floor = 1; floor <= floorCount; floor += 1) {
         if (random() > 0.72) continue;
         const strip = new THREE.Mesh(new THREE.BoxGeometry(width + 0.035, 0.055, depth + 0.035), stripMaterial);
@@ -596,12 +604,13 @@ function initDataCity(THREE) {
         building.add(strip);
       }
       if (index % 4 === 0) {
-        const antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.065, 3 + random() * 3, 6), stripMaterial);
-        antenna.position.y = height + 1.5;
+        const antennaHeight = 0.35 + random() * 0.3;
+        const antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.065, antennaHeight, 6), stripMaterial);
+        antenna.position.y = height + antennaHeight / 2;
         building.add(antenna);
       }
       if (index % 3 === 0) {
-        const verticalSign = new THREE.Mesh(new THREE.BoxGeometry(Math.min(0.65, width * 0.24), Math.min(5.4, height * 0.45), 0.07), stripMaterial);
+        const verticalSign = new THREE.Mesh(new THREE.BoxGeometry(Math.min(0.65, width * 0.24), Math.min(1.4, height * 0.45), 0.07), stripMaterial);
         verticalSign.position.set(width * (random() > 0.5 ? 0.28 : -0.28), height * 0.48, depth / 2 + 0.055);
         building.add(verticalSign);
       }
@@ -638,11 +647,11 @@ function initDataCity(THREE) {
     const concrete = new THREE.MeshStandardMaterial({ color: 0x20292c, roughness: 0.64, metalness: 0.33 });
     const railGlow = new THREE.MeshStandardMaterial({ color: 0xff517f, emissive: 0xff294f, emissiveIntensity: 2.2, roughness: 0.28 });
     const deck = new THREE.Mesh(new THREE.BoxGeometry(110, 0.75, 4.2), concrete);
-    deck.position.set(0, 7.4, -34);
+    deck.position.set(0, architecture.maxHeight - 0.38, -34);
     deck.castShadow = true;
     world.add(deck);
     const lightLine = new THREE.Mesh(new THREE.BoxGeometry(110, 0.1, 0.12), railGlow);
-    lightLine.position.set(0, 7.05, -31.92);
+    lightLine.position.set(0, architecture.maxHeight - 0.77, -31.92);
     world.add(lightLine);
   }
 
@@ -687,7 +696,7 @@ function initDataCity(THREE) {
     for (let index = 0; index < 11; index += 1) {
       [-1, 1].forEach((side) => {
         const width = 3.4 + random() * 1.5;
-        const height = 3.3 + random() * 5.5;
+        const height = architecture.minHeight + random() * (architecture.maxHeight - architecture.minHeight);
         const depth = 3.8 + random() * 2.5;
         const z = -7.5 - index * 4.25;
         const shop = new THREE.Group();
@@ -776,49 +785,38 @@ function initDataCity(THREE) {
     const cyan = new THREE.MeshStandardMaterial({ color: 0xa9ffff, emissive: 0x38dce5, emissiveIntensity: 4.2, roughness: 0.14 });
     const rose = new THREE.MeshStandardMaterial({ color: 0xff9bbd, emissive: 0xff386f, emissiveIntensity: 3.4, roughness: 0.18 });
 
-    const core = new THREE.Mesh(new THREE.BoxGeometry(7.4, 36, 6.4), coreMaterial);
-    core.position.y = 18;
+    const towerHeight = architecture.maxHeight;
+    const core = new THREE.Mesh(new THREE.BoxGeometry(7.4, towerHeight, 6.4), coreMaterial);
+    core.position.y = towerHeight / 2;
     core.castShadow = true;
     tower.add(core);
     [-3.86, 3.86].forEach((x) => {
-      const fin = new THREE.Mesh(new THREE.BoxGeometry(0.48, 38, 7.2), frameMaterial);
-      fin.position.set(x, 19, 0);
+      const fin = new THREE.Mesh(new THREE.BoxGeometry(0.48, towerHeight, 7.2), frameMaterial);
+      fin.position.set(x, towerHeight / 2, 0);
       tower.add(fin);
-      const beam = new THREE.Mesh(new THREE.BoxGeometry(0.11, 35, 7.28), cyan);
-      beam.position.set(x + (x < 0 ? -0.27 : 0.27), 19.2, 0);
+      const beam = new THREE.Mesh(new THREE.BoxGeometry(0.11, towerHeight - 0.2, 7.28), cyan);
+      beam.position.set(x + (x < 0 ? -0.27 : 0.27), towerHeight / 2, 0);
       tower.add(beam);
     });
-    for (let y = 4.5; y < 34; y += 3.4) {
+    for (let y = 1.15; y < towerHeight; y += 1.15) {
       const floor = new THREE.Mesh(new THREE.BoxGeometry(7.65, 0.08, 6.65), y % 6.8 ? cyan : rose);
       floor.position.y = y;
       tower.add(floor);
     }
-    const crown = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 3.9, 4.8, 6), frameMaterial);
-    crown.position.y = 38.4;
+    const crown = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 3.9, 0.42, 6), frameMaterial);
+    crown.position.y = towerHeight - 0.21;
     tower.add(crown);
-    const spire = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.28, 11, 8), cyan);
-    spire.position.y = 46.2;
-    tower.add(spire);
 
-    [10, 19, 28].forEach((y, index) => {
-      const panel = makeLabel(["NIGHT", "DATA", "CITY"][index], ["SIGNAL 04", "LIVE ARCHIVE", "OPEN 24H"][index], index === 1 ? "#ff6799" : "#69eff0");
+    [1.45, 2.65].forEach((y, index) => {
+      const panel = makeLabel(["NIGHT", "DATA"][index], ["SIGNAL 04", "LIVE ARCHIVE"][index], index === 1 ? "#ff6799" : "#69eff0");
       panel.position.set(0, y, 3.28);
-      panel.scale.set(5.2, 1.5, 1);
+      panel.scale.set(4.4, 1.25, 1);
       tower.add(panel);
     });
     const towerGlow = new THREE.PointLight(0x57e8ea, 18, 34, 1.6);
-    towerGlow.position.set(0, 26, 4);
+    towerGlow.position.set(0, 2.4, 4);
     tower.add(towerGlow);
     world.add(tower);
-
-    [-1, 1].forEach((side) => {
-      const skyBeam = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.13, 0.48, 92, 10),
-        new THREE.MeshBasicMaterial({ color: 0x4cf4ef, transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false }),
-      );
-      skyBeam.position.set(14.5 + side * 3.9, 54, -57);
-      world.add(skyBeam);
-    });
   }
 
   function buildGarageShowroom() {
@@ -896,15 +894,15 @@ function initDataCity(THREE) {
     const trunk = new THREE.MeshStandardMaterial({ color: 0x2d1c24, roughness: 0.9 });
 
     const deck = new THREE.Mesh(new THREE.BoxGeometry(34, 0.72, 4.4), concrete);
-    deck.position.set(2, 6.6, -8.2);
+    deck.position.set(2, architecture.maxHeight - 0.36, -8.2);
     deck.castShadow = true;
     market.add(deck);
     const rail = new THREE.Mesh(new THREE.BoxGeometry(34, 0.12, 0.14), pink);
-    rail.position.set(2, 6.15, -5.95);
+    rail.position.set(2, architecture.maxHeight - 0.78, -5.95);
     market.add(rail);
     const marketSign = makeLabel("BLOSSOM 24", "NEON MARKET · NIGHT LINE", "#ff77ad");
-    marketSign.position.set(4.5, 9.4, -7.95);
-    marketSign.scale.set(9, 2.5, 1);
+    marketSign.position.set(4.5, 4.65, -7.95);
+    marketSign.scale.set(7.4, 2.1, 1);
     market.add(marketSign);
 
     [-1, 1].forEach((side) => {
@@ -984,7 +982,7 @@ function initDataCity(THREE) {
     for (let row = 0; row < 5; row += 1) {
       const z = -9 + row * 5.5;
       const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 14.5, 5), frameMaterial);
-      cable.position.set(0, 5.5 + (row % 2) * 0.45, z);
+      cable.position.set(0, 3.55 + (row % 2) * 0.15, z);
       cable.rotation.z = Math.PI / 2;
       market.add(cable);
       for (let lantern = 0; lantern < 7; lantern += 1) {
@@ -995,15 +993,15 @@ function initDataCity(THREE) {
         const tassel = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.35, 5), warm);
         tassel.position.y = -0.55;
         lamp.add(tassel);
-        lamp.position.set(-6 + lantern * 2, 5.18 + (row % 2) * 0.45 + random() * 0.14, z);
+        lamp.position.set(-6 + lantern * 2, 3.23 + (row % 2) * 0.15 + random() * 0.08, z);
         lamp.userData.phase = random() * Math.PI * 2;
         atmosphere.lanterns.push(lamp);
         market.add(lamp);
       }
     }
     const alleySign = makeLabel("LANTERN ALLEY", "FOOD · LIGHT · RAIN", "#ff7556");
-    alleySign.position.set(0, 8.2, -11);
-    alleySign.scale.set(9.4, 2.6, 1);
+    alleySign.position.set(0, 4.75, -11);
+    alleySign.scale.set(7.8, 2.15, 1);
     market.add(alleySign);
     const violetGlow = new THREE.PointLight(0xff4fb7, 12, 25, 1.9);
     violetGlow.position.set(4, 4, 7);
@@ -1063,8 +1061,8 @@ function initDataCity(THREE) {
       garden.add(light);
     }
     const gardenSign = makeLabel("SKY GARDEN", "QUIET ABOVE THE SIGNAL", "#83eee3");
-    gardenSign.position.set(0, 7.8, 10.6);
-    gardenSign.scale.set(8.4, 2.4, 1);
+    gardenSign.position.set(0, 4.55, 10.6);
+    gardenSign.scale.set(7.2, 2, 1);
     garden.add(gardenSign);
     const gardenGlow = new THREE.PointLight(0x55dfd0, 10, 20, 1.8);
     gardenGlow.position.set(0, 5, 2);
@@ -1081,7 +1079,7 @@ function initDataCity(THREE) {
 
     [-6.5, 0, 6.5].forEach((z) => {
       const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(16.2, 0.48, 0.62), steel);
-      crossBeam.position.set(0, 7.1, z + 4.2);
+      crossBeam.position.set(0, architecture.maxHeight - 0.25, z + 4.2);
       crossBeam.visible = false;
       crossBeam.castShadow = true;
       garage.add(crossBeam);
@@ -1089,13 +1087,13 @@ function initDataCity(THREE) {
 
     [-5.3, 5.3].forEach((x, index) => {
       const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, 17.5, 10), darkSteel);
-      pipe.position.set(x, 7.55, 4.4);
+      pipe.position.set(x, architecture.maxHeight - 0.18, 4.4);
       pipe.rotation.x = Math.PI / 2;
       garage.add(pipe);
       const connectorMaterial = index ? violetLight : cyanLight;
       for (let z = -3; z <= 11; z += 3.5) {
         const connector = new THREE.Mesh(new THREE.TorusGeometry(0.23, 0.045, 7, 18), connectorMaterial);
-        connector.position.set(x, 7.55, z);
+        connector.position.set(x, architecture.maxHeight - 0.18, z);
         connector.rotation.x = Math.PI / 2;
         garage.add(connector);
       }
@@ -1105,13 +1103,13 @@ function initDataCity(THREE) {
       new THREE.BoxGeometry(15.5, 0.18, 15),
       new THREE.MeshStandardMaterial({ color: 0x0a1116, roughness: 0.55, metalness: 0.68, transparent: true, opacity: 0.07, depthWrite: false }),
     );
-    ceilingPanels.position.set(0, 8.05, 4.8);
+    ceilingPanels.position.set(0, architecture.maxHeight, 4.8);
     ceilingPanels.visible = false;
     garage.add(ceilingPanels);
 
     for (let x = -5.5; x <= 5.5; x += 3.65) {
       const ceilingLamp = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.06, 0.18), x < 0 ? cyanLight : violetLight);
-      ceilingLamp.position.set(x, 7.92, 0.1);
+      ceilingLamp.position.set(x, architecture.maxHeight - 0.08, 0.1);
       garage.add(ceilingLamp);
     }
 
@@ -1150,17 +1148,17 @@ function initDataCity(THREE) {
     atmosphere.hologram = hologram;
 
     const diagnosticFrame = new THREE.Mesh(new THREE.TorusGeometry(2.65, 0.04, 7, 48), violetLight);
-    diagnosticFrame.position.set(0, 3.2, -7.4);
+    diagnosticFrame.position.set(0, 2.75, -7.4);
     diagnosticFrame.scale.x = 1.3;
     garage.add(diagnosticFrame);
 
     const garageSign = makeLabel("DATA GARAGE", "NIGHT SHIFT · SYSTEM ONLINE", "#67e7ee");
-    garageSign.position.set(0, 6.45, -8.1);
-    garageSign.scale.set(6.2, 1.8, 1);
+    garageSign.position.set(0, 4.45, -8.1);
+    garageSign.scale.set(5.5, 1.6, 1);
     garage.add(garageSign);
 
     const serviceGlow = new THREE.PointLight(0x5debf4, 13, 19, 1.8);
-    serviceGlow.position.set(0, 5.4, 2.2);
+    serviceGlow.position.set(0, 3.1, 2.2);
     garage.add(serviceGlow);
     world.add(garage);
   }
@@ -1173,23 +1171,23 @@ function initDataCity(THREE) {
 
     const arch = new THREE.Group();
     const bridge = new THREE.Mesh(new THREE.BoxGeometry(17.8, 1.25, 2), metal);
-    bridge.position.set(0, 9.8, -19);
+    bridge.position.set(0, architecture.maxHeight - 0.62, -19);
     bridge.castShadow = true;
     arch.add(bridge);
     const archLight = new THREE.Mesh(new THREE.BoxGeometry(14.4, 0.11, 0.1), pink);
-    archLight.position.set(0, 9.15, -17.95);
+    archLight.position.set(0, architecture.maxHeight - 1.28, -17.95);
     arch.add(archLight);
     const archSign = makeLabel("MIDNIGHT DATA", "THREE DISTRICTS · ONE SIGNAL", "#ff74ae");
-    archSign.position.set(0, 11.6, -18.8);
-    archSign.scale.set(8.7, 2.5, 1);
+    archSign.position.set(0, 4.75, -18.8);
+    archSign.scale.set(7.2, 2.05, 1);
     arch.add(archSign);
     world.add(arch);
 
     const signData = [
-      [-14, 7.2, -10, "SYNC", "RESONANCE", "#66f0ed"],
-      [14, 6.4, -9, "DREAM", "NEON CROSSING", "#ff6aa6"],
-      [-8.5, 9.5, 18, "24H", "DATA MARKET", "#ffca59"],
-      [9, 8.5, 20, "SIGNAL", "OPEN ALL NIGHT", "#8c7dff"],
+      [-14, 4.2, -10, "SYNC", "RESONANCE", "#66f0ed"],
+      [14, 4.15, -9, "DREAM", "NEON CROSSING", "#ff6aa6"],
+      [-8.5, 4.45, 18, "24H", "DATA MARKET", "#ffca59"],
+      [9, 4.35, 20, "SIGNAL", "OPEN ALL NIGHT", "#8c7dff"],
     ];
     signData.forEach(([x, y, z, title, subtitle, color], index) => {
       const sign = makeLabel(title, subtitle, color);
@@ -1218,7 +1216,7 @@ function initDataCity(THREE) {
     for (let index = 0; index < 14; index += 1) {
       const cableGeometry = new THREE.TorusGeometry(4 + (index % 3), 0.025, 5, 28, Math.PI * 0.72);
       const cable = new THREE.Mesh(cableGeometry, metal);
-      cable.position.set((index % 2 ? -1 : 1) * (8 + index * 0.5), 8 + (index % 4), -30 + index * 4.5);
+      cable.position.set((index % 2 ? -1 : 1) * (8 + index * 0.5), 3.15 + (index % 4) * 0.18, -30 + index * 4.5);
       cable.rotation.set(Math.PI / 2, 0, index % 2 ? 0.4 : -0.4);
       world.add(cable);
     }
@@ -1347,9 +1345,9 @@ function initDataCity(THREE) {
     const baseMaterial = new THREE.MeshStandardMaterial({ color: color.clone().multiplyScalar(0.24), roughness: 0.55, metalness: 0.45 });
     const edgeMaterial = new THREE.MeshStandardMaterial({ color: zone.color, emissive: zone.color, emissiveIntensity: 1.4, roughness: 0.35 });
     const arrangements = [
-      [[-6.5, -2, 1.5, 4.8], [6.5, -1, 1.6, 6.8], [-6.2, 4, 1.3, 3.3]],
-      [[-6.4, -1, 1.6, 7], [6.3, -2, 1.8, 4.6], [5.7, 4.5, 1.25, 3.5]],
-      [[-6.6, -2, 1.8, 4], [6.4, -2, 1.8, 4], [-6.1, 4.4, 1.5, 5.2], [6.1, 4.4, 1.5, 5.2]],
+      [[-6.5, -2, 1.5, 3.2], [6.5, -1, 1.6, 3.7], [-6.2, 4, 1.3, 2.9]],
+      [[-6.4, -1, 1.6, 3.75], [6.3, -2, 1.8, 3.15], [5.7, 4.5, 1.25, 2.85]],
+      [[-6.6, -2, 1.8, 3.1], [6.4, -2, 1.8, 3.1], [-6.1, 4.4, 1.5, 3.55], [6.1, 4.4, 1.5, 3.55]],
     ][districtIndex];
     arrangements.forEach(([x, z, width, height], index) => {
       const tower = new THREE.Mesh(new THREE.BoxGeometry(width, height, width), baseMaterial);
@@ -1362,7 +1360,7 @@ function initDataCity(THREE) {
       district.add(cap);
       if (districtIndex === 0 && index < 2) {
         const wave = new THREE.Mesh(new THREE.TorusGeometry(1.15 + index * 0.25, 0.05, 6, 36, Math.PI), edgeMaterial);
-        wave.position.set(x, height + 1.15, z);
+        wave.position.set(x, height + 0.35, z);
         wave.rotation.z = index ? Math.PI : 0;
         district.add(wave);
       }
@@ -1596,9 +1594,23 @@ function initDataCity(THREE) {
       originalDepthWrite: material.depthWrite,
     };
     proximityFadeMeshes.push(object);
+    if (object.isMesh) proximityFadeRayMeshes.push(object);
   }
 
   function updateProximityFades(delta) {
+    directSightOccluders.clear();
+    [-0.75, 0, 0.75].forEach((lateralOffset) => {
+      fadeRayTarget.copy(car.position);
+      fadeRayTarget.x += Math.cos(state.yaw) * lateralOffset;
+      fadeRayTarget.y += 0.72;
+      fadeRayTarget.z += Math.sin(state.yaw) * lateralOffset;
+      const sightDistance = camera.position.distanceTo(fadeRayTarget);
+      fadeRayDirection.subVectors(fadeRayTarget, camera.position).normalize();
+      fadeRaycaster.set(camera.position, fadeRayDirection);
+      fadeRaycaster.far = Math.max(0.1, sightDistance - 0.35);
+      fadeRaycaster.intersectObjects(proximityFadeRayMeshes, false).forEach(({ object }) => directSightOccluders.add(object));
+    });
+
     proximityFadeMeshes.forEach((object) => {
       object.getWorldPosition(fadeWorldPosition);
       object.getWorldScale(fadeWorldScale);
@@ -1618,8 +1630,10 @@ function initDataCity(THREE) {
         targetOpacity,
         THREE.MathUtils.clamp(0.18 + Math.max(0, carClearance) / 4.2, 0.18, fadeData.originalOpacity),
       );
-      if (sightClearance < 1.3) targetOpacity = Math.min(targetOpacity, 0.22);
-      object.material.opacity = THREE.MathUtils.lerp(object.material.opacity, targetOpacity, 1 - Math.exp(-7 * delta));
+      if (sightClearance < 2.1) targetOpacity = Math.min(targetOpacity, 0.12);
+      if (directSightOccluders.has(object) || sightClearance < 0.75) targetOpacity = Math.min(targetOpacity, 0.035);
+      const fadeSpeed = targetOpacity < object.material.opacity ? 14 : 5;
+      object.material.opacity = THREE.MathUtils.lerp(object.material.opacity, targetOpacity, 1 - Math.exp(-fadeSpeed * delta));
       object.material.depthWrite = object.material.opacity > fadeData.originalOpacity * 0.94 ? fadeData.originalDepthWrite : false;
     });
   }
