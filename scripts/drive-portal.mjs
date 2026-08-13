@@ -1060,8 +1060,8 @@ function initDataCity(THREE) {
 
     const rampGeometry = new THREE.BufferGeometry();
     rampGeometry.setAttribute("position", new THREE.Float32BufferAttribute([
-      -3, 0, -2, -3, 1.25, -2, 3, 0, -2,
-      -3, 0, 2, -3, 1.25, 2, 3, 0, 2,
+      -3, 0, -2.75, -3, 1.25, -2.75, 3, 0, -2.75,
+      -3, 0, 2.75, -3, 1.25, 2.75, 3, 0, 2.75,
     ], 3));
     rampGeometry.setIndex([
       1, 4, 5, 1, 5, 2,
@@ -1080,7 +1080,7 @@ function initDataCity(THREE) {
     garden.add(jumpRamp);
 
     const rampAngle = -Math.atan2(1.25, 6);
-    [-1.88, 1.88].forEach((z) => {
+    [-2.62, 2.62].forEach((z) => {
       const rail = new THREE.Mesh(
         new THREE.BoxGeometry(6.1, 0.12, 0.13),
         new THREE.MeshStandardMaterial({ color: 0xb8ffff, emissive: 0x39dbe5, emissiveIntensity: 3.5, roughness: 0.2 }),
@@ -1806,18 +1806,18 @@ function initDataCity(THREE) {
     const rampWest = -20.75;
     const rampEast = -14.75;
     const insideRamp = state.rearAxle.x >= rampWest && state.rearAxle.x <= rampEast
-      && Math.abs(state.rearAxle.z + 12) <= 2.05;
-    const movingTowardGarden = forward.x < -0.55 && state.speed > 4.5;
+      && Math.abs(state.rearAxle.z + 12) <= 2.95;
+    const movingTowardGarden = forward.x < -0.25 && state.speed > 2;
     if (!state.airborne && insideRamp) {
       const rampProgress = THREE.MathUtils.clamp((rampEast - state.rearAxle.x) / (rampEast - rampWest), 0, 1);
       state.rearAxle.y = rampProgress * 1.25;
       state.onRamp = true;
-      if (rampProgress > 0.92 && movingTowardGarden && state.jumpCooldown <= 0) {
-        state.speed = Math.min(state.speed, 14);
+      if (rampProgress > 0.66 && movingTowardGarden && state.jumpCooldown <= 0) {
+        state.speed = THREE.MathUtils.clamp(Math.max(state.speed * 1.06, 9), 9, 16);
         state.airborne = true;
         state.onRamp = false;
-        state.verticalVelocity = 3.8;
-        state.jumpCooldown = 0.8;
+        state.verticalVelocity = 5.2;
+        state.jumpCooldown = 1.2;
       }
     } else if (state.airborne) {
       state.verticalVelocity -= 10.5 * step;
