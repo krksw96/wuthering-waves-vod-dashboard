@@ -40,8 +40,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Refresh VOD data
-        run: node scripts/daily-refresh.mjs
+      - name: Refresh Zenless VOD data
+        run: node scripts/daily-zenless-refresh.mjs
       - name: Commit refreshed data
         run: |
           if git diff --quiet; then
@@ -50,6 +50,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ad-videos.json data/videos.js data/youtube-update-*.json index.html
-          git commit -m "Daily VOD refresh $(date -u +%Y-%m-%d)"
+          git add data/videos.js data/zenless-youtube-update-*.json index.html
+          git commit -m "Daily Zenless VOD refresh $(date -u +%Y-%m-%d)"
           git push origin main

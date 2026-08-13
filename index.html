@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#11151d" />
-    <title>명조 영상 데이터 보드</title>
+    <title>젠레스 존 제로 영상 데이터 보드</title>
     <style>
       :root {
         --ink: #141820;
@@ -66,7 +66,7 @@
         position: relative;
         min-height: 390px;
         overflow: hidden;
-        background: #cfd7df url("assets/anni-kv-bg.jpg") center 26% / cover no-repeat;
+        background: radial-gradient(circle at 78% 28%, rgba(255,111,44,.95), transparent 27%), radial-gradient(circle at 63% 76%, rgba(41,218,235,.68), transparent 35%), linear-gradient(118deg, #161e2a 0%, #253a4e 45%, #e85d35 100%);
         color: #fff;
       }
       .hero::after { position: absolute; inset: 0; content: ""; background: rgba(10, 17, 27, .38); }
@@ -261,14 +261,14 @@
   <body>
     <header class="topbar">
       <div class="shell topbar-inner">
-        <div class="brand"><div class="brand-mark">W</div><div class="brand-copy"><strong data-i18n="brand">명조 영상 데이터</strong><span>WUTHERING WAVES CONTENT INTELLIGENCE</span></div></div>
+        <div class="brand"><div class="brand-mark">Z</div><div class="brand-copy"><strong data-i18n="brand">젠레스 존 제로 영상 데이터</strong><span>ZENLESS ZONE ZERO CONTENT INTELLIGENCE</span></div></div>
         <div class="top-links">
           <div class="language-switcher" role="group" aria-label="언어 변경" data-i18n-aria="languageSwitch">
             <button class="language-button" type="button" data-language="ko" lang="ko">KO</button>
             <button class="language-button" type="button" data-language="zh" lang="zh-CN">中</button>
             <button class="language-button" type="button" data-language="en" lang="en">EN</button>
           </div>
-          <a class="icon-link" href="https://kurogame.feishu.cn/sheets/V9C1sSLU4hOweEtvDRdcBnENnMh?sheet=PY4QV4" target="_blank" rel="noreferrer" title="Feishu 원본 시트 열기" aria-label="Feishu 원본 시트 열기" data-i18n-title="sheetOpen" data-i18n-aria="sheetOpen">
+          <a class="icon-link" href="https://kurogame.feishu.cn/sheets/V9C1sSLU4hOweEtvDRdcBnENnMh?sheet=XJKrFe" target="_blank" rel="noreferrer" title="Feishu 원본 시트 열기" aria-label="Feishu 원본 시트 열기" data-i18n-title="sheetOpen" data-i18n-aria="sheetOpen">
             <svg class="icon" viewBox="0 0 24 24"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
           </a>
         </div>
@@ -276,13 +276,12 @@
     </header>
 
     <section class="hero">
-      <img class="hero-character" src="assets/anni-kv-denia.png" alt="" />
       <div class="shell hero-inner">
         <div class="hero-copy">
           <p class="eyebrow">KOREA · PUBLIC YOUTUBE VIDEOS · NO AI</p>
-          <h1 data-i18n-html="heroTitle">명조 영상<br />데이터 보드</h1>
-          <p class="hero-description" data-i18n="heroDescription">한국어로 게시된 명조 일반 영상과 쇼츠를 한곳에서 비교합니다. 광고 과업은 별도 표시하고, AI 사용 표기 콘텐츠는 제외한 공개 지표를 기준으로 구성했습니다.</p>
-          <div class="period"><span id="period-label">2026.07.10 — 2026.07.13</span><span data-i18n="collectionPeriod">수집 기준</span></div>
+          <h1 data-i18n-html="heroTitle">젠레스 존 제로<br />데이터 보드</h1>
+          <p class="hero-description" data-i18n="heroDescription">한국어로 게시된 젠레스 존 제로 일반 영상과 쇼츠를 한곳에서 비교합니다. 공개된 YouTube API 지표를 기준으로 구성했습니다.</p>
+          <div class="period"><span id="period-label">2026.08.01 — 2026.08.13</span><span data-i18n="collectionPeriod">수집 기준</span></div>
         </div>
       </div>
     </section>
@@ -360,18 +359,15 @@
         <div class="method-grid">
           <div class="method-copy">
             <h2 id="collection-method-title" data-i18n="criteriaTitle">영상 수집 기준</h2>
-            <p data-i18n="criteriaIntro">공식 YouTube Data API v3에서 대한민국·한국어 조건과 16개 검색어로 공개 영상을 찾습니다. 매일 오전 8시(KST)에 전날과 당일을 다시 수집하고, 등록된 전체 영상의 공개 지표를 갱신합니다.</p>
-            <div class="keyword-list" aria-label="사용 검색어 16개" data-i18n-aria="searchKeywords">
-              <span class="keyword">명조</span><span class="keyword">명조 워더링 웨이브</span><span class="keyword">워더링 웨이브</span><span class="keyword">wuthering waves 명조</span>
-              <span class="keyword">명조 3.5</span><span class="keyword">명조 양양</span><span class="keyword">명조 현령</span><span class="keyword">명조 수수</span>
-              <span class="keyword">명조 공략</span><span class="keyword">명조 스토리</span><span class="keyword">명조 다시보기</span><span class="keyword">명조 리액션</span>
-              <span class="keyword">명조 쇼츠</span><span class="keyword">명조 shorts</span><span class="keyword">워더링 웨이브 쇼츠</span><span class="keyword">워더링 웨이브 shorts</span>
+            <p data-i18n="criteriaIntro">공식 YouTube Data API v3에서 대한민국·한국어 조건과 4개 검색어로 공개 영상을 찾습니다. 등록된 영상의 공개 지표를 갱신합니다.</p>
+            <div class="keyword-list" aria-label="사용 검색어 4개" data-i18n-aria="searchKeywords">
+              <span class="keyword">젠레스</span><span class="keyword">젠레스 존 제로</span><span class="keyword">젠존제</span><span class="keyword">레미엘</span>
             </div>
           </div>
           <div class="method-rules">
-            <div class="method-rule"><strong data-i18n="coverageTitle">수집 범위</strong><span data-i18n="coverageBody">표시 기간 내 한국어 관련성이 확인된 일반 영상·라이브 다시보기·Shorts를 조회수 제한 없이 포함하며, 명조 한국 공식 채널은 제외합니다.</span></div>
-            <div class="method-rule"><strong data-i18n="relevanceTitle">관련성 확인</strong><span data-i18n="relevanceBody">제목·설명·태그·채널명에서 명조, 워더링 웨이브, Wuthering Waves, WUWA 또는 鳴潮를 확인하고 YouTube 영상 ID로 중복 제거합니다.</span></div>
-            <div class="method-rule"><strong data-i18n="formatExclusionTitle">형식·제외</strong><span data-i18n="formatExclusionBody">재생시간 180초 이하는 Shorts, 초과는 VOD로 분류하며, AI 생성·사용 표기가 감지된 콘텐츠는 제외합니다.</span></div>
+            <div class="method-rule"><strong data-i18n="coverageTitle">수집 범위</strong><span data-i18n="coverageBody">표시 기간 내 한국어 관련성이 확인된 일반 영상·라이브 다시보기·Shorts를 조회수 제한 없이 포함합니다.</span></div>
+            <div class="method-rule"><strong data-i18n="relevanceTitle">관련성 확인</strong><span data-i18n="relevanceBody">제목·설명·태그·채널명에서 젠레스, 젠레스 존 제로, 젠존제, Zenless Zone Zero, ZZZ, 絶区零 또는 레미엘을 확인하고 YouTube 영상 ID로 중복 제거합니다.</span></div>
+            <div class="method-rule"><strong data-i18n="formatExclusionTitle">형식·제외</strong><span data-i18n="formatExclusionBody">재생시간 180초 이하는 Shorts, 초과는 VOD로 분류합니다.</span></div>
             <div class="method-rule"><strong data-i18n="partnerTitle">파트너 분류</strong><span data-i18n="partnerBody">KOC·장기협업 KOL은 관리 중인 채널명 별칭으로, 광고 과업은 Feishu 과업 시트와 수동 확인된 YouTube ID로 표시합니다.</span></div>
             <div class="method-rule"><strong data-i18n="refreshTitle">지표 갱신</strong><span data-i18n="refreshBody">조회수·좋아요·댓글·구독자는 매일 공개 API 값으로 갱신합니다. 웹사이트는 매일 08:00 KST, Feishu 시트는 08:15 KST에 동기화합니다.</span></div>
             <div class="method-rule"><strong data-i18n="limitsTitle">수집 한계</strong><span data-i18n="limitsBody">검색어별 최신 100개까지 확인하므로 검색 미노출·비공개·관련어가 명확하지 않은 영상은 누락될 수 있습니다. 게시일은 YouTube API의 UTC 날짜 기준입니다.</span></div>
@@ -404,12 +400,12 @@
       const data = window.VOD_DATA || { videos: [], period: {} };
       const translations = {
         ko: {
-          metaTitle: "명조 영상 데이터 보드", brand: "명조 영상 데이터", sheetOpen: "Feishu 원본 시트 열기", languageSwitch: "언어 변경", videoList: "스크롤 가능한 영상 목록",
-          heroTitle: "명조 영상<br />데이터 보드", heroDescription: "한국어로 게시된 명조 일반 영상과 쇼츠를 한곳에서 비교합니다. 광고 과업은 별도 표시하고, AI 사용 표기 콘텐츠는 제외한 공개 지표를 기준으로 구성했습니다.", collectionPeriod: "수집 기준",
+          metaTitle: "젠레스 존 제로 영상 데이터 보드", brand: "젠레스 존 제로 영상 데이터", sheetOpen: "Feishu 원본 시트 열기", languageSwitch: "언어 변경", videoList: "스크롤 가능한 영상 목록",
+          heroTitle: "젠레스 존 제로<br />데이터 보드", heroDescription: "한국어로 게시된 젠레스 존 제로 일반 영상과 쇼츠를 한곳에서 비교합니다. 공개된 YouTube API 지표를 기준으로 구성했습니다.", collectionPeriod: "수집 기준",
           keyMetrics: "주요 지표", collectedVideos: "수집 영상", totalViews: "누적 조회수", publicAtRefresh: "갱신 시점 공개 수치", likes: "좋아요 수", likesShort: "좋아요", publicTotal: "공개 수치 합계", comments: "댓글 수", commentsShort: "댓글", availableComments: "확인 가능한 댓글", creators: "참여 크리에이터",
           periodUploads: "기간별 업로드", selectedPeriodMetrics: "선택한 기간의 업로드 수치", videos: "영상", video: "영상", views: "조회수", format: "형식", creator: "유튜버", creatorSearch: "유튜버 검색", videoTitle: "영상 제목", titleSearch: "영상 제목 검색", uploadRange: "업로드 집계 기간", startDate: "시작일", endDate: "종료일", explorer: "VOD 탐색기", dateFilter: "날짜 구간 필터", sortMethod: "정렬 방식",
           formatFilter: "영상 형식 필터", channelFilter: "채널 구분 필터", topicFilter: "콘텐츠 주제 필터", allFormats: "전체 형식", allChannels: "전체 채널", longTermKol: "장기협업 KOL", adTask: "광고 과업", nonPartner: "비협업 채널", nonKoc: "非KOC", allTopics: "전체 주제", allPeriod: "전체 기간",
-          latest: "최신순", published: "게시일", subscribers: "구독자", engagement: "참여율", emptyTitle: "조건에 맞는 영상이 없습니다.", emptyBody: "검색어나 필터를 조정해 주세요.", footnote: "좋아요 수와 구독자 수가 공개되지 않은 영상은 빈 값으로 표시합니다. 댓글 수는 YouTube가 공개하는 댓글 총계를 기준으로 하며, 댓글이 없거나 비활성화된 영상은 0으로 표시합니다.",
+          latest: "최신순", published: "게시일", subscribers: "구독자", engagement: "참여율", emptyTitle: "8월 데이터를 수집 중입니다.", emptyBody: "YouTube API 검색 할당량이 초기화되면 자동으로 표시됩니다.", footnote: "좋아요 수와 구독자 수가 공개되지 않은 영상은 빈 값으로 표시합니다. 댓글 수는 YouTube가 공개하는 댓글 총계를 기준으로 하며, 댓글이 없거나 비활성화된 영상은 0으로 표시합니다.",
           criteriaTitle: "영상 수집 기준", criteriaIntro: "공식 YouTube Data API v3에서 대한민국·한국어 조건과 16개 검색어로 공개 영상을 찾습니다. 매일 오전 8시(KST)에 전날과 당일을 다시 수집하고, 등록된 전체 영상의 공개 지표를 갱신합니다.", searchKeywords: "사용 검색어 16개",
           coverageTitle: "수집 범위", coverageBody: "표시 기간 내 한국어 관련성이 확인된 일반 영상·라이브 다시보기·Shorts를 조회수 제한 없이 포함하며, 명조 한국 공식 채널은 제외합니다.", relevanceTitle: "관련성 확인", relevanceBody: "제목·설명·태그·채널명에서 명조, 워더링 웨이브, Wuthering Waves, WUWA 또는 鳴潮를 확인하고 YouTube 영상 ID로 중복 제거합니다.",
           formatExclusionTitle: "형식·제외", formatExclusionBody: "재생시간 180초 이하는 Shorts, 초과는 VOD로 분류하며, AI 생성·사용 표기 콘텐츠와 다른 게임으로 확인된 이름 충돌 영상은 제외합니다.", partnerTitle: "파트너 분류", partnerBody: "KOC·장기협업 KOL은 관리 중인 채널명 별칭으로, 광고 과업은 Feishu 과업 시트와 수동 확인된 YouTube ID로 표시합니다.",
@@ -419,8 +415,8 @@
           csvTitle: "제목", csvLink: "링크", csvCreator: "유튜버 이름", csvKoc: "KOC 여부", csvKol: "장기협업 KOL 여부", csvAd: "광고 과업 여부", csvSubscribers: "유튜버 구독자 수", csvDate: "날짜", csvViews: "조회수", csvLikes: "좋아요 수", csvComments: "댓글 수"
         },
         zh: {
-          metaTitle: "鸣潮视频数据看板", brand: "鸣潮视频数据", sheetOpen: "打开飞书原始表格", languageSwitch: "切换语言", videoList: "可滚动的视频列表",
-          heroTitle: "鸣潮视频<br />数据看板", heroDescription: "集中比较以韩语发布的《鸣潮》普通视频与 Shorts。广告任务单独标注，排除标注使用 AI 的内容，数据均来自公开指标。", collectionPeriod: "采集区间",
+          metaTitle: "绝区零视频数据看板", brand: "绝区零视频数据", sheetOpen: "打开飞书原始表格", languageSwitch: "切换语言", videoList: "可滚动的视频列表",
+          heroTitle: "绝区零<br />视频数据看板", heroDescription: "集中比较以韩语发布的《绝区零》普通视频与 Shorts，数据均来自公开 YouTube API 指标。", collectionPeriod: "采集区间",
           keyMetrics: "核心指标", collectedVideos: "已收录视频", totalViews: "累计播放量", publicAtRefresh: "刷新时的公开数据", likes: "点赞数", likesShort: "点赞", publicTotal: "公开数据合计", comments: "评论数", commentsShort: "评论", availableComments: "可读取评论", creators: "参与创作者",
           periodUploads: "分时段上传", selectedPeriodMetrics: "所选时段的上传数据", videos: "视频", video: "视频", views: "播放量", format: "类型", creator: "YouTuber", creatorSearch: "搜索 YouTuber", videoTitle: "视频标题", titleSearch: "搜索视频标题", uploadRange: "上传统计期间", startDate: "开始日期", endDate: "结束日期", explorer: "VOD 浏览器", dateFilter: "日期范围筛选", sortMethod: "排序方式",
           formatFilter: "视频类型筛选", channelFilter: "频道分类筛选", topicFilter: "内容主题筛选", allFormats: "全部类型", allChannels: "全部频道", longTermKol: "长期合作 KOL", adTask: "广告任务", nonPartner: "非合作频道", nonKoc: "非KOC", allTopics: "全部主题", allPeriod: "全部期间",
@@ -434,8 +430,8 @@
           csvTitle: "标题", csvLink: "链接", csvCreator: "YouTuber 名称", csvKoc: "是否 KOC", csvKol: "是否长期合作 KOL", csvAd: "是否广告任务", csvSubscribers: "订阅数", csvDate: "日期", csvViews: "播放量", csvLikes: "点赞数", csvComments: "评论数"
         },
         en: {
-          metaTitle: "Wuthering Waves Video Data Board", brand: "Wuthering Waves Video Data", sheetOpen: "Open the source Feishu sheet", languageSwitch: "Change language", videoList: "Scrollable video list",
-          heroTitle: "Wuthering Waves<br />Video Data Board", heroDescription: "Compare Korean-language Wuthering Waves videos and Shorts in one place. Ad tasks are labeled separately, AI-labeled content is excluded, and all metrics come from public data.", collectionPeriod: "Collection period",
+          metaTitle: "Zenless Zone Zero Video Data Board", brand: "Zenless Zone Zero Video Data", sheetOpen: "Open the source Feishu sheet", languageSwitch: "Change language", videoList: "Scrollable video list",
+          heroTitle: "Zenless Zone Zero<br />Video Data Board", heroDescription: "Compare Korean-language Zenless Zone Zero videos and Shorts in one place using public YouTube API metrics.", collectionPeriod: "Collection period",
           keyMetrics: "Key metrics", collectedVideos: "Collected videos", totalViews: "Total views", publicAtRefresh: "Public values at refresh", likes: "Likes", likesShort: "Likes", publicTotal: "Public-value total", comments: "Comments", commentsShort: "Comments", availableComments: "Available comments", creators: "Participating creators",
           periodUploads: "Uploads by period", selectedPeriodMetrics: "Upload metrics for the selected period", videos: "Videos", video: "Video", views: "Views", format: "Format", creator: "YouTuber", creatorSearch: "Search YouTuber", videoTitle: "Video title", titleSearch: "Search video titles", uploadRange: "Upload summary period", startDate: "Start date", endDate: "End date", explorer: "VOD explorer", dateFilter: "Date range filter", sortMethod: "Sort method",
           formatFilter: "Video format filter", channelFilter: "Channel category filter", topicFilter: "Content topic filter", allFormats: "All formats", allChannels: "All channels", longTermKol: "Long-term KOL", adTask: "Ad task", nonPartner: "Non-partner", nonKoc: "Non-KOC", allTopics: "All topics", allPeriod: "Full period",
