@@ -12,7 +12,7 @@ const env = {
   spreadsheetToken: process.env.FEISHU_SPREADSHEET_TOKEN || "V9C1sSLU4hOweEtvDRdcBnENnMh",
   sheetId: process.env.FEISHU_AD_SHEET_ID || "0GfgFb",
   range: process.env.FEISHU_AD_RANGE || "B:K",
-  dataUrl: process.env.AD_TASK_DATA_URL || "https://raw.githubusercontent.com/krksw96/wuthering-waves-kol-dashboard/main/data/ad-task-video-ids.json",
+  dataUrl: process.env.AD_TASK_DATA_URL || "https://api.github.com/repos/krksw96/wuthering-waves-kol-dashboard/contents/data/ad-task-video-ids.json?ref=main",
 };
 
 const apiKeyHeaders = () => env.apiKey ? { "X-API-Key": env.apiKey } : {};
@@ -47,11 +47,15 @@ async function loadSheetRows() {
       title: String(row[9] || "").trim(),
     })).filter((row) => row.youtubeId);
   }
-  const url = new URL(env.dataUrl);
-  url.searchParams.set("v", Date.now().toString());
-  const response = await fetch(url, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(30_000) });
+  const response = await fetch(env.dataUrl, {
+    headers: { Accept: "application/vnd.github+json", "User-Agent": "wuthering-waves-vod-dashboard" },
+    signal: AbortSignal.timeout(30_000),
+  });
   if (!response.ok) throw new Error(`Advertising-task data request failed (${response.status})`);
-  const payload = await response.json();
+  const body = await response.json();
+  const payload = body.content
+    ? JSON.parse(Buffer.from(String(body.content).replace(/\s/g, ""), "base64").toString("utf8"))
+    : body;
   if (!Array.isArray(payload.rows)) throw new Error("Advertising-task data has no rows array");
   return payload.rows.map((row) => ({ ...row, youtubeId: youtubeIdFrom(row.link) || youtubeIdFrom(row.youtubeId) })).filter((row) => row.youtubeId);
 }
