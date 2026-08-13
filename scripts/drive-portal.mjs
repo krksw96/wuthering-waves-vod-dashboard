@@ -106,7 +106,7 @@ function initDataCity(THREE) {
   ];
 
   const world = new THREE.Group();
-  const atmosphere = { rain: null };
+  const atmosphere = { rain: null, hologram: null, petals: null, lanterns: [], clouds: [] };
   scene.add(world);
   buildGround();
   buildSkyline();
@@ -123,6 +123,7 @@ function initDataCity(THREE) {
     wheelRadius: 0.42,
     maxForwardSpeed: 18,
     maxReverseSpeed: 7,
+    fixedStep: 1 / 120,
   };
   const state = {
     started: false,
@@ -131,6 +132,9 @@ function initDataCity(THREE) {
     yawRate: 0,
     acceleration: 0,
     steeringAngle: 0,
+    reverseHold: 0,
+    wheelRotation: 0,
+    physicsAccumulator: 0,
     rearAxle: new THREE.Vector3(0, 0, vehicle.rearAxleOffset),
     elapsed: 0,
     entryProgress: 0,
@@ -306,7 +310,7 @@ function initDataCity(THREE) {
     for (let index = 0; index < 76; index += 1) {
       const x = random() * 106 - 53;
       const z = random() * 106 - 53;
-      if (Math.hypot(x, z) < 13.5 || distanceToAnyRoad(x, z) < 5.7 || zones.some((zone) => Math.hypot(x - zone.position.x, z - zone.position.z) < 11.5)) continue;
+      if (Math.hypot(x, z) < 13.5 || Math.hypot(x - 14.5, z + 51) < 11 || distanceToAnyRoad(x, z) < 5.7 || zones.some((zone) => Math.hypot(x - zone.position.x, z - zone.position.z) < 11.5)) continue;
       const width = 2.4 + random() * 4.8;
       const depth = 2.4 + random() * 4.6;
       const height = 5 + random() * 19;
@@ -342,7 +346,13 @@ function initDataCity(THREE) {
 
     buildElevatedRail();
     buildCentralBoulevard(random);
+    buildMoonAndClouds(random);
+    buildMegatower();
     buildServiceGarage();
+    buildGarageShowroom();
+    buildCherryMarket(random);
+    buildLanternMarket(random);
+    buildRooftopGarden(random);
     buildNightCityDetails(random);
     buildStreetFurniture(random);
     buildRain(random);
@@ -454,6 +464,358 @@ function initDataCity(THREE) {
     world.add(boulevard);
   }
 
+  function buildMoonAndClouds(random) {
+    const moon = new THREE.Group();
+    moon.position.set(-9, 27, -88);
+
+    const moonDisc = new THREE.Mesh(
+      new THREE.CircleGeometry(18, 72),
+      new THREE.MeshBasicMaterial({ color: 0xc7f4ea, transparent: true, opacity: 0.8, fog: false, depthWrite: false }),
+    );
+    moon.add(moonDisc);
+    const moonHalo = new THREE.Mesh(
+      new THREE.RingGeometry(18.1, 20.2, 72),
+      new THREE.MeshBasicMaterial({ color: 0x8bded7, transparent: true, opacity: 0.12, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, fog: false, depthWrite: false }),
+    );
+    moonHalo.position.z = -0.03;
+    moon.add(moonHalo);
+
+    const craterMaterial = new THREE.MeshBasicMaterial({ color: 0x6daaa9, transparent: true, opacity: 0.22, fog: false, depthWrite: false });
+    [
+      [-6.1, 5.2, 2.3, 1.1], [4.4, 8.2, 2.8, 1.3], [7.4, -2.1, 1.8, 1],
+      [-2.3, -6.4, 3.6, 1.55], [-8.6, -3.2, 1.5, 0.8], [1.1, 2.6, 1.2, 0.65],
+    ].forEach(([x, y, rx, ry]) => {
+      const crater = new THREE.Mesh(new THREE.CircleGeometry(1, 28), craterMaterial);
+      crater.position.set(x, y, 0.03);
+      crater.scale.set(rx, ry, 1);
+      moon.add(crater);
+    });
+    scene.add(moon);
+
+    const cloudMaterial = new THREE.MeshBasicMaterial({ color: 0x0b3439, transparent: true, opacity: 0.42, fog: false, depthWrite: false });
+    for (let index = 0; index < 8; index += 1) {
+      const cloud = new THREE.Group();
+      const width = 8 + random() * 12;
+      for (let blob = 0; blob < 5; blob += 1) {
+        const puff = new THREE.Mesh(new THREE.CircleGeometry(1, 20), cloudMaterial);
+        puff.position.set((blob - 2) * width * 0.18, Math.sin(blob * 1.7) * 0.75, 0);
+        puff.scale.set(width * (0.19 + random() * 0.08), 1.5 + random() * 2.2, 1);
+        cloud.add(puff);
+      }
+      cloud.position.set(-46 + random() * 92, 24 + random() * 22, -75 - random() * 8);
+      cloud.userData.drift = 0.18 + random() * 0.22;
+      atmosphere.clouds.push(cloud);
+      scene.add(cloud);
+    }
+  }
+
+  function buildMegatower() {
+    const tower = new THREE.Group();
+    tower.position.set(14.5, 0, -57);
+    const coreMaterial = new THREE.MeshStandardMaterial({ color: 0x0b1b21, roughness: 0.28, metalness: 0.78 });
+    const frameMaterial = new THREE.MeshStandardMaterial({ color: 0x16282e, roughness: 0.4, metalness: 0.72 });
+    const cyan = new THREE.MeshStandardMaterial({ color: 0xa9ffff, emissive: 0x38dce5, emissiveIntensity: 4.2, roughness: 0.14 });
+    const rose = new THREE.MeshStandardMaterial({ color: 0xff9bbd, emissive: 0xff386f, emissiveIntensity: 3.4, roughness: 0.18 });
+
+    const core = new THREE.Mesh(new THREE.BoxGeometry(7.4, 36, 6.4), coreMaterial);
+    core.position.y = 18;
+    core.castShadow = true;
+    tower.add(core);
+    [-3.86, 3.86].forEach((x) => {
+      const fin = new THREE.Mesh(new THREE.BoxGeometry(0.48, 38, 7.2), frameMaterial);
+      fin.position.set(x, 19, 0);
+      tower.add(fin);
+      const beam = new THREE.Mesh(new THREE.BoxGeometry(0.11, 35, 7.28), cyan);
+      beam.position.set(x + (x < 0 ? -0.27 : 0.27), 19.2, 0);
+      tower.add(beam);
+    });
+    for (let y = 4.5; y < 34; y += 3.4) {
+      const floor = new THREE.Mesh(new THREE.BoxGeometry(7.65, 0.08, 6.65), y % 6.8 ? cyan : rose);
+      floor.position.y = y;
+      tower.add(floor);
+    }
+    const crown = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 3.9, 4.8, 6), frameMaterial);
+    crown.position.y = 38.4;
+    tower.add(crown);
+    const spire = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.28, 11, 8), cyan);
+    spire.position.y = 46.2;
+    tower.add(spire);
+
+    [10, 19, 28].forEach((y, index) => {
+      const panel = makeLabel(["NIGHT", "DATA", "CITY"][index], ["SIGNAL 04", "LIVE ARCHIVE", "OPEN 24H"][index], index === 1 ? "#ff6799" : "#69eff0");
+      panel.position.set(0, y, 3.28);
+      panel.scale.set(5.2, 1.5, 1);
+      tower.add(panel);
+    });
+    const towerGlow = new THREE.PointLight(0x57e8ea, 18, 34, 1.6);
+    towerGlow.position.set(0, 26, 4);
+    tower.add(towerGlow);
+    world.add(tower);
+
+    [-1, 1].forEach((side) => {
+      const skyBeam = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.13, 0.48, 92, 10),
+        new THREE.MeshBasicMaterial({ color: 0x4cf4ef, transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false }),
+      );
+      skyBeam.position.set(14.5 + side * 3.9, 54, -57);
+      world.add(skyBeam);
+    });
+  }
+
+  function buildGarageShowroom() {
+    const displayCar = (paint, accent) => {
+      const car = new THREE.Group();
+      const paintMaterial = new THREE.MeshStandardMaterial({ color: paint, roughness: 0.22, metalness: 0.74 });
+      const glassMaterial = new THREE.MeshStandardMaterial({ color: 0x08161f, roughness: 0.08, metalness: 0.78 });
+      const accentMaterial = new THREE.MeshStandardMaterial({ color: accent, emissive: accent, emissiveIntensity: 3.6, roughness: 0.16 });
+      const tireMaterial = new THREE.MeshStandardMaterial({ color: 0x05070a, roughness: 0.86 });
+
+      const nose = new THREE.Mesh(new THREE.BoxGeometry(3.35, 0.48, 2.8), paintMaterial);
+      nose.position.set(0, 0.63, -1.15);
+      nose.rotation.x = -0.055;
+      car.add(nose);
+      const rear = new THREE.Mesh(new THREE.BoxGeometry(3.1, 0.62, 2.45), paintMaterial);
+      rear.position.set(0, 0.77, 1.45);
+      car.add(rear);
+      const cabin = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.78, 2.15), glassMaterial);
+      cabin.position.set(0, 1.25, 0.35);
+      cabin.rotation.x = 0.05;
+      car.add(cabin);
+      const splitter = new THREE.Mesh(new THREE.BoxGeometry(3.55, 0.12, 0.46), accentMaterial);
+      splitter.position.set(0, 0.42, -2.48);
+      car.add(splitter);
+      [-1.42, 1.42].forEach((x) => {
+        const headlight = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.12, 0.08), accentMaterial);
+        headlight.position.set(x * 0.64, 0.85, -2.55);
+        car.add(headlight);
+      });
+      [[-1.62, -1.45], [1.62, -1.45], [-1.62, 1.5], [1.62, 1.5]].forEach(([x, z]) => {
+        const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.52, 0.35, 18), tireMaterial);
+        wheel.position.set(x, 0.53, z);
+        wheel.rotation.z = Math.PI / 2;
+        car.add(wheel);
+      });
+      return car;
+    };
+
+    const amberCar = displayCar(0xb7a51c, 0xe9ffff);
+    amberCar.position.set(-5.1, 0.05, 4.6);
+    amberCar.rotation.y = -0.2;
+    world.add(amberCar);
+    const silverCar = displayCar(0xb8c2cc, 0xff4e98);
+    silverCar.position.set(5.15, 0.05, 4.4);
+    silverCar.rotation.y = 0.22;
+    world.add(silverCar);
+
+    [-5.1, 5.15].forEach((x, index) => {
+      const pad = new THREE.Mesh(
+        new THREE.CylinderGeometry(3.05, 3.15, 0.16, 40),
+        new THREE.MeshStandardMaterial({ color: 0x111a20, roughness: 0.26, metalness: 0.8 }),
+      );
+      pad.position.set(x, 0.08, 4.5);
+      world.add(pad);
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(2.72, 2.84, 48),
+        new THREE.MeshBasicMaterial({ color: index ? 0xff5c9f : 0x75edf0, transparent: true, opacity: 0.76, side: THREE.DoubleSide }),
+      );
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.set(x, 0.18, 4.5);
+      world.add(ring);
+    });
+  }
+
+  function buildCherryMarket(random) {
+    const market = new THREE.Group();
+    market.position.set(28, 0, -12);
+    const concrete = new THREE.MeshStandardMaterial({ color: 0x263033, roughness: 0.66, metalness: 0.28 });
+    const dark = new THREE.MeshStandardMaterial({ color: 0x10151a, roughness: 0.46, metalness: 0.64 });
+    const pink = new THREE.MeshStandardMaterial({ color: 0xffb2d1, emissive: 0xff377f, emissiveIntensity: 3.1, roughness: 0.28 });
+    const cyan = new THREE.MeshStandardMaterial({ color: 0xb8ffff, emissive: 0x39dbe5, emissiveIntensity: 3.2, roughness: 0.2 });
+    const blossom = new THREE.MeshStandardMaterial({ color: 0xff82b5, emissive: 0xff286f, emissiveIntensity: 1.75, roughness: 0.52 });
+    const trunk = new THREE.MeshStandardMaterial({ color: 0x2d1c24, roughness: 0.9 });
+
+    const deck = new THREE.Mesh(new THREE.BoxGeometry(34, 0.72, 4.4), concrete);
+    deck.position.set(2, 6.6, -8.2);
+    deck.castShadow = true;
+    market.add(deck);
+    [-12, -2, 8, 18].forEach((x) => {
+      const pillar = new THREE.Mesh(new THREE.BoxGeometry(1.2, 6.6, 1.2), concrete);
+      pillar.position.set(x, 3.3, -8.2);
+      market.add(pillar);
+    });
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(34, 0.12, 0.14), pink);
+    rail.position.set(2, 6.15, -5.95);
+    market.add(rail);
+    const marketSign = makeLabel("BLOSSOM 24", "NEON MARKET · NIGHT LINE", "#ff77ad");
+    marketSign.position.set(4.5, 9.4, -7.95);
+    marketSign.scale.set(9, 2.5, 1);
+    market.add(marketSign);
+
+    [-1, 1].forEach((side) => {
+      for (let index = 0; index < 5; index += 1) {
+        const tree = new THREE.Group();
+        const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.18, 3.2, 7), trunk);
+        stem.position.y = 1.6;
+        tree.add(stem);
+        for (let cluster = 0; cluster < 7; cluster += 1) {
+          const crown = new THREE.Mesh(new THREE.IcosahedronGeometry(0.55 + random() * 0.45, 1), blossom);
+          crown.position.set((random() - 0.5) * 2.4, 3 + random() * 1.4, (random() - 0.5) * 1.7);
+          tree.add(crown);
+        }
+        tree.position.set(-10 + index * 6.1, 0, side * 7.2 + 1.2);
+        market.add(tree);
+
+        const kiosk = new THREE.Group();
+        const cabinet = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.35, 1.5), dark);
+        cabinet.position.y = 1.18;
+        kiosk.add(cabinet);
+        const display = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.52, 0.06), (index + side) % 2 ? pink : cyan);
+        display.position.set(0, 1.42, side > 0 ? -0.78 : 0.78);
+        kiosk.add(display);
+        kiosk.position.set(-10 + index * 6.1, 0, side * 10.1 + 1.2);
+        kiosk.rotation.y = side > 0 ? 0 : Math.PI;
+        market.add(kiosk);
+      }
+    });
+
+    const petals = [];
+    for (let index = 0; index < 260; index += 1) {
+      petals.push(random() * 34 - 17, 1 + random() * 11, random() * 28 - 14);
+    }
+    const petalGeometry = new THREE.BufferGeometry();
+    petalGeometry.setAttribute("position", new THREE.Float32BufferAttribute(petals, 3));
+    const petalCloud = new THREE.Points(petalGeometry, new THREE.PointsMaterial({ color: 0xffa7c8, size: 0.11, transparent: true, opacity: 0.88, depthWrite: false }));
+    market.add(petalCloud);
+    atmosphere.petals = petalCloud;
+    const marketGlow = new THREE.PointLight(0xff4b91, 15, 25, 1.8);
+    marketGlow.position.set(1, 5, 2);
+    market.add(marketGlow);
+    world.add(market);
+  }
+
+  function buildLanternMarket(random) {
+    const market = new THREE.Group();
+    market.position.set(0, 0, 32);
+    const frameMaterial = new THREE.MeshStandardMaterial({ color: 0x161417, roughness: 0.5, metalness: 0.58 });
+    const counterMaterial = new THREE.MeshStandardMaterial({ color: 0x282126, roughness: 0.5, metalness: 0.42 });
+    const awningMaterials = [0x5b1823, 0x283d42, 0x42264f].map((color) => new THREE.MeshStandardMaterial({ color, roughness: 0.65 }));
+    const warm = new THREE.MeshStandardMaterial({ color: 0xffd2a1, emissive: 0xff5b24, emissiveIntensity: 3.8, roughness: 0.24 });
+    const violet = new THREE.MeshStandardMaterial({ color: 0xffa4dc, emissive: 0xff45aa, emissiveIntensity: 3.2, roughness: 0.2 });
+
+    [-1, 1].forEach((side) => {
+      for (let index = 0; index < 5; index += 1) {
+        const stall = new THREE.Group();
+        const back = new THREE.Mesh(new THREE.BoxGeometry(3.7, 3.3, 0.35), frameMaterial);
+        back.position.set(0, 1.65, side > 0 ? 1.35 : -1.35);
+        stall.add(back);
+        const counter = new THREE.Mesh(new THREE.BoxGeometry(3.7, 1, 1.05), counterMaterial);
+        counter.position.set(0, 0.55, side > 0 ? -0.42 : 0.42);
+        stall.add(counter);
+        const awning = new THREE.Mesh(new THREE.BoxGeometry(4.1, 0.18, 2.5), awningMaterials[index % awningMaterials.length]);
+        awning.position.y = 3.25;
+        awning.rotation.x = side * 0.12;
+        stall.add(awning);
+        const menu = makeLabel(["STEAM", "NOODLE", "TEA", "GRILL", "NIGHT"][index], "MIDNIGHT KITCHEN", index % 2 ? "#ff84c0" : "#ff9960");
+        menu.position.set(0, 2.35, side > 0 ? -1.58 : 1.58);
+        menu.scale.set(3.25, 0.95, 1);
+        stall.add(menu);
+        stall.position.set(side * 7.6, 0, -10 + index * 5.1);
+        stall.rotation.y = side > 0 ? 0 : Math.PI;
+        market.add(stall);
+      }
+    });
+
+    for (let row = 0; row < 5; row += 1) {
+      const z = -9 + row * 5.5;
+      const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 14.5, 5), frameMaterial);
+      cable.position.set(0, 5.5 + (row % 2) * 0.45, z);
+      cable.rotation.z = Math.PI / 2;
+      market.add(cable);
+      for (let lantern = 0; lantern < 7; lantern += 1) {
+        const lamp = new THREE.Group();
+        const body = new THREE.Mesh(new THREE.SphereGeometry(0.32 + (lantern % 2) * 0.09, 12, 9), warm);
+        body.scale.y = 1.35;
+        lamp.add(body);
+        const tassel = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.35, 5), warm);
+        tassel.position.y = -0.55;
+        lamp.add(tassel);
+        lamp.position.set(-6 + lantern * 2, 5.18 + (row % 2) * 0.45 + random() * 0.14, z);
+        lamp.userData.phase = random() * Math.PI * 2;
+        atmosphere.lanterns.push(lamp);
+        market.add(lamp);
+      }
+    }
+    const alleySign = makeLabel("LANTERN ALLEY", "FOOD · LIGHT · RAIN", "#ff7556");
+    alleySign.position.set(0, 8.2, -11);
+    alleySign.scale.set(9.4, 2.6, 1);
+    market.add(alleySign);
+    const violetGlow = new THREE.PointLight(0xff4fb7, 12, 25, 1.9);
+    violetGlow.position.set(4, 4, 7);
+    market.add(violetGlow);
+    world.add(market);
+  }
+
+  function buildRooftopGarden(random) {
+    const garden = new THREE.Group();
+    garden.position.set(-28, 0, -12);
+    const stone = new THREE.MeshStandardMaterial({ color: 0x1a2728, roughness: 0.68, metalness: 0.28 });
+    const darkStone = new THREE.MeshStandardMaterial({ color: 0x0e1718, roughness: 0.75, metalness: 0.2 });
+    const foliage = new THREE.MeshStandardMaterial({ color: 0x163e34, emissive: 0x0a392d, emissiveIntensity: 0.52, roughness: 0.86 });
+    const bark = new THREE.MeshStandardMaterial({ color: 0x31261f, roughness: 0.9 });
+    const stepLight = new THREE.MeshStandardMaterial({ color: 0xffedbf, emissive: 0xffc35c, emissiveIntensity: 3.2, roughness: 0.22 });
+    const waterMaterial = new THREE.MeshStandardMaterial({ color: 0x153e45, emissive: 0x0a8796, emissiveIntensity: 0.6, roughness: 0.08, metalness: 0.68, transparent: true, opacity: 0.88 });
+
+    const terrace = new THREE.Mesh(new THREE.BoxGeometry(25, 0.48, 25), stone);
+    terrace.position.y = -0.12;
+    terrace.receiveShadow = true;
+    garden.add(terrace);
+    const pond = new THREE.Mesh(new THREE.CircleGeometry(3.3, 40), waterMaterial);
+    pond.rotation.x = -Math.PI / 2;
+    pond.position.set(-5.5, 0.2, 4.8);
+    garden.add(pond);
+    const pondRing = new THREE.Mesh(new THREE.RingGeometry(3.3, 3.7, 40), darkStone);
+    pondRing.rotation.x = -Math.PI / 2;
+    pondRing.position.copy(pond.position);
+    garden.add(pondRing);
+
+    const treePositions = [[-8, -5], [7.5, -5.5], [-7.4, 7.4], [7.8, 6.3]];
+    treePositions.forEach(([x, z], index) => {
+      const planter = new THREE.Mesh(new THREE.CylinderGeometry(1.65, 1.9, 0.75, 12), darkStone);
+      planter.position.set(x, 0.38, z);
+      garden.add(planter);
+      const tree = new THREE.Group();
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.28, 3.7, 7), bark);
+      trunk.position.y = 2.15;
+      trunk.rotation.z = (index % 2 ? -1 : 1) * 0.12;
+      tree.add(trunk);
+      for (let tier = 0; tier < 5; tier += 1) {
+        const crown = new THREE.Mesh(new THREE.IcosahedronGeometry(0.75 + random() * 0.42, 1), foliage);
+        crown.position.set((random() - 0.5) * 1.7, 2.9 + tier * 0.47, (random() - 0.5) * 1.2);
+        crown.scale.set(1.5, 0.58, 1.05);
+        tree.add(crown);
+      }
+      tree.position.set(x, 0.35, z);
+      garden.add(tree);
+    });
+
+    for (let step = 0; step < 5; step += 1) {
+      const stair = new THREE.Mesh(new THREE.BoxGeometry(8.5, 0.3, 1.2), stone);
+      stair.position.set(0, 0.15 + step * 0.28, 11.5 + step * 0.82);
+      garden.add(stair);
+      const light = new THREE.Mesh(new THREE.BoxGeometry(7.3, 0.055, 0.08), stepLight);
+      light.position.set(0, 0.32 + step * 0.28, 10.88 + step * 0.82);
+      garden.add(light);
+    }
+    const gardenSign = makeLabel("SKY GARDEN", "QUIET ABOVE THE SIGNAL", "#83eee3");
+    gardenSign.position.set(0, 7.8, 10.6);
+    gardenSign.scale.set(8.4, 2.4, 1);
+    garden.add(gardenSign);
+    const gardenGlow = new THREE.PointLight(0x55dfd0, 10, 20, 1.8);
+    gardenGlow.position.set(0, 5, 2);
+    garden.add(gardenGlow);
+    world.add(garden);
+  }
+
   function buildServiceGarage() {
     const garage = new THREE.Group();
     const steel = new THREE.MeshStandardMaterial({ color: 0x111a20, roughness: 0.34, metalness: 0.82 });
@@ -514,6 +876,32 @@ function initDataCity(THREE) {
     serviceRing.rotation.x = -Math.PI / 2;
     serviceRing.position.set(0, 0.19, 0);
     garage.add(serviceRing);
+
+    const hologram = new THREE.Group();
+    const hologramMaterial = new THREE.MeshBasicMaterial({
+      color: 0x72f3ff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.21,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const hologramBody = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.72, 6.1, 5, 2, 8), hologramMaterial);
+    hologramBody.position.y = 1.05;
+    hologram.add(hologramBody);
+    const hologramCabin = new THREE.Mesh(new THREE.BoxGeometry(2.65, 0.92, 2.5, 4, 2, 4), hologramMaterial);
+    hologramCabin.position.set(0, 1.82, 0.3);
+    hologram.add(hologramCabin);
+    [[-1.72, -1.85], [1.72, -1.85], [-1.72, 1.85], [1.72, 1.85]].forEach(([x, z]) => {
+      const hologramWheel = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.11, 6, 16), hologramMaterial);
+      hologramWheel.position.set(x, 0.72, z);
+      hologramWheel.rotation.y = Math.PI / 2;
+      hologram.add(hologramWheel);
+    });
+    hologram.position.set(-5.1, 0.15, -2.9);
+    hologram.rotation.y = -0.22;
+    garage.add(hologram);
+    atmosphere.hologram = hologram;
 
     const diagnosticFrame = new THREE.Mesh(new THREE.TorusGeometry(2.65, 0.04, 7, 48), violetLight);
     diagnosticFrame.position.set(0, 3.2, -7.4);
@@ -883,6 +1271,9 @@ function initDataCity(THREE) {
     state.yawRate = 0;
     state.acceleration = 0;
     state.steeringAngle = 0;
+    state.reverseHold = 0;
+    state.wheelRotation = 0;
+    state.physicsAccumulator = 0;
     state.entryProgress = 0;
     state.activePortal = null;
     state.rearAxle.set(0, 0, vehicle.rearAxleOffset);
@@ -895,44 +1286,68 @@ function initDataCity(THREE) {
     zonePrompt.style.setProperty("--entry-progress", "0%");
   }
 
-  function updateCar(delta) {
+  function stepVehiclePhysics(step) {
     const steeringInput = Number(inputs.right) - Number(inputs.left);
-    const movingForward = state.speed >= -0.15;
-    let driveForce = 0;
-    if (inputs.forward) driveForce += movingForward ? 10.8 * (1 - Math.max(0, state.speed) / 34) : 22;
-    if (inputs.backward) driveForce -= state.speed > 0.35 ? 24 : 7.8 * (1 - Math.abs(Math.min(0, state.speed)) / 15);
+    let longitudinalForce = 0;
 
-    const rollingResistance = state.speed === 0 ? 0 : Math.sign(state.speed) * 0.72;
-    const aerodynamicDrag = state.speed * Math.abs(state.speed) * 0.026;
-    state.acceleration = driveForce - rollingResistance - aerodynamicDrag;
-    if (!inputs.forward && !inputs.backward && Math.abs(state.speed) < 0.18) {
+    if (inputs.forward) {
+      state.reverseHold = 0;
+      if (state.speed < -0.12) longitudinalForce = 25;
+      else longitudinalForce = 11.4 * (1 - Math.max(0, state.speed) / (vehicle.maxForwardSpeed * 1.45));
+    } else if (inputs.backward) {
+      if (state.speed > 0.12) {
+        state.reverseHold = 0;
+        longitudinalForce = -25;
+      } else {
+        state.reverseHold += step;
+        if (state.reverseHold > 0.18) longitudinalForce = -8.2 * (1 - Math.abs(Math.min(0, state.speed)) / (vehicle.maxReverseSpeed * 1.4));
+      }
+    } else {
+      state.reverseHold = 0;
+    }
+
+    const rollingResistance = Math.abs(state.speed) > 0.02 ? Math.sign(state.speed) * 0.62 : 0;
+    const aerodynamicDrag = state.speed * Math.abs(state.speed) * 0.028;
+    state.acceleration = longitudinalForce - rollingResistance - aerodynamicDrag;
+    state.speed += state.acceleration * step;
+    state.speed = THREE.MathUtils.clamp(state.speed, -vehicle.maxReverseSpeed, vehicle.maxForwardSpeed);
+    if (!inputs.forward && !inputs.backward) state.speed *= Math.exp(-0.48 * step);
+    if (Math.abs(state.speed) < 0.035 && Math.abs(longitudinalForce) < 0.01) {
       state.speed = 0;
       state.acceleration = 0;
-    } else {
-      state.speed += state.acceleration * delta;
     }
-    state.speed = THREE.MathUtils.clamp(state.speed, -vehicle.maxReverseSpeed, vehicle.maxForwardSpeed);
 
     const speedRatio = Math.min(Math.abs(state.speed) / vehicle.maxForwardSpeed, 1);
-    const steeringLimit = THREE.MathUtils.lerp(0.58, 0.19, Math.pow(speedRatio, 0.72));
+    const steeringLimit = THREE.MathUtils.lerp(0.6, 0.18, Math.pow(speedRatio, 0.68));
     const targetSteering = steeringInput * steeringLimit;
-    const steeringResponse = steeringInput ? 7.2 : 10.5;
+    const steeringResponse = steeringInput ? 5.8 : 8.5;
     state.steeringAngle = THREE.MathUtils.lerp(
       state.steeringAngle,
       targetSteering,
-      1 - Math.exp(-steeringResponse * delta),
+      1 - Math.exp(-steeringResponse * step),
     );
 
     state.yawRate = Math.abs(state.speed) > 0.015
       ? (state.speed / vehicle.wheelBase) * Math.tan(state.steeringAngle)
       : 0;
-    const middleYaw = state.yaw + state.yawRate * delta * 0.5;
+    const middleYaw = state.yaw + state.yawRate * step * 0.5;
     forward.set(Math.sin(middleYaw), 0, -Math.cos(middleYaw));
-    state.rearAxle.addScaledVector(forward, state.speed * delta);
-    state.yaw += state.yawRate * delta;
+    // A no-slip bicycle model: the rear axle can only move along its own heading.
+    state.rearAxle.addScaledVector(forward, state.speed * step);
+    state.yaw += state.yawRate * step;
+    state.wheelRotation -= state.speed * step / vehicle.wheelRadius;
 
     state.rearAxle.x = THREE.MathUtils.clamp(state.rearAxle.x, -54, 54);
     state.rearAxle.z = THREE.MathUtils.clamp(state.rearAxle.z, -54, 54);
+  }
+
+  function updateCar(delta) {
+    state.physicsAccumulator = Math.min(state.physicsAccumulator + delta, vehicle.fixedStep * 8);
+    while (state.physicsAccumulator >= vehicle.fixedStep) {
+      stepVehiclePhysics(vehicle.fixedStep);
+      state.physicsAccumulator -= vehicle.fixedStep;
+    }
+
     forward.set(Math.sin(state.yaw), 0, -Math.cos(state.yaw));
     car.position.copy(state.rearAxle).addScaledVector(forward, vehicle.rearAxleOffset);
     // The physics heading is clockwise-positive, while Three.js rotates Y counter-clockwise.
@@ -955,7 +1370,7 @@ function initDataCity(THREE) {
     }
     frontWheelPivots[0].rotation.y = THREE.MathUtils.lerp(frontWheelPivots[0].rotation.y, -leftWheelAngle, 1 - Math.exp(-12 * delta));
     frontWheelPivots[1].rotation.y = THREE.MathUtils.lerp(frontWheelPivots[1].rotation.y, -rightWheelAngle, 1 - Math.exp(-12 * delta));
-    wheelSpins.forEach((wheel) => { wheel.rotation.x -= state.speed * delta / vehicle.wheelRadius; });
+    wheelSpins.forEach((wheel) => { wheel.rotation.x = state.wheelRotation; });
 
     const lateralLoad = THREE.MathUtils.clamp(state.yawRate * Math.abs(state.speed) / 22, -1, 1);
     const targetRoll = lateralLoad * 0.095;
@@ -1055,6 +1470,23 @@ function initDataCity(THREE) {
       }
       atmosphere.rain.geometry.attributes.position.needsUpdate = true;
     }
+    if (atmosphere.hologram) {
+      atmosphere.hologram.position.y = 0.15 + Math.sin(state.elapsed * 1.8) * 0.09;
+      atmosphere.hologram.children.forEach((part, index) => {
+        part.material.opacity = 0.16 + Math.sin(state.elapsed * 4.2 + index) * 0.055;
+      });
+    }
+    if (atmosphere.petals) {
+      atmosphere.petals.rotation.y = state.elapsed * 0.045;
+      atmosphere.petals.position.y = Math.sin(state.elapsed * 0.7) * 0.22;
+    }
+    atmosphere.lanterns.forEach((lantern) => {
+      lantern.rotation.z = Math.sin(state.elapsed * 1.15 + lantern.userData.phase) * 0.055;
+    });
+    atmosphere.clouds.forEach((cloud) => {
+      cloud.position.x += delta * cloud.userData.drift;
+      if (cloud.position.x > 58) cloud.position.x = -58;
+    });
     if (state.started && !document.hidden) updateCar(delta);
     updatePortals(delta);
     updateCamera(delta);
