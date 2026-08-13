@@ -3,7 +3,7 @@
 자동차를 운전해 명조, 이환, 젠레스 존 제로 구역을 방문하고, 각 게임의 한국어 YouTube 일반 영상과 쇼츠 공개 지표를 탐색하는 정적 데이터 사이트입니다.
 
 - `/` — 세 게임 구역을 돌아다니는 3D 드라이빙 로비
-- `/dashboard.html?game=wuthering-waves` — 명조 데이터 보드
+- `https://krksw96.github.io/wuthering-waves-vod-dashboard/dashboard.html?game=wuthering-waves` — 명조 데이터 보드
 - `/dashboard.html?game=neverness-to-everness` — 이환 데이터 보드
 - `/dashboard.html?game=zenless-zone-zero` — 젠레스 존 제로 데이터 보드
 
