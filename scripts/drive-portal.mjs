@@ -257,8 +257,12 @@ function initDataCity(THREE) {
   buildSkyline();
   zones.forEach((zone, index) => buildDistrict(zone, index));
 
-  const { car, carBody, wheelSpins, frontWheelPivots } = buildCar();
+  const { car, carBody, wheelSpins, frontWheelPivots, boostTrails } = buildCar();
   scene.add(car);
+  const proximityFadeMeshes = [];
+  const fadeWorldPosition = new THREE.Vector3();
+  const fadeWorldScale = new THREE.Vector3();
+  prepareProximityFades();
 
   const inputs = { forward: false, backward: false, left: false, right: false, boost: false };
   const vehicle = {
@@ -372,6 +376,8 @@ function initDataCity(THREE) {
     zones.forEach((zone) => {
       zone.shortName = copy().games[zone.id];
       if (zone.label && zone.district) {
+        const fadeIndex = proximityFadeMeshes.indexOf(zone.label);
+        if (fadeIndex >= 0) proximityFadeMeshes.splice(fadeIndex, 1);
         zone.district.remove(zone.label);
         zone.label.material.map?.dispose();
         zone.label.material.dispose();
@@ -379,6 +385,7 @@ function initDataCity(THREE) {
         zone.label.position.set(0, 7.2, 0);
         zone.label.scale.set(8.4, 2.5, 1);
         zone.district.add(zone.label);
+        registerProximityFade(zone.label);
       }
     });
     state.nearestZone = null;
@@ -569,12 +576,6 @@ function initDataCity(THREE) {
     const lightLine = new THREE.Mesh(new THREE.BoxGeometry(110, 0.1, 0.12), railGlow);
     lightLine.position.set(0, 7.05, -31.92);
     world.add(lightLine);
-    for (let x = -48; x <= 48; x += 12) {
-      const pillar = new THREE.Mesh(new THREE.BoxGeometry(1.25, 7.3, 1.25), concrete);
-      pillar.position.set(x, 3.65, -34);
-      pillar.castShadow = true;
-      world.add(pillar);
-    }
   }
 
   function buildCentralBoulevard(random) {
@@ -830,11 +831,6 @@ function initDataCity(THREE) {
     deck.position.set(2, 6.6, -8.2);
     deck.castShadow = true;
     market.add(deck);
-    [-12, -2, 8, 18].forEach((x) => {
-      const pillar = new THREE.Mesh(new THREE.BoxGeometry(1.2, 6.6, 1.2), concrete);
-      pillar.position.set(x, 3.3, -8.2);
-      market.add(pillar);
-    });
     const rail = new THREE.Mesh(new THREE.BoxGeometry(34, 0.12, 0.14), pink);
     rail.position.set(2, 6.15, -5.95);
     market.add(rail);
@@ -1015,18 +1011,6 @@ function initDataCity(THREE) {
     const cyanLight = new THREE.MeshStandardMaterial({ color: 0xa6ffff, emissive: 0x55deeb, emissiveIntensity: 3.8, roughness: 0.18 });
     const violetLight = new THREE.MeshStandardMaterial({ color: 0xf1c7ff, emissive: 0xa764ff, emissiveIntensity: 3, roughness: 0.2 });
 
-    [-7.6, 7.6].forEach((x) => {
-      [-1.2, 5.2, 11.2].forEach((z) => {
-        const column = new THREE.Mesh(new THREE.BoxGeometry(0.58, 7.2, 0.72), steel);
-        column.position.set(x, 3.6, z);
-        column.castShadow = true;
-        garage.add(column);
-        const columnLight = new THREE.Mesh(new THREE.BoxGeometry(0.08, 4.6, 0.76), cyanLight);
-        columnLight.position.set(x + (x < 0 ? 0.31 : -0.31), 3.7, z);
-        garage.add(columnLight);
-      });
-    });
-
     [-6.5, 0, 6.5].forEach((z) => {
       const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(16.2, 0.48, 0.62), steel);
       crossBeam.position.set(0, 7.1, z + 4.2);
@@ -1120,12 +1104,6 @@ function initDataCity(THREE) {
     const amber = new THREE.MeshStandardMaterial({ color: 0xffdda2, emissive: 0xff9c32, emissiveIntensity: 2.7, roughness: 0.2 });
 
     const arch = new THREE.Group();
-    [-8.3, 8.3].forEach((x) => {
-      const pillar = new THREE.Mesh(new THREE.BoxGeometry(1.2, 10.5, 1.6), metal);
-      pillar.position.set(x, 5.25, -19);
-      pillar.castShadow = true;
-      arch.add(pillar);
-    });
     const bridge = new THREE.Mesh(new THREE.BoxGeometry(17.8, 1.25, 2), metal);
     bridge.position.set(0, 9.8, -19);
     bridge.castShadow = true;
@@ -1404,7 +1382,57 @@ function initDataCity(THREE) {
     const underglow = new THREE.PointLight(0x8c78ff, 4.5, 7, 2.2);
     underglow.position.set(0, 0.36, 0);
     group.add(underglow);
-    return { car: group, carBody: bodyGroup, wheelSpins: allWheelSpins, frontWheelPivots: steerPivots };
+
+    const boostTrails = new THREE.Group();
+    boostTrails.visible = false;
+    const outerTrailMaterial = new THREE.MeshBasicMaterial({
+      color: 0x4cf7ec,
+      transparent: true,
+      opacity: 0.48,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const innerTrailMaterial = new THREE.MeshBasicMaterial({
+      color: 0xf1e6ff,
+      transparent: true,
+      opacity: 0.82,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    [-0.57, 0.57].forEach((x, index) => {
+      const outerTrail = new THREE.Mesh(new THREE.ConeGeometry(0.42, 3.4, 18, 1, true), outerTrailMaterial.clone());
+      outerTrail.position.set(x, 0.72, 3.25);
+      outerTrail.rotation.x = Math.PI / 2;
+      outerTrail.userData.baseOpacity = 0.62;
+      boostTrails.add(outerTrail);
+      const innerTrail = new THREE.Mesh(new THREE.ConeGeometry(0.19, 2.3, 16, 1, true), innerTrailMaterial.clone());
+      innerTrail.position.set(x, 0.72, 2.7);
+      innerTrail.rotation.x = Math.PI / 2;
+      innerTrail.userData.baseOpacity = 0.94;
+      boostTrails.add(innerTrail);
+      const exhaustCore = new THREE.Mesh(
+        new THREE.SphereGeometry(0.24, 12, 8),
+        new THREE.MeshBasicMaterial({
+          color: index ? 0xc296ff : 0x8ffff8,
+          transparent: true,
+          opacity: 0.96,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }),
+      );
+      exhaustCore.position.set(x, 0.72, 2.02);
+      exhaustCore.userData.baseOpacity = 0.96;
+      exhaustCore.userData.isBoostCore = true;
+      boostTrails.add(exhaustCore);
+      const exhaustLight = new THREE.PointLight(index ? 0xad72ff : 0x58f8ee, 0, 6, 2.1);
+      exhaustLight.position.set(x, 0.72, 2.05);
+      exhaustLight.userData.boostLight = true;
+      boostTrails.add(exhaustLight);
+    });
+    group.add(boostTrails);
+    return { car: group, carBody: bodyGroup, wheelSpins: allWheelSpins, frontWheelPivots: steerPivots, boostTrails };
   }
 
   function makeLabel(title, subtitle, color) {
@@ -1462,6 +1490,70 @@ function initDataCity(THREE) {
   function clearInputs() {
     Object.keys(inputs).forEach((key) => { inputs[key] = false; });
     document.querySelectorAll("[data-control].active").forEach((button) => button.classList.remove("active"));
+  }
+
+  function prepareProximityFades() {
+    world.updateMatrixWorld(true);
+    const protectedMeshes = new Set(zones.flatMap((zone) => [zone.portalRing, zone.portalGlow, zone.hazard]).filter(Boolean));
+    world.traverse((object) => {
+      if (!protectedMeshes.has(object)) registerProximityFade(object);
+    });
+  }
+
+  function registerProximityFade(object) {
+    if ((!object.isMesh && !object.isSprite) || !object.visible || object.userData.proximityFade || Array.isArray(object.material)) return;
+    const material = object.material;
+    if (!material) return;
+
+    let halfX = 0.5;
+    let halfZ = 0.5;
+    if (object.isMesh) {
+      if (material.transparent || material.opacity < 0.99 || !object.geometry) return;
+      object.geometry.computeBoundingBox();
+      const bounds = object.geometry.boundingBox;
+      if (!bounds) return;
+      const size = new THREE.Vector3();
+      bounds.getSize(size);
+      if (object.geometry.type === "PlaneGeometry" || size.y < 0.85) return;
+      halfX = Math.max(0.2, size.x * 0.5);
+      halfZ = Math.max(0.2, size.z * 0.5);
+    }
+
+    object.material = material.clone();
+    object.material.transparent = true;
+    object.userData.proximityFade = {
+      halfX,
+      halfZ,
+      originalOpacity: material.opacity,
+      originalDepthWrite: material.depthWrite,
+    };
+    proximityFadeMeshes.push(object);
+  }
+
+  function updateProximityFades(delta) {
+    proximityFadeMeshes.forEach((object) => {
+      object.getWorldPosition(fadeWorldPosition);
+      object.getWorldScale(fadeWorldScale);
+      const fadeData = object.userData.proximityFade;
+      const radius = Math.max(fadeData.halfX * fadeWorldScale.x, fadeData.halfZ * fadeWorldScale.z);
+      const carClearance = Math.hypot(fadeWorldPosition.x - car.position.x, fadeWorldPosition.z - car.position.z) - radius;
+      const sightClearance = pointToSegmentDistance(
+        fadeWorldPosition.x,
+        fadeWorldPosition.z,
+        camera.position.x,
+        camera.position.z,
+        car.position.x,
+        car.position.z,
+      ) - radius;
+      let targetOpacity = fadeData.originalOpacity;
+      if (carClearance < 4.2) targetOpacity = Math.min(
+        targetOpacity,
+        THREE.MathUtils.clamp(0.18 + Math.max(0, carClearance) / 4.2, 0.18, fadeData.originalOpacity),
+      );
+      if (sightClearance < 1.3) targetOpacity = Math.min(targetOpacity, 0.22);
+      object.material.opacity = THREE.MathUtils.lerp(object.material.opacity, targetOpacity, 1 - Math.exp(-7 * delta));
+      object.material.depthWrite = object.material.opacity > fadeData.originalOpacity * 0.94 ? fadeData.originalDepthWrite : false;
+    });
   }
 
   function resetCar() {
@@ -1555,6 +1647,19 @@ function initDataCity(THREE) {
     }
     const boostActive = (inputs.boost || performance.now() < state.boostUntil) && inputs.forward && state.speed > 0.2;
     document.body.classList.toggle("boosting", boostActive);
+    boostTrails.visible = boostActive;
+    if (boostActive) {
+      const boostRatio = THREE.MathUtils.clamp(state.speed / vehicle.boostedMaxForwardSpeed, 0.2, 1);
+      const pulse = 0.88 + Math.sin(state.elapsed * 32) * 0.12;
+      boostTrails.children.forEach((trail) => {
+        if (trail.isMesh) {
+          if (trail.userData.isBoostCore) trail.scale.setScalar(0.9 + pulse * 0.2);
+          else trail.scale.y = (0.8 + boostRatio * 1.25) * pulse;
+          trail.material.opacity = trail.userData.baseOpacity * (0.78 + boostRatio * 0.3);
+        }
+        if (trail.userData.boostLight) trail.intensity = 5 + boostRatio * 8 + Math.sin(state.elapsed * 25) * 1.2;
+      });
+    }
 
     forward.set(Math.sin(state.yaw), 0, -Math.cos(state.yaw));
     car.position.copy(state.rearAxle).addScaledVector(forward, vehicle.rearAxleOffset);
@@ -1698,6 +1803,7 @@ function initDataCity(THREE) {
     if (state.started && !document.hidden) updateCar(delta);
     updatePortals(delta);
     updateCamera(delta);
+    updateProximityFades(delta);
     updateHud();
     renderer.render(scene, camera);
   }
