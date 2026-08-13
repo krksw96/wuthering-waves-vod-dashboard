@@ -31,6 +31,7 @@ jobs:
       FEISHU_SPREADSHEET_TOKEN: V9C1sSLU4hOweEtvDRdcBnENnMh
       FEISHU_AD_SHEET_ID: 0GfgFb
       FEISHU_AD_RANGE: B:K
+      AD_TASK_DATA_URL: https://raw.githubusercontent.com/krksw96/wuthering-waves-kol-dashboard/main/data/ad-task-video-ids.json
       TARGET_DATE: ${{ inputs.target_date }}
     steps:
       - uses: actions/checkout@v4

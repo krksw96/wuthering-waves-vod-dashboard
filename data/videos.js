@@ -1,5 +1,5 @@
 window.VOD_DATA = {
-  "generatedAt": "2026-08-13T03:20:31.024Z",
+  "generatedAt": "2026-08-13T03:44:52.699Z",
   "period": {
     "start": "2025-06-01",
     "end": "2026-08-13"
@@ -2955,7 +2955,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "w08Nx5oxwaM",
@@ -9705,7 +9705,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "nS8TrdQNesg",
@@ -53049,7 +53049,7 @@ window.VOD_DATA = {
       "kocName": "명떡",
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "nGgDhydyBkA",
@@ -62301,7 +62301,7 @@ window.VOD_DATA = {
       "kocName": "고뇨",
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "uqMiCJtS48c",
@@ -76071,7 +76071,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": true
+      "isAdTask": false
     },
     {
       "id": "Z44B3dIzvX8",
@@ -76215,7 +76215,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": true
+      "isAdTask": false
     },
     {
       "id": "AEMWFOQBx0k",
@@ -103071,7 +103071,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": true,
       "kolName": "델로략국",
-      "isAdTask": true
+      "isAdTask": false
     },
     {
       "id": "aw9Lyfd3TmU",
@@ -104727,7 +104727,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": true,
       "kolName": "러끼",
-      "isAdTask": true
+      "isAdTask": false
     },
     {
       "id": "xNrwNu6UW00",
@@ -262011,7 +262011,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "Ld4QZglh-wE",
@@ -262281,7 +262281,7 @@ window.VOD_DATA = {
       "kocName": "윤치",
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "lPK5jYa15M4",
@@ -262911,7 +262911,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "oJINKaHQflI",
@@ -274683,7 +274683,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "nzYK8mb8QZg",
@@ -325857,7 +325857,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "4kSLph5aM_k",
@@ -331491,7 +331491,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "GNFz45j1asY",
@@ -353163,7 +353163,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "FomnriHM3A0",
@@ -380163,7 +380163,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "8HDArf4rouY",
@@ -388893,7 +388893,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "b3GZhUN9B54",
@@ -391377,7 +391377,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "wz7Pp9QxezI",
@@ -433371,7 +433371,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "MguymLbfiBo",
@@ -434451,7 +434451,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "iKH0A8VubxY",
@@ -460335,7 +460335,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "57BT4OJmrao",
@@ -510897,7 +510897,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "cc9W9fIPA-8",
@@ -513039,7 +513039,7 @@ window.VOD_DATA = {
       "kocName": "박서림",
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "LPNNzkxYryQ",
@@ -513255,7 +513255,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "dbrQjQiOLIA",
@@ -514515,7 +514515,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "ECYIV7RYlUA",
@@ -515955,7 +515955,7 @@ window.VOD_DATA = {
       "kocName": "고뇨",
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "XuY9n8_Dd7s",
@@ -517413,7 +517413,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "3JkLT2HMq6k",
@@ -517539,7 +517539,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "WGo3aNydy2A",
@@ -520113,7 +520113,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "HDNLJWuWwVA",
@@ -532875,7 +532875,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "-1tskgopESg",
@@ -532911,7 +532911,7 @@ window.VOD_DATA = {
       "kocName": "모 아",
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "ZTF77xnHVMI",
@@ -534117,7 +534117,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "_-O-h4o756s",
@@ -551253,7 +551253,7 @@ window.VOD_DATA = {
       "kocName": null,
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "_828vG1lXAE",
@@ -553395,7 +553395,7 @@ window.VOD_DATA = {
       "kocName": "상덕",
       "isKol": false,
       "kolName": null,
-      "isAdTask": false
+      "isAdTask": true
     },
     {
       "id": "ps5HDKeLumw",
