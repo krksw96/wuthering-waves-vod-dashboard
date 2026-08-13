@@ -252,9 +252,9 @@ function initDataCity(THREE) {
 
   const world = new THREE.Group();
   const atmosphere = { rain: null, hologram: null, petals: null, lanterns: [], clouds: [] };
-  // The rendered car is about 1.25 world units tall. Keep architecture within
-  // roughly two to three car heights so the city reads as a compact diorama.
-  const architecture = { minHeight: 2.75, maxHeight: 3.75 };
+  // Keep the city sparse and low so architecture never overwhelms the car.
+  // These heights are two thirds of the previous compact-diorama buildings.
+  const architecture = { minHeight: 1.83, maxHeight: 2.5 };
   scene.add(world);
   buildGround();
   buildSkyline();
@@ -580,7 +580,7 @@ function initDataCity(THREE) {
     const random = seededRandom(8626);
     const buildingMaterials = [0x12232c, 0x1c202d, 0x201b2b, 0x163039].map((color) => new THREE.MeshStandardMaterial({ color, roughness: 0.48, metalness: 0.52 }));
     const neonColors = [0x4ee8e2, 0xff537f, 0x9f7bff, 0xffb936];
-    for (let index = 0; index < 76; index += 1) {
+    for (let index = 0; index < 25; index += 1) {
       const x = random() * 106 - 53;
       const z = random() * 106 - 53;
       if (Math.hypot(x, z) < 13.5 || Math.hypot(x - 14.5, z + 51) < 11 || distanceToAnyRoad(x, z) < 5.7 || zones.some((zone) => Math.hypot(x - zone.position.x, z - zone.position.z) < 11.5)) continue;
@@ -693,7 +693,7 @@ function initDataCity(THREE) {
       new THREE.MeshStandardMaterial({ color: 0xff9ac6, emissive: 0xff397f, emissiveIntensity: 3.2, roughness: 0.18 }),
       new THREE.MeshStandardMaterial({ color: 0xffdf8d, emissive: 0xff9d32, emissiveIntensity: 2.8, roughness: 0.2 }),
     ];
-    for (let index = 0; index < 11; index += 1) {
+    for (let index = 0; index < 4; index += 1) {
       [-1, 1].forEach((side) => {
         const width = 3.4 + random() * 1.5;
         const height = architecture.minHeight + random() * (architecture.maxHeight - architecture.minHeight);
@@ -1345,9 +1345,9 @@ function initDataCity(THREE) {
     const baseMaterial = new THREE.MeshStandardMaterial({ color: color.clone().multiplyScalar(0.24), roughness: 0.55, metalness: 0.45 });
     const edgeMaterial = new THREE.MeshStandardMaterial({ color: zone.color, emissive: zone.color, emissiveIntensity: 1.4, roughness: 0.35 });
     const arrangements = [
-      [[-6.5, -2, 1.5, 3.2], [6.5, -1, 1.6, 3.7], [-6.2, 4, 1.3, 2.9]],
-      [[-6.4, -1, 1.6, 3.75], [6.3, -2, 1.8, 3.15], [5.7, 4.5, 1.25, 2.85]],
-      [[-6.6, -2, 1.8, 3.1], [6.4, -2, 1.8, 3.1], [-6.1, 4.4, 1.5, 3.55], [6.1, 4.4, 1.5, 3.55]],
+      [[-6.5, -2, 1.5, 2.13]],
+      [[6.3, -2, 1.8, 2.1]],
+      [[-6.1, 4.4, 1.5, 2.37]],
     ][districtIndex];
     arrangements.forEach(([x, z, width, height], index) => {
       const tower = new THREE.Mesh(new THREE.BoxGeometry(width, height, width), baseMaterial);
