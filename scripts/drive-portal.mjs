@@ -250,12 +250,12 @@ function initDataCity(THREE) {
     stairOuterZ: 17.5,
   };
   const skyGardenTerrainConfig = {
-    centerX: -11.5,
-    centerZ: -11,
-    halfWidth: 15.5,
-    halfDepth: 16.5,
-    plateauRadius: 0.36,
-    summitHeight: 2.35,
+    centerX: -15,
+    centerZ: 10,
+    halfWidth: 9.5,
+    halfDepth: 10.5,
+    plateauRadius: 0.34,
+    summitHeight: 2.15,
   };
 
   const zoneName = (zone) => {
