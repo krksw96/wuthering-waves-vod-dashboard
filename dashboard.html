@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#11151d" />
+    <title>게임 YouTube 데이터 보드</title>
+    <style>
+      :root {
+        --ink: #141820;
+        --muted: #69727e;
+        --line: #dce1e6;
+        --paper: #f4f6f7;
+        --white: #ffffff;
+        --cyan: #18a9b8;
+        --pink: #dc4f83;
+        --yellow: #f2c84b;
+        --dark: #121720;
+        --shadow: 0 12px 30px rgba(15, 25, 38, 0.1);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Pretendard", "SUIT Variable", "Noto Sans KR", Arial, sans-serif;
+      }
+      html[lang="zh-CN"] body { font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif; }
+      html[lang="en"] body { font-family: Inter, "Segoe UI", Arial, sans-serif; }
+      button, input, select { font: inherit; }
+      button, a { -webkit-tap-highlight-color: transparent; }
+      a { color: inherit; }
+      .shell { width: min(1500px, calc(100% - 36px)); margin: 0 auto; }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        border-bottom: 1px solid rgba(255,255,255,.12);
+        background: rgba(18, 23, 32, .94);
+        color: #fff;
+        backdrop-filter: blur(14px);
+      }
+      .topbar-inner { height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+      .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+      .brand-mark { width: 30px; height: 30px; border: 1px solid #fff; display: grid; place-items: center; font-weight: 900; }
+      .brand-copy { min-width: 0; }
+      .brand-copy strong { display: block; font-size: 13px; letter-spacing: 0; }
+      .brand-copy span { display: block; color: #9aa7b5; font-size: 10px; letter-spacing: 0; }
+      .top-links { display: flex; gap: 8px; }
+      .game-switcher {
+        display: inline-flex;
+        height: 36px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.18);
+        border-radius: 4px;
+      }
+      .game-button {
+        min-width: 72px;
+        border: 0;
+        border-right: 1px solid rgba(255,255,255,.14);
+        padding: 0 14px;
+        background: transparent;
+        color: #aeb8c3;
+        font-size: 12px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .game-button:last-child { border-right: 0; }
+      .game-button:hover { background: rgba(255,255,255,.1); color: #fff; }
+      .game-button.active { background: #fff; color: var(--dark); }
+      .language-switcher { display: inline-flex; height: 34px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 4px; }
+      .language-button { min-width: 38px; border: 0; border-right: 1px solid rgba(255,255,255,.14); padding: 0 10px; background: transparent; color: #aeb8c3; font-size: 11px; font-weight: 900; cursor: pointer; }
+      .language-button:last-child { border-right: 0; }
+      .language-button:hover { background: rgba(255,255,255,.1); color: #fff; }
+      .language-button.active { background: #fff; color: var(--dark); }
+      .icon-link, .icon-button {
+        width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.18);
+        border-radius: 4px; background: transparent; color: #fff; cursor: pointer; text-decoration: none;
+      }
+      .icon-link:hover, .icon-button:hover { background: rgba(255,255,255,.1); }
+      .icon { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+      .hero {
+        position: relative;
+        min-height: 390px;
+        overflow: hidden;
+        background: radial-gradient(circle at 78% 28%, rgba(255,111,44,.95), transparent 27%), radial-gradient(circle at 63% 76%, rgba(41,218,235,.68), transparent 35%), linear-gradient(118deg, #161e2a 0%, #253a4e 45%, #e85d35 100%);
+        color: #fff;
+      }
+      body[data-game="wuthering-waves"] .hero {
+        background: radial-gradient(circle at 76% 25%, rgba(255,188,88,.88), transparent 26%), radial-gradient(circle at 62% 78%, rgba(89,214,209,.58), transparent 36%), linear-gradient(118deg, #101820 0%, #1d3e47 48%, #a06e37 100%);
+      }
+      body[data-game="neverness-to-everness"] .hero {
+        background: radial-gradient(circle at 78% 22%, rgba(255,74,134,.82), transparent 28%), radial-gradient(circle at 62% 78%, rgba(93,72,255,.62), transparent 36%), linear-gradient(118deg, #161326 0%, #38254f 48%, #c63e78 100%);
+      }
+      body[data-game="zenless-zone-zero"] .hero {
+        background: radial-gradient(circle at 78% 28%, rgba(255,111,44,.95), transparent 27%), radial-gradient(circle at 63% 76%, rgba(41,218,235,.68), transparent 35%), linear-gradient(118deg, #161e2a 0%, #253a4e 45%, #e85d35 100%);
+      }
+      .hero::after { position: absolute; inset: 0; content: ""; background: rgba(10, 17, 27, .38); }
+      .hero-inner { position: relative; z-index: 2; min-height: 390px; display: flex; align-items: center; padding: 54px 0 78px; }
+      .hero-copy { max-width: 720px; }
+      .eyebrow { margin: 0 0 14px; color: #bff8ff; font-size: 12px; font-weight: 800; letter-spacing: 0; }
+      h1 { margin: 0; max-width: 650px; font-size: clamp(38px, 6vw, 72px); line-height: 1.04; letter-spacing: 0; }
+      .hero-description { max-width: 610px; margin: 18px 0 0; color: rgba(255,255,255,.86); font-size: 15px; line-height: 1.7; }
+      .period { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; padding: 8px 10px; border-left: 3px solid var(--yellow); background: rgba(11,17,24,.48); font-size: 12px; }
+      .hero-character { position: absolute; z-index: 1; right: max(-30px, calc((100vw - 1500px) / 2)); bottom: -92px; width: min(45vw, 660px); max-height: 550px; object-fit: contain; object-position: bottom; filter: drop-shadow(0 24px 28px rgba(0,0,0,.25)); pointer-events: none; }
+
+      .summary { position: relative; z-index: 4; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: -42px; }
+      .stat { min-height: 112px; border: 1px solid var(--line); border-radius: 6px; background: var(--white); padding: 20px; box-shadow: var(--shadow); }
+      .stat:nth-child(1) { border-top: 4px solid var(--cyan); }
+      .stat:nth-child(2) { border-top: 4px solid var(--pink); }
+      .stat:nth-child(3) { border-top: 4px solid var(--yellow); }
+      .stat:nth-child(4) { border-top: 4px solid #7a6bd0; }
+      .stat:nth-child(5) { border-top: 4px solid var(--dark); }
+      .stat-label { color: var(--muted); font-size: 12px; font-weight: 700; }
+      .stat-value { margin-top: 8px; font-size: 30px; font-weight: 900; line-height: 1; }
+      .stat-note { margin-top: 8px; color: #8a939e; font-size: 11px; }
+
+      main { padding: 34px 0 60px; }
+      .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 14px; }
+      .section-head h2 { margin: 0; font-size: 21px; letter-spacing: 0; }
+      .section-head p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+      .daily-picker { display: grid; grid-template-columns: minmax(280px, 360px) 1fr; align-items: center; gap: 18px; margin-bottom: 34px; border: 1px solid var(--line); border-radius: 6px; padding: 16px; background: #fff; }
+      .daily-picker input { font-weight: 700; }
+      .daily-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; min-width: 0; }
+      .daily-metric { display: grid; gap: 3px; }
+      .daily-metric span { color: var(--muted); font-size: 9px; }
+      .daily-metric strong { font-size: 13px; font-variant-numeric: tabular-nums; }
+
+      .workspace { border: 1px solid var(--line); border-radius: 6px; background: #fff; box-shadow: var(--shadow); overflow: hidden; }
+      .controls { display: grid; grid-template-columns: repeat(2, minmax(160px, .7fr)) minmax(230px, .85fr) repeat(3, minmax(100px, .4fr)) auto auto; gap: 10px; padding: 14px; border-bottom: 1px solid var(--line); background: #f9fafb; }
+      .field { position: relative; }
+      .field svg { position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: #7d8792; pointer-events: none; }
+      input[type="search"], input[type="date"], select { width: 100%; height: 42px; border: 1px solid #cfd5db; border-radius: 4px; background: #fff; color: var(--ink); outline: none; }
+      input[type="search"] { padding: 0 12px 0 38px; }
+      input[type="date"] { min-width: 0; padding: 0 8px; }
+      select { padding: 0 32px 0 11px; }
+      input[type="search"]:focus, input[type="date"]:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(24,169,184,.12); }
+      .date-range { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 7px; }
+      .date-range span { color: var(--muted); font-size: 11px; }
+      .export-button { height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--dark); border-radius: 4px; padding: 0 14px; background: var(--dark); color: #fff; cursor: pointer; white-space: nowrap; }
+      .export-button:hover { background: #2a313c; }
+      .period-reset { height: 42px; border: 1px solid #cfd5db; border-radius: 4px; padding: 0 12px; background: #fff; color: #46515d; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+      .period-reset:hover { border-color: var(--cyan); color: #087d88; }
+      .sortbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+      .result-count { color: var(--muted); font-size: 12px; }
+      .segments { display: inline-flex; border: 1px solid #cfd5db; border-radius: 4px; overflow: hidden; }
+      .segment { height: 32px; border: 0; border-right: 1px solid #cfd5db; padding: 0 12px; background: #fff; color: #5f6975; font-size: 12px; cursor: pointer; }
+      .segment:last-child { border-right: 0; }
+      .segment.active { background: var(--dark); color: #fff; }
+
+      .table-wrap {
+        max-height: 840px;
+        overflow: auto;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+      }
+      table { width: 100%; min-width: 1080px; border-collapse: collapse; table-layout: fixed; }
+      th { position: sticky; top: 0; z-index: 2; height: 42px; padding: 0 12px; background: #f1f4f5; color: #68727e; font-size: 11px; text-align: right; white-space: nowrap; }
+      th:first-child, th:nth-child(2) { text-align: left; }
+      td { height: 78px; border-top: 1px solid #e4e8eb; padding: 10px 12px; font-size: 12px; text-align: right; vertical-align: middle; }
+      tbody tr {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 78px;
+        cursor: pointer;
+        transition: background .15s ease;
+      }
+      tbody tr:hover { background: #f5fbfc; }
+      tbody tr.virtual-spacer { height: 0; content-visibility: visible; cursor: default; transition: none; }
+      tbody tr.virtual-spacer:hover { background: transparent; }
+      tbody tr.virtual-spacer td { height: 0; border: 0; padding: 0; }
+      .rank { width: 54px; color: #8a939e; font-weight: 800; text-align: center; }
+      .video-cell { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; align-items: center; text-align: left; }
+      .thumb { position: relative; width: 104px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 4px; background: #d9dee2; }
+      .thumb img { width: 100%; height: 100%; display: block; object-fit: cover; }
+      .duration { position: absolute; right: 4px; bottom: 4px; padding: 2px 4px; border-radius: 2px; background: rgba(0,0,0,.8); color: #fff; font-size: 9px; }
+      .video-title { display: -webkit-box; overflow: hidden; color: #202631; font-size: 13px; font-weight: 800; line-height: 1.42; text-decoration: none; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+      .video-title:hover { color: var(--cyan); text-decoration: underline; }
+      .topic, .format-badge { display: inline-flex; margin: 6px 4px 0 0; border: 1px solid #d9dee3; border-radius: 3px; padding: 2px 5px; color: #6d7783; font-size: 9px; }
+      .format-badge { border-color: rgba(24,169,184,.35); color: #087d88; }
+      .format-badge.shorts { border-color: rgba(220,79,131,.35); color: #b52e61; }
+      .koc-badge { display: inline-flex; align-items: center; margin-left: 6px; border: 1px solid #d2a82c; border-radius: 3px; padding: 2px 5px; background: #fff8dc; color: #775600; font-size: 9px; font-weight: 900; }
+      .kol-badge { display: inline-flex; align-items: center; margin-left: 6px; border: 1px solid #d14f83; border-radius: 3px; padding: 2px 5px; background: #fff1f6; color: #a72759; font-size: 9px; font-weight: 900; }
+      .ad-badge { display: inline-flex; align-items: center; margin-left: 6px; border: 1px solid #5b6f87; border-radius: 3px; padding: 2px 5px; background: #eef3f7; color: #34495e; font-size: 9px; font-weight: 900; }
+      .creator-wrap { display: flex; align-items: center; min-width: 0; }
+      .creator-wrap > span:first-child { overflow: hidden; text-overflow: ellipsis; }
+      .creator { overflow: hidden; text-overflow: ellipsis; font-weight: 700; text-align: left; white-space: nowrap; }
+      .metric-number { font-variant-numeric: tabular-nums; }
+      .engagement { color: var(--pink); font-weight: 800; }
+      .empty { display: none; padding: 70px 20px; text-align: center; color: var(--muted); }
+      .empty strong { display: block; margin-bottom: 7px; color: var(--ink); }
+
+      .mobile-list { display: none; }
+      .video-card {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 108px;
+        box-sizing: border-box;
+        height: 108px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 126px minmax(0, 1fr);
+        gap: 12px;
+        padding: 13px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+      .video-card .thumb { width: 126px; }
+      .video-card-stats { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 9px; color: var(--muted); font-size: 10px; }
+      .mobile-virtual-spacer { width: 1px; pointer-events: none; }
+
+      dialog { width: min(720px, calc(100% - 24px)); border: 0; border-radius: 6px; padding: 0; box-shadow: 0 30px 90px rgba(0,0,0,.3); }
+      dialog::backdrop { background: rgba(9,13,19,.72); backdrop-filter: blur(5px); }
+      .detail-visual { position: relative; aspect-ratio: 16 / 7; overflow: hidden; background: #111; }
+      .detail-visual img { width: 100%; height: 100%; object-fit: cover; opacity: .86; }
+      .detail-close { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,.6); }
+      .detail-body { padding: 22px; }
+      .detail-body h3 { margin: 0; font-size: 21px; line-height: 1.45; letter-spacing: 0; }
+      .detail-meta { margin-top: 8px; color: var(--muted); font-size: 12px; }
+      .detail-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 20px 0; }
+      .detail-stat { border: 1px solid var(--line); border-radius: 4px; padding: 12px; }
+      .detail-stat span { display: block; color: var(--muted); font-size: 10px; }
+      .detail-stat strong { display: block; margin-top: 5px; font-size: 16px; }
+      .youtube-button { width: 100%; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 4px; background: #e62929; color: #fff; font-weight: 800; text-decoration: none; }
+
+      .footnote { margin-top: 14px; color: #7b8590; font-size: 10px; line-height: 1.6; }
+      .collection-method { margin: 48px 0 52px; border-top: 1px solid var(--line); padding-top: 28px; }
+      .method-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(250px, .55fr); gap: 36px; }
+      .method-copy h2 { margin: 0 0 8px; font-size: 20px; }
+      .method-copy > p { margin: 0 0 18px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+      .keyword-list { display: flex; flex-wrap: wrap; gap: 6px; }
+      .keyword { border: 1px solid #d7dde2; border-radius: 3px; padding: 5px 7px; background: #f7f9fa; color: #46515d; font-size: 10px; }
+      .method-rules { display: grid; gap: 16px; }
+      .method-rule { border-left: 2px solid var(--cyan); padding-left: 13px; }
+      .method-rule strong { display: block; margin-bottom: 4px; font-size: 11px; }
+      .method-rule span { display: block; color: var(--muted); font-size: 10px; line-height: 1.6; }
+      .kol-list { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin-top: 26px; border-top: 1px solid var(--line); padding-top: 18px; }
+      .kol-list strong { margin-right: 6px; font-size: 11px; }
+      .kol-list a { border-bottom: 1px solid #cbd2d8; padding: 3px 1px; color: #46515d; font-size: 10px; font-weight: 700; }
+      .kol-list a:hover { border-color: var(--pink); color: var(--pink); }
+      footer { border-top: 1px solid var(--line); padding: 24px 0 36px; color: var(--muted); font-size: 11px; }
+      footer .shell { display: flex; justify-content: space-between; gap: 20px; }
+
+      @media (max-width: 900px) {
+        .topbar-inner { height: auto; min-height: 58px; flex-wrap: wrap; padding: 10px 0; }
+        .brand { flex: 1 1 280px; }
+        .top-links { margin-left: auto; }
+        .game-switcher { order: 3; width: 100%; }
+        .game-button { flex: 1; }
+        .hero { min-height: 410px; }
+        .hero-inner { min-height: 410px; padding-bottom: 95px; }
+        .hero-copy { max-width: 76%; }
+        .hero-character { right: -130px; width: 520px; opacity: .84; }
+        .summary { grid-template-columns: repeat(2, 1fr); }
+        .controls { grid-template-columns: 1fr 1fr; }
+        .controls .field:nth-child(-n+2) { grid-column: auto; }
+        .export-button, .period-reset { width: 100%; }
+        .daily-picker { grid-template-columns: minmax(280px, 360px) 1fr; }
+      }
+      @media (max-width: 640px) {
+        .shell { width: min(100% - 24px, 1500px); }
+        .brand-copy span { display: none; }
+        .brand { flex-basis: 150px; }
+        .game-button { min-width: 0; padding: 0 8px; }
+        .language-button { min-width: 34px; padding: 0 8px; }
+        .hero { min-height: 430px; }
+        .hero-inner { min-height: 430px; align-items: flex-start; padding-top: 50px; }
+        .hero-copy { max-width: 100%; }
+        h1 { max-width: 330px; font-size: 42px; }
+        .hero-description { max-width: 320px; font-size: 13px; }
+        .hero-character { right: -165px; bottom: -85px; width: 460px; opacity: .58; }
+        .summary { gap: 8px; margin-top: -32px; }
+        .stat { min-height: 98px; padding: 14px; }
+        .stat-value { font-size: 24px; }
+        .daily-picker { grid-template-columns: 1fr; gap: 14px; }
+        .controls { grid-template-columns: 1fr; }
+        .controls .field:first-child { grid-column: auto; }
+        .sortbar { align-items: flex-start; flex-direction: column; }
+        .segments { width: 100%; }
+        .segment { flex: 1; padding: 0 6px; }
+        .table-wrap { display: none; }
+        .mobile-list {
+          display: block;
+          max-height: 1080px;
+          overflow-y: auto;
+          overscroll-behavior: contain;
+          scrollbar-gutter: stable;
+        }
+        .detail-stats { grid-template-columns: repeat(2, 1fr); }
+        .collection-method { margin: 36px 0 40px; }
+        .method-grid { grid-template-columns: 1fr; gap: 24px; }
+        footer .shell { flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body data-game="wuthering-waves">
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <div class="brand"><div class="brand-mark" id="brand-mark">Z</div><div class="brand-copy"><strong data-i18n="brand">게임 YouTube 데이터</strong><span id="brand-subtitle">MULTI-GAME CONTENT INTELLIGENCE</span></div></div>
+        <nav class="game-switcher" aria-label="게임 변경" data-i18n-aria="gameSwitch">
+          <button class="game-button" type="button" data-game="wuthering-waves">명조</button>
+          <button class="game-button" type="button" data-game="neverness-to-everness">이환</button>
+          <button class="game-button" type="button" data-game="zenless-zone-zero">젠레스</button>
+        </nav>
+        <div class="top-links">
+          <div class="language-switcher" role="group" aria-label="언어 변경" data-i18n-aria="languageSwitch">
+            <button class="language-button" type="button" data-language="ko" lang="ko">KO</button>
+            <button class="language-button" type="button" data-language="zh" lang="zh-CN">中</button>
+            <button class="language-button" type="button" data-language="en" lang="en">EN</button>
+          </div>
+          <a class="icon-link" id="source-sheet-link" href="https://kurogame.feishu.cn/sheets/V9C1sSLU4hOweEtvDRdcBnENnMh?sheet=XJKrFe" target="_blank" rel="noreferrer" title="Feishu 원본 시트 열기" aria-label="Feishu 원본 시트 열기" data-i18n-title="sheetOpen" data-i18n-aria="sheetOpen">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M14 3h7v7"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="shell hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">KOREA · PUBLIC YOUTUBE VIDEOS · NO AI</p>
+          <h1 data-i18n-html="heroTitle">젠레스 존 제로<br />데이터 보드</h1>
+          <p class="hero-description" data-i18n="heroDescription">한국어로 게시된 젠레스 존 제로 일반 영상과 쇼츠를 한곳에서 비교합니다. 공개된 YouTube API 지표를 기준으로 구성했습니다.</p>
+          <div class="period"><span id="period-label">2026.08.01 — 2026.08.13</span><span data-i18n="collectionPeriod">수집 기준</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell summary" aria-label="주요 지표" data-i18n-aria="keyMetrics">
+      <article class="stat"><div class="stat-label" data-i18n="collectedVideos">수집 영상</div><div class="stat-value" id="total-videos">-</div><div class="stat-note" id="format-summary">VOD + Shorts</div></article>
+      <article class="stat"><div class="stat-label" data-i18n="totalViews">누적 조회수</div><div class="stat-value" id="total-views">-</div><div class="stat-note" data-i18n="publicAtRefresh">수집 시점 공개 수치</div></article>
+      <article class="stat"><div class="stat-label" data-i18n="likes">좋아요 수</div><div class="stat-value" id="total-likes">-</div><div class="stat-note" data-i18n="publicTotal">공개 수치 합계</div></article>
+      <article class="stat"><div class="stat-label" data-i18n="comments">댓글 수</div><div class="stat-value" id="total-comments">-</div><div class="stat-note" data-i18n="availableComments">확인 가능한 댓글</div></article>
+      <article class="stat"><div class="stat-label" data-i18n="creators">참여 크리에이터</div><div class="stat-value" id="total-creators">-</div><div class="stat-note" id="creator-summary">중복 제거 채널</div></article>
+    </section>
+
+    <main class="shell">
+      <section>
+        <div class="section-head"><div><h2 data-i18n="periodUploads">기간별 업로드</h2><p data-i18n="selectedPeriodMetrics">선택한 기간의 업로드 수치</p></div></div>
+        <div class="daily-picker">
+          <div class="date-range" aria-label="업로드 집계 기간" data-i18n-aria="uploadRange">
+            <input id="daily-start-date" type="date" aria-label="집계 시작일" data-i18n-aria="startDate" />
+            <span>~</span>
+            <input id="daily-end-date" type="date" aria-label="집계 종료일" data-i18n-aria="endDate" />
+          </div>
+          <div class="daily-summary" aria-live="polite">
+            <div class="daily-metric"><span data-i18n="videos">영상</span><strong id="daily-count">-</strong></div>
+            <div class="daily-metric"><span data-i18n="views">조회수</span><strong id="daily-views">-</strong></div>
+            <div class="daily-metric"><span data-i18n="format">형식</span><strong id="daily-formats">-</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="VOD 탐색기" data-i18n-aria="explorer">
+        <div class="controls">
+          <label class="field">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="creator-search" type="search" placeholder="유튜버" aria-label="유튜버 검색" data-i18n-placeholder="creator" data-i18n-aria="creatorSearch" />
+          </label>
+          <label class="field">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="title-search" type="search" placeholder="영상 제목" aria-label="영상 제목 검색" data-i18n-placeholder="videoTitle" data-i18n-aria="titleSearch" />
+          </label>
+          <div class="date-range" aria-label="날짜 구간 필터" data-i18n-aria="dateFilter">
+            <input id="start-date" type="date" aria-label="시작일" data-i18n-aria="startDate" />
+            <span>~</span>
+            <input id="end-date" type="date" aria-label="종료일" data-i18n-aria="endDate" />
+          </div>
+          <select id="format-filter" aria-label="영상 형식 필터" data-i18n-aria="formatFilter"></select>
+          <select id="koc-filter" aria-label="채널 구분 필터" data-i18n-aria="channelFilter"></select>
+          <select id="topic-filter" aria-label="콘텐츠 주제 필터" data-i18n-aria="topicFilter"></select>
+          <button class="period-reset" id="period-reset" type="button" data-i18n="allPeriod">전체 기간</button>
+          <button class="export-button" id="export" type="button">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>CSV
+          </button>
+        </div>
+        <div class="sortbar">
+          <div class="result-count" id="result-count">-</div>
+          <div class="segments" aria-label="정렬 방식" data-i18n-aria="sortMethod">
+            <button class="segment active" type="button" data-sort="views" data-i18n="views">조회수</button>
+            <button class="segment" type="button" data-sort="likes" data-i18n="likesShort">좋아요</button>
+            <button class="segment" type="button" data-sort="comments" data-i18n="commentsShort">댓글</button>
+            <button class="segment" type="button" data-sort="date" data-i18n="latest">최신순</button>
+          </div>
+        </div>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="스크롤 가능한 영상 목록" data-i18n-aria="videoList">
+          <table>
+            <colgroup><col style="width:54px"/><col style="width:430px"/><col style="width:150px"/><col style="width:98px"/><col style="width:110px"/><col style="width:92px"/><col style="width:82px"/><col style="width:82px"/><col style="width:84px"/></colgroup>
+            <thead><tr><th>#</th><th data-i18n="video">영상</th><th data-i18n="creator">유튜버</th><th data-i18n="published">게시일</th><th data-i18n="subscribers">구독자</th><th data-i18n="views">조회수</th><th data-i18n="likesShort">좋아요</th><th data-i18n="commentsShort">댓글</th><th data-i18n="engagement">참여율</th></tr></thead>
+            <tbody id="video-rows"></tbody>
+          </table>
+        </div>
+        <div class="mobile-list" id="mobile-list" tabindex="0" role="region" aria-label="스크롤 가능한 영상 목록" data-i18n-aria="videoList"></div>
+        <div class="empty" id="empty"><strong data-i18n="emptyTitle">조건에 맞는 영상이 없습니다.</strong><span data-i18n="emptyBody">검색어나 필터를 조정해 주세요.</span></div>
+      </section>
+      <p class="footnote" data-i18n="footnote">좋아요 수와 구독자 수가 공개되지 않은 영상은 빈 값으로 표시합니다. 댓글 수는 YouTube가 공개하는 댓글 총계를 기준으로 하며, 댓글이 없거나 비활성화된 영상은 0으로 표시합니다.</p>
+
+      <section class="collection-method" aria-labelledby="collection-method-title">
+        <div class="method-grid">
+          <div class="method-copy">
+            <h2 id="collection-method-title" data-i18n="criteriaTitle">영상 수집 기준</h2>
+            <p data-i18n="criteriaIntro">공식 YouTube Data API v3에서 대한민국·한국어 조건과 4개 검색어로 공개 영상을 찾습니다. 등록된 영상의 공개 지표를 갱신합니다.</p>
+            <div class="keyword-list" aria-label="사용 검색어 4개" data-i18n-aria="searchKeywords">
+              <span class="keyword">젠레스</span><span class="keyword">젠레스 존 제로</span><span class="keyword">젠존제</span><span class="keyword">레미엘</span>
+            </div>
+          </div>
+          <div class="method-rules">
+            <div class="method-rule"><strong data-i18n="coverageTitle">수집 범위</strong><span data-i18n="coverageBody">표시 기간 내 한국어 관련성이 확인된 일반 영상·라이브 다시보기·Shorts를 조회수 제한 없이 포함합니다.</span></div>
+            <div class="method-rule"><strong data-i18n="relevanceTitle">관련성 확인</strong><span data-i18n="relevanceBody">제목·설명·태그·채널명에서 젠레스, 젠레스 존 제로, 젠존제, Zenless Zone Zero, ZZZ, 絶区零 또는 레미엘을 확인하고 YouTube 영상 ID로 중복 제거합니다.</span></div>
+            <div class="method-rule"><strong data-i18n="formatExclusionTitle">형식·제외</strong><span data-i18n="formatExclusionBody">재생시간 180초 이하는 Shorts, 초과는 VOD로 분류합니다.</span></div>
+            <div class="method-rule" id="partner-rule"><strong data-i18n="partnerTitle">파트너 분류</strong><span data-i18n="partnerBody">KOC·장기협업 KOL은 관리 중인 채널명 별칭으로, 광고 과업은 Feishu 과업 시트와 수동 확인된 YouTube ID로 표시합니다.</span></div>
+            <div class="method-rule"><strong data-i18n="refreshTitle">지표 갱신</strong><span data-i18n="refreshBody">조회수·좋아요·댓글·구독자는 매일 공개 API 값으로 갱신합니다. 웹사이트는 매일 08:00 KST, Feishu 시트는 08:15 KST에 동기화합니다.</span></div>
+            <div class="method-rule"><strong data-i18n="limitsTitle">수집 한계</strong><span data-i18n="limitsBody">검색어별 최신 100개까지 확인하므로 검색 미노출·비공개·관련어가 명확하지 않은 영상은 누락될 수 있습니다. 게시일은 YouTube API의 UTC 날짜 기준입니다.</span></div>
+          </div>
+        </div>
+        <div class="kol-list" aria-label="장기협업 KOL 공식 채널" data-i18n-aria="kolChannels">
+          <strong data-i18n="longTermKol">장기협업 KOL</strong>
+          <a href="https://www.youtube.com/@%EB%9F%AC%EB%81%BC" target="_blank" rel="noreferrer" data-creator-name="러끼">러끼</a>
+          <a href="https://www.youtube.com/c/MareFlosCh" target="_blank" rel="noreferrer" data-creator-name="마레플로스">마레플로스</a>
+          <a href="https://www.youtube.com/@%EA%B3%BC%EB%A1%9C%EC%82%AC" target="_blank" rel="noreferrer" data-creator-name="과로사">과로사</a>
+          <a href="https://www.youtube.com/@Collet11/featured" target="_blank" rel="noreferrer" data-creator-name="코렛트">코렛트</a>
+          <a href="https://www.youtube.com/channel/UCls1Y2LgkPk6t5TMFIKaoBQ" target="_blank" rel="noreferrer" data-creator-name="델로략국">델로략국</a>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="detail-dialog">
+      <div class="detail-visual"><img id="detail-image" alt=""/><button class="icon-button detail-close" id="detail-close" type="button" aria-label="상세 닫기" data-i18n-aria="closeDetail"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+      <div class="detail-body">
+        <h3 id="detail-title"></h3><div class="detail-meta" id="detail-meta"></div>
+        <div class="detail-stats" id="detail-stats"></div>
+        <a class="youtube-button" id="detail-link" target="_blank" rel="noreferrer" data-i18n="watchYouTube">YouTube에서 보기</a>
+      </div>
+    </dialog>
+
+    <footer><div class="shell"><span id="footer-label">Multi-game YouTube Data Board</span><span id="generated-at"></span></div></footer>
+
+    <script>
+      const requestedGame = new URLSearchParams(location.search).get("game");
+      const gameDataPaths = {
+        "wuthering-waves": "data/wuthering-waves.js?v=20260813",
+        "neverness-to-everness": "data/neverness-to-everness.js?v=20260813",
+        "zenless-zone-zero": "data/zenless-zone-zero.js?v=20260813"
+      };
+      const initialGame = gameDataPaths[requestedGame] ? requestedGame : "wuthering-waves";
+      document.write(`<script src="${gameDataPaths[initialGame]}"><\/script>`);
+    </script>
+    <script>
+      const gameConfigs = {
+        "wuthering-waves": {
+          mark: "W",
+          labels: { ko: "명조", zh: "鸣潮", en: "Wuthering Waves" },
+          subtitle: "WUTHERING WAVES CONTENT INTELLIGENCE",
+          sheetUrl: "https://kurogame.feishu.cn/sheets/V9C1sSLU4hOweEtvDRdcBnENnMh?sheet=PY4QV4",
+          footer: "Wuthering Waves Korean Video Data Board",
+          csvName: "wuthering-waves-vod-filtered.csv",
+          keywords: ["명조", "워더링 웨이브", "Wuthering Waves", "WUWA"],
+          partnerLabels: true
+        },
+        "neverness-to-everness": {
+          mark: "N",
+          labels: { ko: "이환", zh: "异环", en: "Neverness to Everness" },
+          subtitle: "NEVERNESS TO EVERNESS CONTENT INTELLIGENCE",
+          sheetUrl: "https://kurogame.feishu.cn/sheets/V9C1sSLU4hOweEtvDRdcBnENnMh?sheet=Sd2guS",
+          footer: "Neverness to Everness Korean Video Data Board",
+          csvName: "neverness-to-everness-vod-filtered.csv",
+          keywords: ["이환", "이환 NTE", "Neverness to Everness", "이환 공략", "이환 리딤코드", "이환 공방", "이환 캐릭터", "이환 방송"],
+          partnerLabels: false
+        },
+        "zenless-zone-zero": {
+          mark: "Z",
+          labels: { ko: "젠레스 존 제로", zh: "绝区零", en: "Zenless Zone Zero" },
+          subtitle: "ZENLESS ZONE ZERO CONTENT INTELLIGENCE",
+          sheetUrl: "https://kurogame.feishu.cn/sheets/V9C1sSLU4hOweEtvDRdcBnENnMh?sheet=XJKrFe",
+          footer: "Zenless Zone Zero Korean Video Data Board",
+          csvName: "zenless-zone-zero-vod-filtered.csv",
+          keywords: ["젠레스", "젠레스 존 제로", "젠존제", "레미엘"],
+          partnerLabels: true
+        }
+      };
+      const gameFromUrl = () => {
+        const game = new URLSearchParams(location.search).get("game");
+        return gameConfigs[game] ? game : "wuthering-waves";
+      };
+      let activeGame = gameFromUrl();
+      let gameConfig = gameConfigs[activeGame];
+      let data = window.GAME_DATA?.[activeGame] || { videos: [], period: {} };
+      document.body.dataset.game = activeGame;
+      const translations = {
+        ko: {
+          metaTitle: "{game} YouTube 데이터 보드", brand: "게임 YouTube 데이터", gameSwitch: "게임 변경", sheetOpen: "Feishu 원본 시트 열기", languageSwitch: "언어 변경", videoList: "스크롤 가능한 영상 목록",
+          heroTitle: "{game}<br />데이터 보드", heroDescription: "한국어로 게시된 {game} 일반 영상과 쇼츠를 한곳에서 비교합니다. 공개된 YouTube 지표를 기준으로 구성했습니다.", collectionPeriod: "수집 기준",
+          keyMetrics: "주요 지표", collectedVideos: "수집 영상", totalViews: "누적 조회수", publicAtRefresh: "갱신 시점 공개 수치", likes: "좋아요 수", likesShort: "좋아요", publicTotal: "공개 수치 합계", comments: "댓글 수", commentsShort: "댓글", availableComments: "확인 가능한 댓글", creators: "참여 크리에이터",
+          periodUploads: "기간별 업로드", selectedPeriodMetrics: "선택한 기간의 업로드 수치", videos: "영상", video: "영상", views: "조회수", format: "형식", creator: "유튜버", creatorSearch: "유튜버 검색", videoTitle: "영상 제목", titleSearch: "영상 제목 검색", uploadRange: "업로드 집계 기간", startDate: "시작일", endDate: "종료일", explorer: "VOD 탐색기", dateFilter: "날짜 구간 필터", sortMethod: "정렬 방식",
+          formatFilter: "영상 형식 필터", channelFilter: "채널 구분 필터", topicFilter: "콘텐츠 주제 필터", allFormats: "전체 형식", allChannels: "전체 채널", longTermKol: "장기협업 KOL", adTask: "광고 과업", nonPartner: "비협업 채널", nonKoc: "非KOC", allTopics: "전체 주제", allPeriod: "전체 기간",
+          latest: "최신순", published: "게시일", subscribers: "구독자", engagement: "참여율", emptyTitle: "8월 데이터를 수집 중입니다.", emptyBody: "YouTube API 검색 할당량이 초기화되면 자동으로 표시됩니다.", footnote: "좋아요 수와 구독자 수가 공개되지 않은 영상은 빈 값으로 표시합니다. 댓글 수는 YouTube가 공개하는 댓글 총계를 기준으로 하며, 댓글이 없거나 비활성화된 영상은 0으로 표시합니다.",
+          criteriaTitle: "영상 수집 기준", criteriaIntro: "공식 YouTube Data API v3에서 대한민국·한국어 조건과 {keywordCount}개 검색어로 공개 영상을 찾고, 등록된 영상의 공개 지표를 갱신합니다.", searchKeywords: "사용 검색어 {keywordCount}개",
+          coverageTitle: "수집 범위", coverageBody: "표시 기간 내 한국어 관련성이 확인된 일반 영상·라이브 다시보기·Shorts를 조회수 제한 없이 포함합니다.", relevanceTitle: "관련성 확인", relevanceBody: "제목·설명·태그·채널명에서 {keywords} 관련성을 확인하고 YouTube 영상 ID로 중복 제거합니다.",
+          formatExclusionTitle: "형식·제외", formatExclusionBody: "재생시간 180초 이하는 Shorts, 초과는 VOD로 분류하며, AI 생성·사용 표기 콘텐츠와 다른 게임으로 확인된 이름 충돌 영상은 제외합니다.", partnerTitle: "파트너 분류", partnerBody: "KOC·장기협업 KOL은 관리 중인 채널명 별칭으로, 광고 과업은 Feishu 과업 시트와 수동 확인된 YouTube ID로 표시합니다.",
+          refreshTitle: "지표 갱신", refreshBody: "조회수·좋아요·댓글·구독자는 매일 공개 API 값으로 갱신합니다. 웹사이트는 매일 08:00 KST, Feishu 시트는 08:15 KST에 동기화합니다.", limitsTitle: "수집 한계", limitsBody: "검색어별 최신 100개까지 확인하므로 검색 미노출·비공개·관련어가 명확하지 않은 영상은 누락될 수 있습니다.", kolChannels: "장기협업 KOL 공식 채널",
+          closeDetail: "상세 닫기", watchYouTube: "YouTube에서 보기", guide: "공략·리뷰", story: "스토리", gacha: "뽑기·육성", stream: "방송·다시보기", other: "기타",
+          creatorSummary: "KOC {koc}명 · KOL {kol}명 · 광고 {ads}건", creatorSummaryPublic: "한국어 공개 콘텐츠 · 고유 채널 {creators}개", competitorDataTitle: "데이터 구분", competitorDataBody: "경쟁사 공개 데이터이므로 KOC·장기협업·광고 과업 분류는 사용하지 않습니다.", generated: "데이터 생성 {date}", dailyCount: "{count}개", dailyViews: "{count}회", resultCount: "총 {count}개 영상", mobileViews: "조회 {count}", mobileLikes: "좋아요 {count}",
+          csvTitle: "제목", csvLink: "링크", csvCreator: "유튜버 이름", csvKoc: "KOC 여부", csvKol: "장기협업 KOL 여부", csvAd: "광고 과업 여부", csvSubscribers: "유튜버 구독자 수", csvDate: "날짜", csvViews: "조회수", csvLikes: "좋아요 수", csvComments: "댓글 수"
+        },
+        zh: {
+          metaTitle: "{game} YouTube 数据看板", brand: "游戏 YouTube 数据", gameSwitch: "切换游戏", sheetOpen: "打开飞书原始表格", languageSwitch: "切换语言", videoList: "可滚动的视频列表",
+          heroTitle: "{game}<br />数据看板", heroDescription: "集中比较以韩语发布的 {game} 普通视频与 Shorts，数据均来自公开 YouTube 指标。", collectionPeriod: "采集区间",
+          keyMetrics: "核心指标", collectedVideos: "已收录视频", totalViews: "累计播放量", publicAtRefresh: "刷新时的公开数据", likes: "点赞数", likesShort: "点赞", publicTotal: "公开数据合计", comments: "评论数", commentsShort: "评论", availableComments: "可读取评论", creators: "参与创作者",
+          periodUploads: "分时段上传", selectedPeriodMetrics: "所选时段的上传数据", videos: "视频", video: "视频", views: "播放量", format: "类型", creator: "YouTuber", creatorSearch: "搜索 YouTuber", videoTitle: "视频标题", titleSearch: "搜索视频标题", uploadRange: "上传统计期间", startDate: "开始日期", endDate: "结束日期", explorer: "VOD 浏览器", dateFilter: "日期范围筛选", sortMethod: "排序方式",
+          formatFilter: "视频类型筛选", channelFilter: "频道分类筛选", topicFilter: "内容主题筛选", allFormats: "全部类型", allChannels: "全部频道", longTermKol: "长期合作 KOL", adTask: "广告任务", nonPartner: "非合作频道", nonKoc: "非KOC", allTopics: "全部主题", allPeriod: "全部期间",
+          latest: "最新", published: "发布日期", subscribers: "订阅数", engagement: "互动率", emptyTitle: "没有符合条件的视频。", emptyBody: "请调整搜索词或筛选条件。", footnote: "未公开点赞数或订阅数的视频显示为空。评论数采用 YouTube 公开的评论总数；无评论或关闭评论时显示为 0。",
+          criteriaTitle: "视频采集标准", criteriaIntro: "通过官方 YouTube Data API v3，使用韩国地区、韩语设置及 {keywordCount} 个关键词检索公开视频，并刷新已收录视频的公开数据。", searchKeywords: "使用的 {keywordCount} 个搜索词",
+          coverageTitle: "采集范围", coverageBody: "收录所示时间范围内与韩语内容相关的普通视频、直播回放和 Shorts，不设最低播放量。", relevanceTitle: "相关性检查", relevanceBody: "检查标题、简介、标签和频道名中的 {keywords} 相关性，并按 YouTube 视频 ID 去重。",
+          formatExclusionTitle: "格式与排除", formatExclusionBody: "时长不超过 180 秒标记为 Shorts，超过 180 秒标记为 VOD；排除标注为 AI 生成或使用 AI 的内容，以及确认属于其他游戏的同名冲突视频。", partnerTitle: "合作分类", partnerBody: "KOC 和长期合作 KOL 根据维护的频道别名匹配；广告任务依据飞书任务表或人工确认的 YouTube 视频 ID 标记。",
+          refreshTitle: "数据更新", refreshBody: "播放量、点赞、评论和订阅数每天按公开 API 数据刷新。网站每天韩国时间 08:00 更新，飞书表格于 08:15 同步。", limitsTitle: "采集限制", limitsBody: "每个关键词仅检查最新 100 条结果。未被搜索收录、非公开视频或相关词不明确的视频可能遗漏。", kolChannels: "长期合作 KOL 官方频道",
+          closeDetail: "关闭详情", watchYouTube: "在 YouTube 观看", guide: "攻略·评测", story: "剧情", gacha: "抽卡·养成", stream: "直播·回放", other: "其他",
+          creatorSummary: "KOC {koc}人 · KOL {kol}人 · 广告 {ads}条", creatorSummaryPublic: "韩语公开内容 · {creators} 个频道", competitorDataTitle: "数据分类", competitorDataBody: "这是竞品公开数据，不使用 KOC、长期合作 KOL 或广告任务分类。", generated: "数据生成于 {date}", dailyCount: "{count}个", dailyViews: "{count}次", resultCount: "共 {count} 个视频", mobileViews: "播放 {count}", mobileLikes: "点赞 {count}",
+          csvTitle: "标题", csvLink: "链接", csvCreator: "YouTuber 名称", csvKoc: "是否 KOC", csvKol: "是否长期合作 KOL", csvAd: "是否广告任务", csvSubscribers: "订阅数", csvDate: "日期", csvViews: "播放量", csvLikes: "点赞数", csvComments: "评论数"
+        },
+        en: {
+          metaTitle: "{game} YouTube Data Board", brand: "Game YouTube Data", gameSwitch: "Change game", sheetOpen: "Open the source Feishu sheet", languageSwitch: "Change language", videoList: "Scrollable video list",
+          heroTitle: "{game}<br />Data Board", heroDescription: "Compare Korean-language {game} videos and Shorts in one place using public YouTube metrics.", collectionPeriod: "Collection period",
+          keyMetrics: "Key metrics", collectedVideos: "Collected videos", totalViews: "Total views", publicAtRefresh: "Public values at refresh", likes: "Likes", likesShort: "Likes", publicTotal: "Public-value total", comments: "Comments", commentsShort: "Comments", availableComments: "Available comments", creators: "Participating creators",
+          periodUploads: "Uploads by period", selectedPeriodMetrics: "Upload metrics for the selected period", videos: "Videos", video: "Video", views: "Views", format: "Format", creator: "YouTuber", creatorSearch: "Search YouTuber", videoTitle: "Video title", titleSearch: "Search video titles", uploadRange: "Upload summary period", startDate: "Start date", endDate: "End date", explorer: "VOD explorer", dateFilter: "Date range filter", sortMethod: "Sort method",
+          formatFilter: "Video format filter", channelFilter: "Channel category filter", topicFilter: "Content topic filter", allFormats: "All formats", allChannels: "All channels", longTermKol: "Long-term KOL", adTask: "Ad task", nonPartner: "Non-partner", nonKoc: "Non-KOC", allTopics: "All topics", allPeriod: "Full period",
+          latest: "Latest", published: "Published", subscribers: "Subscribers", engagement: "Engagement", emptyTitle: "No videos match these conditions.", emptyBody: "Adjust the search term or filters.", footnote: "Videos with hidden like or subscriber counts show a blank value. Comments use YouTube's public total; videos with no comments or disabled comments show 0.",
+          criteriaTitle: "Video collection criteria", criteriaIntro: "Public videos are discovered through the official YouTube Data API v3 using Korea/Korean search settings and {keywordCount} queries, then saved public metrics are refreshed.", searchKeywords: "{keywordCount} search queries used",
+          coverageTitle: "Coverage", coverageBody: "Includes Korean-relevant standard videos, archived livestreams and Shorts in the displayed period, with no minimum view count.", relevanceTitle: "Relevance check", relevanceBody: "Titles, descriptions, tags and channel names are checked for {keywords} relevance; duplicates are removed by YouTube video ID.",
+          formatExclusionTitle: "Format & exclusions", formatExclusionBody: "Videos up to 180 seconds are labeled Shorts; longer videos are labeled VOD. AI-labeled content and confirmed cross-game name collisions are excluded.", partnerTitle: "Partner labels", partnerBody: "KOC and long-term KOL labels are matched from maintained channel aliases. Ad-task labels use video IDs confirmed in the Feishu task sheet or manually.",
+          refreshTitle: "Metric refresh", refreshBody: "Views, likes, comments and subscribers are refreshed daily from public API values. The website updates at 08:00 KST and the Feishu sheet syncs at 08:15 KST.", limitsTitle: "Collection limits", limitsBody: "Only the newest 100 results per query are checked. Unindexed, private or weakly matched videos may be missed.", kolChannels: "Official long-term KOL channels",
+          closeDetail: "Close details", watchYouTube: "Watch on YouTube", guide: "Guide & review", story: "Story", gacha: "Gacha & build", stream: "Stream & replay", other: "Other",
+          creatorSummary: "KOC {koc} · KOL {kol} · Ads {ads}", creatorSummaryPublic: "Korean public content · {creators} unique channels", competitorDataTitle: "Data category", competitorDataBody: "This competitor dataset does not use KOC, long-term KOL or ad-task labels.", generated: "Data generated {date}", dailyCount: "{count}", dailyViews: "{count} views", resultCount: "{count} videos", mobileViews: "Views {count}", mobileLikes: "Likes {count}",
+          csvTitle: "Title", csvLink: "Link", csvCreator: "YouTuber", csvKoc: "KOC", csvKol: "Long-term KOL", csvAd: "Ad task", csvSubscribers: "Subscribers", csvDate: "Date", csvViews: "Views", csvLikes: "Likes", csvComments: "Comments"
+        }
+      };
+      const languageFromBrowser = () => navigator.language?.toLowerCase().startsWith("zh") ? "zh" : navigator.language?.toLowerCase().startsWith("en") ? "en" : "ko";
+      const savedLanguage = (() => { try { return localStorage.getItem("vodLanguage"); } catch { return null; } })();
+      const state = { language: translations[savedLanguage] ? savedLanguage : languageFromBrowser(), creatorQuery: "", titleQuery: "", startDate: data.period.start || "", endDate: data.period.end || "", format: "all", koc: "all", topic: "all", sort: "views" };
+      const locales = { ko: "ko-KR", zh: "zh-CN", en: "en-US" };
+      let nf = new Intl.NumberFormat(locales[state.language]);
+      let compact = new Intl.NumberFormat(locales[state.language], { notation: "compact", maximumFractionDigits: 1 });
+      const t = (key, values = {}) => {
+        const defaults = {
+          game: gameConfig.labels[state.language] || gameConfig.labels.ko,
+          keywordCount: gameConfig.keywords.length,
+          keywords: gameConfig.keywords.join(", ")
+        };
+        return Object.entries({ ...defaults, ...values }).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, value), translations[state.language][key] || translations.ko[key] || key);
+      };
+
+      const topicOf = (video) => {
+        const text = video.title.toLowerCase();
+        if (/공략|가이드|사용법|세팅|조합|사이클|성능|후기|리뷰/.test(text)) return "guide";
+        if (/스토리|임무|컷신|하이라이트|에필로그|[0-9]장|[0-9]막/.test(text)) return "story";
+        if (/뽑기|픽업|풀돌|명함|전무|돌파/.test(text)) return "gacha";
+        if (/다시보기|풀영상|라이브/.test(text)) return "stream";
+        return "other";
+      };
+      const thumbnail = (id, quality = "mqdefault") => `https://i.ytimg.com/vi/${id}/${quality}.jpg`;
+      const fmt = (value) => value === null || value === undefined || value === "" ? "-" : nf.format(value);
+      const fmtDuration = (seconds) => {
+        if (!seconds) return "";
+        const h = Math.floor(seconds / 3600); const m = Math.floor((seconds % 3600) / 60); const s = seconds % 60;
+        return h ? `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}` : `${m}:${String(s).padStart(2,"0")}`;
+      };
+      const engagementRate = (video) => video.views ? (((video.likes || 0) + (video.comments || 0)) / video.views) * 100 : 0;
+      const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+      const displayDate = (date) => date.replaceAll("-", ".");
+      const creatorRomanizationOverrides = new Map([
+        ["릴카", "Lilka"], ["러끼", "Lukki"], ["마레플로스", "MareFlos"], ["과로사", "Gwarosa"], ["코렛트", "Collet"], ["델로략국", "Delloryakguk"],
+        ["키플", "KEYPLE"], ["도도리코", "dodorico"], ["G스토리", "Gstory"], ["매드라이프", "MadLife"], ["미오", "Mio"], ["시루시루", "Siru"],
+        ["도로탱 Dorotang", "Dorotang"], ["그리움 / Rium", "Rium"]
+      ]);
+      const romanizeHangul = (value) => {
+        const initials = ["g","kk","n","d","tt","r","m","b","pp","s","ss","","j","jj","ch","k","t","p","h"];
+        const vowels = ["a","ae","ya","yae","eo","e","yeo","ye","o","wa","wae","oe","yo","u","wo","we","wi","yu","eu","ui","i"];
+        const finals = ["","k","k","ks","n","nj","nh","t","l","lk","lm","lb","ls","lt","lp","lh","m","p","ps","t","t","ng","t","t","k","t","p","h"];
+        const output = [...String(value || "")].map((character) => {
+          const code = character.charCodeAt(0) - 0xAC00;
+          if (code < 0 || code > 11171) return character;
+          const initial = Math.floor(code / 588);
+          const vowel = Math.floor((code % 588) / 28);
+          const final = code % 28;
+          return `${initials[initial]}${vowels[vowel]}${finals[final]}`;
+        }).join("");
+        return output.replace(/(^|[\s/()[\]_.·-])([a-z])/g, (_, boundary, letter) => `${boundary}${letter.toUpperCase()}`);
+      };
+      const romanizedCreator = (name) => !/[가-힣]/.test(name || "") ? name : creatorRomanizationOverrides.get(name) || romanizeHangul(name);
+      const displayCreator = (name) => state.language === "ko" ? name : romanizedCreator(name);
+
+      const enriched = data.videos.map((video) => ({ ...video, topic: topicOf(video) }));
+      const dates = [...new Set(enriched.map((video) => video.date))].sort().reverse();
+      const formats = [...new Set(enriched.map((video) => video.format))].sort();
+      const topics = [...new Set(enriched.map((video) => video.topic))].sort();
+
+      for (const id of ["start-date", "end-date"]) {
+        const input = document.getElementById(id);
+        input.min = data.period.start || "";
+        input.max = data.period.end || "";
+      }
+      document.getElementById("start-date").value = state.startDate;
+      document.getElementById("end-date").value = state.endDate;
+
+      const dailyStartDate = document.getElementById("daily-start-date");
+      const dailyEndDate = document.getElementById("daily-end-date");
+      for (const input of [dailyStartDate, dailyEndDate]) {
+        input.min = data.period.start || "";
+        input.max = data.period.end || "";
+      }
+      dailyStartDate.value = data.period.start || dates.at(-1) || "";
+      dailyEndDate.value = data.period.end || dates[0] || "";
+
+      function renderDailySummary() {
+        if (dailyStartDate.value && dailyEndDate.value && dailyStartDate.value > dailyEndDate.value) {
+          if (document.activeElement === dailyStartDate) dailyEndDate.value = dailyStartDate.value;
+          else dailyStartDate.value = dailyEndDate.value;
+        }
+        const rows = enriched.filter((video) =>
+          (!dailyStartDate.value || video.date >= dailyStartDate.value) &&
+          (!dailyEndDate.value || video.date <= dailyEndDate.value)
+        );
+        document.getElementById("daily-count").textContent = t("dailyCount", { count: nf.format(rows.length) });
+        document.getElementById("daily-views").textContent = formats.map((format) => {
+          const views = rows
+            .filter((video) => video.format === format)
+            .reduce((sum, video) => sum + (video.views || 0), 0);
+          return `${format} ${compact.format(views)}`;
+        }).join(" · ");
+        document.getElementById("daily-formats").textContent = formats.map((format) => `${format} ${rows.filter((video) => video.format === format).length}`).join(" · ");
+      }
+
+      function filteredVideos() {
+        const creatorQuery = state.creatorQuery.trim().toLowerCase();
+        const titleQuery = state.titleQuery.trim().toLowerCase();
+        return enriched.filter((video) => {
+          const matchesCreator = !creatorQuery || video.creator.toLowerCase().includes(creatorQuery) || romanizedCreator(video.creator).toLowerCase().includes(creatorQuery);
+          const matchesTitle = !titleQuery || video.title.toLowerCase().includes(titleQuery);
+          const matchesKoc = state.koc === "all" || (state.koc === "koc" && video.isKoc) || (state.koc === "kol" && video.isKol) || (state.koc === "ad-task" && video.isAdTask) || (state.koc === "non-partner" && !video.isKoc && !video.isKol && !video.isAdTask);
+          const matchesDate = (!state.startDate || video.date >= state.startDate) && (!state.endDate || video.date <= state.endDate);
+          return matchesCreator && matchesTitle && matchesKoc && matchesDate && (state.format === "all" || video.format === state.format) && (state.topic === "all" || video.topic === state.topic);
+        }).sort((a, b) => state.sort === "date" ? b.date.localeCompare(a.date) || b.views - a.views : (b[state.sort] || 0) - (a[state.sort] || 0));
+      }
+
+      function videoCell(video) {
+        return `<div class="video-cell"><div class="thumb"><img src="${thumbnail(video.id)}" alt="" loading="lazy"/><span class="duration">${fmtDuration(video.duration)}</span></div><div><a class="video-title" href="${video.url}" target="_blank" rel="noreferrer" data-stop>${escapeHtml(video.title)}</a><span class="format-badge ${video.format === "Shorts" ? "shorts" : ""}">${video.format}</span><span class="topic">${t(video.topic)}</span></div></div>`;
+      }
+
+      const tableWrap = document.querySelector(".table-wrap");
+      const tableRows = document.getElementById("video-rows");
+      const mobileList = document.getElementById("mobile-list");
+      const TABLE_ROW_HEIGHT = 78;
+      const MOBILE_CARD_HEIGHT = 108;
+      const VIRTUAL_OVERSCAN = 5;
+      let visibleRows = [];
+      let tableRenderFrame = 0;
+      let mobileRenderFrame = 0;
+
+      function tableRow(video, index) {
+        const creator = displayCreator(video.creator);
+        return `<tr data-id="${video.id}" aria-rowindex="${index + 2}"><td class="rank">${index + 1}</td><td>${videoCell(video)}</td><td class="creator" title="${escapeHtml(creator)}"><div class="creator-wrap"><span>${escapeHtml(creator)}</span>${video.isKoc ? '<span class="koc-badge">KOC</span>' : ''}${video.isKol ? '<span class="kol-badge">KOL</span>' : ''}${video.isAdTask ? `<span class="ad-badge">${t("adTask")}</span>` : ''}</div></td><td>${displayDate(video.date).slice(5)}</td><td class="metric-number">${fmt(video.subscribers)}</td><td class="metric-number"><strong>${fmt(video.views)}</strong></td><td class="metric-number">${fmt(video.likes)}</td><td class="metric-number">${fmt(video.comments)}</td><td class="engagement">${engagementRate(video).toFixed(2)}%</td></tr>`;
+      }
+
+      function mobileCard(video, index) {
+        const creator = displayCreator(video.creator);
+        return `<article class="video-card" data-id="${video.id}" role="listitem" aria-posinset="${index + 1}" aria-setsize="${visibleRows.length}"><div class="thumb"><img src="${thumbnail(video.id)}" alt="" loading="lazy"/><span class="duration">${fmtDuration(video.duration)}</span></div><div><a class="video-title" href="${video.url}" target="_blank" rel="noreferrer" data-stop>${escapeHtml(video.title)}</a><span class="format-badge ${video.format === "Shorts" ? "shorts" : ""}">${video.format}</span><span class="topic">${t(video.topic)}</span>${video.isKoc ? '<span class="koc-badge">KOC</span>' : ''}${video.isKol ? '<span class="kol-badge">KOL</span>' : ''}${video.isAdTask ? `<span class="ad-badge">${t("adTask")}</span>` : ''}<div class="video-card-stats"><span>${escapeHtml(creator)}</span><span>${t("mobileViews", { count: fmt(video.views) })}</span><span>${t("mobileLikes", { count: fmt(video.likes) })}</span></div></div></article>`;
+      }
+
+      function renderTableWindow() {
+        const viewportHeight = tableWrap.clientHeight || 840;
+        const start = Math.max(0, Math.floor(tableWrap.scrollTop / TABLE_ROW_HEIGHT) - VIRTUAL_OVERSCAN);
+        const count = Math.ceil(viewportHeight / TABLE_ROW_HEIGHT) + VIRTUAL_OVERSCAN * 2 + 2;
+        const end = Math.min(visibleRows.length, start + count);
+        const topHeight = start * TABLE_ROW_HEIGHT;
+        const bottomHeight = Math.max(0, (visibleRows.length - end) * TABLE_ROW_HEIGHT);
+        tableRows.setAttribute("aria-rowcount", String(visibleRows.length));
+        tableRows.innerHTML = `<tr class="virtual-spacer" aria-hidden="true"><td colspan="9"><div style="height:${topHeight}px"></div></td></tr>${visibleRows.slice(start, end).map((video, offset) => tableRow(video, start + offset)).join("")}<tr class="virtual-spacer" aria-hidden="true"><td colspan="9"><div style="height:${bottomHeight}px"></div></td></tr>`;
+      }
+
+      function renderMobileWindow() {
+        const viewportHeight = mobileList.clientHeight || 1080;
+        const start = Math.max(0, Math.floor(mobileList.scrollTop / MOBILE_CARD_HEIGHT) - VIRTUAL_OVERSCAN);
+        const count = Math.ceil(viewportHeight / MOBILE_CARD_HEIGHT) + VIRTUAL_OVERSCAN * 2 + 2;
+        const end = Math.min(visibleRows.length, start + count);
+        const topHeight = start * MOBILE_CARD_HEIGHT;
+        const bottomHeight = Math.max(0, (visibleRows.length - end) * MOBILE_CARD_HEIGHT);
+        mobileList.setAttribute("role", "list");
+        mobileList.innerHTML = `<div class="mobile-virtual-spacer" aria-hidden="true" style="height:${topHeight}px"></div>${visibleRows.slice(start, end).map((video, offset) => mobileCard(video, start + offset)).join("")}<div class="mobile-virtual-spacer" aria-hidden="true" style="height:${bottomHeight}px"></div>`;
+      }
+
+      function scheduleTableWindow() {
+        if (tableRenderFrame) return;
+        tableRenderFrame = requestAnimationFrame(() => { tableRenderFrame = 0; renderTableWindow(); });
+      }
+
+      function scheduleMobileWindow() {
+        if (mobileRenderFrame) return;
+        mobileRenderFrame = requestAnimationFrame(() => { mobileRenderFrame = 0; renderMobileWindow(); });
+      }
+
+      function render() {
+        visibleRows = filteredVideos();
+        document.getElementById("result-count").textContent = t("resultCount", { count: nf.format(visibleRows.length) });
+        tableWrap.scrollTop = 0;
+        mobileList.scrollTop = 0;
+        renderTableWindow();
+        renderMobileWindow();
+        document.getElementById("empty").style.display = visibleRows.length ? "none" : "block";
+      }
+
+      function openDetail(id) {
+        const video = enriched.find((item) => item.id === id); if (!video) return;
+        document.getElementById("detail-dialog").dataset.videoId = id;
+        document.getElementById("detail-image").src = thumbnail(video.id, "maxresdefault");
+        document.getElementById("detail-title").textContent = video.title;
+        document.getElementById("detail-meta").textContent = `${displayCreator(video.creator)}${video.isKoc ? ` · KOC (${displayCreator(video.kocName)})` : ""}${video.isKol ? ` · ${t("longTermKol")} (${displayCreator(video.kolName)})` : ""}${video.isAdTask ? ` · ${t("adTask")}` : ""} · ${displayDate(video.date)} · ${t(video.topic)}`;
+        document.getElementById("detail-stats").innerHTML = [[t("subscribers"), video.subscribers], [t("views"), video.views], [t("likesShort"), video.likes], [t("commentsShort"), video.comments]].map(([label,value]) => `<div class="detail-stat"><span>${label}</span><strong>${fmt(value)}</strong></div>`).join("");
+        document.getElementById("detail-link").href = video.url;
+        document.getElementById("detail-dialog").showModal();
+      }
+
+      function exportCsv() {
+        const headers = [t("csvTitle"),t("csvLink"),t("csvCreator"),t("csvKoc"),t("csvKol"),t("csvAd"),t("csvSubscribers"),t("csvDate"),t("csvViews"),t("csvLikes"),t("csvComments")];
+        const keys = ["title","url","creator","isKoc","isKol","isAdTask","subscribers","date","views","likes","comments"];
+        const quote = (value) => `"${String(value ?? "").replaceAll('"','""')}"`;
+        const csv = [headers.map(quote).join(","), ...filteredVideos().map((video) => keys.map((key) => quote(key === "creator" ? displayCreator(video.creator) : key === "isKoc" ? (video.isKoc ? "KOC" : t("nonKoc")) : key === "isKol" ? (video.isKol ? t("longTermKol") : "") : key === "isAdTask" ? (video.isAdTask ? t("adTask") : "") : video[key])).join(","))].join("\r\n");
+        const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" })); link.download = gameConfig.csvName; link.click(); URL.revokeObjectURL(link.href);
+      }
+
+      function renderFilterOptions() {
+        const formatFilter = document.getElementById("format-filter");
+        formatFilter.innerHTML = `<option value="all">${t("allFormats")}</option>${formats.map((format) => `<option value="${format}">${format}</option>`).join("")}`;
+        formatFilter.value = state.format;
+        const kocFilter = document.getElementById("koc-filter");
+        kocFilter.innerHTML = `<option value="all">${t("allChannels")}</option><option value="koc">KOC</option><option value="kol">${t("longTermKol")}</option><option value="ad-task">${t("adTask")}</option><option value="non-partner">${t("nonPartner")}</option>`;
+        kocFilter.value = state.koc;
+        kocFilter.hidden = !gameConfig.partnerLabels;
+        const topicFilter = document.getElementById("topic-filter");
+        topicFilter.innerHTML = `<option value="all">${t("allTopics")}</option>${topics.map((topic) => `<option value="${topic}">${t(topic)}</option>`).join("")}`;
+        topicFilter.value = state.topic;
+      }
+
+      function applyLanguage(language = state.language) {
+        state.language = translations[language] ? language : "ko";
+        try { localStorage.setItem("vodLanguage", state.language); } catch {}
+        const htmlLanguage = state.language === "zh" ? "zh-CN" : state.language;
+        document.documentElement.lang = htmlLanguage;
+        document.title = t("metaTitle");
+        nf = new Intl.NumberFormat(locales[state.language]);
+        compact = new Intl.NumberFormat(locales[state.language], { notation: "compact", maximumFractionDigits: 1 });
+        document.querySelectorAll("[data-i18n]").forEach((element) => { element.textContent = t(element.dataset.i18n); });
+        document.querySelectorAll("[data-i18n-html]").forEach((element) => { element.innerHTML = t(element.dataset.i18nHtml); });
+        document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => { element.placeholder = t(element.dataset.i18nPlaceholder); });
+        document.querySelectorAll("[data-i18n-aria]").forEach((element) => { element.setAttribute("aria-label", t(element.dataset.i18nAria)); });
+        document.querySelectorAll("[data-i18n-title]").forEach((element) => { element.title = t(element.dataset.i18nTitle); });
+        const gameLabel = gameConfig.labels[state.language] || gameConfig.labels.ko;
+        const brandSuffix = state.language === "zh" ? "视频数据" : state.language === "en" ? "Video Data" : "영상 데이터";
+        document.querySelector('[data-i18n="brand"]').textContent = `${gameLabel} ${brandSuffix}`;
+        document.getElementById("brand-mark").textContent = gameConfig.mark;
+        document.getElementById("brand-subtitle").textContent = gameConfig.subtitle;
+        document.getElementById("source-sheet-link").href = gameConfig.sheetUrl;
+        document.getElementById("footer-label").textContent = gameConfig.footer;
+        document.querySelectorAll(".game-button").forEach((button) => {
+          const config = gameConfigs[button.dataset.game];
+          button.textContent = config.labels[state.language] || config.labels.ko;
+          const active = button.dataset.game === activeGame;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        document.querySelectorAll("[data-language]").forEach((button) => {
+          const active = button.dataset.language === state.language;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        document.querySelectorAll("[data-creator-name]").forEach((element) => { element.textContent = displayCreator(element.dataset.creatorName); });
+        const keywordList = document.querySelector(".keyword-list");
+        keywordList.innerHTML = gameConfig.keywords.map((keyword) => `<span class="keyword">${escapeHtml(keyword)}</span>`).join("");
+        keywordList.setAttribute("aria-label", t("searchKeywords"));
+        const partnerRule = document.getElementById("partner-rule");
+        partnerRule.querySelector("strong").textContent = t(gameConfig.partnerLabels ? "partnerTitle" : "competitorDataTitle");
+        partnerRule.querySelector("span").textContent = t(gameConfig.partnerLabels ? "partnerBody" : "competitorDataBody");
+        document.querySelector(".kol-list").hidden = !gameConfig.partnerLabels;
+        document.getElementById("period-label").textContent = `${displayDate(data.period.start || "-")} — ${displayDate(data.period.end || "-")}`;
+        document.getElementById("total-videos").textContent = nf.format(enriched.length);
+        document.getElementById("format-summary").textContent = formats.map((format) => `${format} ${nf.format(enriched.filter((video) => video.format === format).length)}`).join(" · ");
+        document.getElementById("total-views").textContent = compact.format(enriched.reduce((sum, video) => sum + (video.views || 0), 0));
+        document.getElementById("total-likes").textContent = compact.format(enriched.reduce((sum, video) => sum + (video.likes || 0), 0));
+        document.getElementById("total-comments").textContent = compact.format(enriched.reduce((sum, video) => sum + (video.comments || 0), 0));
+        document.getElementById("total-creators").textContent = nf.format(new Set(enriched.map((video) => video.creator)).size);
+        document.getElementById("creator-summary").textContent = gameConfig.partnerLabels ? t("creatorSummary", {
+          koc: nf.format(new Set(enriched.filter((video) => video.isKoc).map((video) => video.kocName)).size),
+          kol: nf.format(new Set(enriched.filter((video) => video.isKol).map((video) => video.kolName)).size),
+          ads: nf.format(enriched.filter((video) => video.isAdTask).length)
+        }) : t("creatorSummaryPublic", { creators: nf.format(new Set(enriched.map((video) => video.creator)).size) });
+        document.getElementById("generated-at").textContent = t("generated", { date: new Date(data.generatedAt).toLocaleString(locales[state.language]) });
+        renderFilterOptions();
+        renderDailySummary();
+        render();
+        const dialog = document.getElementById("detail-dialog");
+        if (dialog.open && dialog.dataset.videoId) {
+          const id = dialog.dataset.videoId;
+          dialog.close();
+          openDetail(id);
+        }
+      }
+
+      document.getElementById("creator-search").addEventListener("input", (event) => { state.creatorQuery = event.target.value; render(); });
+      document.getElementById("title-search").addEventListener("input", (event) => { state.titleQuery = event.target.value; render(); });
+      dailyStartDate.addEventListener("change", renderDailySummary);
+      dailyEndDate.addEventListener("change", renderDailySummary);
+      document.getElementById("start-date").addEventListener("change", (event) => { state.startDate = event.target.value; render(); });
+      document.getElementById("end-date").addEventListener("change", (event) => { state.endDate = event.target.value; render(); });
+      document.getElementById("period-reset").addEventListener("click", () => {
+        state.startDate = data.period.start || "";
+        state.endDate = data.period.end || "";
+        document.getElementById("start-date").value = state.startDate;
+        document.getElementById("end-date").value = state.endDate;
+        render();
+      });
+      document.getElementById("format-filter").addEventListener("change", (event) => { state.format = event.target.value; render(); });
+      document.getElementById("koc-filter").addEventListener("change", (event) => { state.koc = event.target.value; render(); });
+      document.getElementById("topic-filter").addEventListener("change", (event) => { state.topic = event.target.value; render(); });
+      document.querySelector(".segments").addEventListener("click", (event) => { const button = event.target.closest("[data-sort]"); if (!button) return; state.sort = button.dataset.sort; document.querySelectorAll(".segment").forEach((item) => item.classList.toggle("active", item === button)); render(); });
+      document.querySelector(".workspace").addEventListener("click", (event) => { if (event.target.closest("[data-stop]")) return; const row = event.target.closest("[data-id]"); if (row) openDetail(row.dataset.id); });
+      tableWrap.addEventListener("scroll", scheduleTableWindow, { passive: true });
+      mobileList.addEventListener("scroll", scheduleMobileWindow, { passive: true });
+      window.addEventListener("resize", () => { scheduleTableWindow(); scheduleMobileWindow(); }, { passive: true });
+      document.getElementById("export").addEventListener("click", exportCsv);
+      document.querySelector(".language-switcher").addEventListener("click", (event) => { const button = event.target.closest("[data-language]"); if (button) applyLanguage(button.dataset.language); });
+      document.querySelector(".game-switcher").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-game]");
+        if (!button || button.dataset.game === activeGame) return;
+        const params = new URLSearchParams(location.search);
+        params.set("game", button.dataset.game);
+        location.search = params.toString();
+      });
+      document.getElementById("detail-close").addEventListener("click", () => document.getElementById("detail-dialog").close());
+      document.getElementById("detail-dialog").addEventListener("click", (event) => { if (event.target === event.currentTarget) event.currentTarget.close(); });
+      applyLanguage();
+    </script>
+  </body>
+</html>

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { readFile, writeFile } from "node:fs/promises";
-import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
+import { readGameDataset, writeGameDataset } from "./game-dataset.mjs";
 
 const env = {
   baseUrl: String(process.env.KURO_BASE_URL || "https://ai-gateway.kurogames.com").replace(/\/$/, ""),
@@ -80,10 +80,7 @@ await writeFile(adFile, `${JSON.stringify({
   rows,
 }, null, 2)}\n`, "utf8");
 
-globalThis.window = {};
-const videosFile = resolve("data/videos.js");
-await import(`${pathToFileURL(videosFile).href}?v=${Date.now()}`);
-const payload = window.VOD_DATA;
+const payload = await readGameDataset("wuthering-waves");
 const adIds = new Set(rows.map((row) => row.youtubeId));
 let changed = 0;
 for (const video of payload.videos) {
@@ -92,6 +89,6 @@ for (const video of payload.videos) {
   video.isAdTask = isAdTask;
 }
 payload.generatedAt = now;
-await writeFile(videosFile, `window.VOD_DATA = ${JSON.stringify(payload, null, 2)};\n`, "utf8");
+await writeGameDataset("wuthering-waves", payload);
 
 console.log(JSON.stringify({ sheetRows: sheetRows.length, adTaskIds: adIds.size, dashboardVideos: payload.videos.length, changed }));

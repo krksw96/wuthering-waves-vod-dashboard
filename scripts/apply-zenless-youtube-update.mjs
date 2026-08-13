@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { readGameDataset, writeGameDataset } from "./game-dataset.mjs";
 
 const source = resolve(process.argv[2] || "data/zenless-youtube-update-2026-08-01_2026-08-31.json");
 const apiKey = process.env.YOUTUBE_API_KEY;
 if (!apiKey) throw new Error("YOUTUBE_API_KEY is not configured");
 
-globalThis.window = {};
-await import(`${pathToFileURL(resolve("data/videos.js")).href}?v=${Date.now()}`);
-const current = window.VOD_DATA || { videos: [], period: {} };
+const current = await readGameDataset("zenless-zone-zero");
 const update = JSON.parse(await readFile(source, "utf8"));
 const kocList = JSON.parse(await readFile("data/koc-list.json", "utf8").catch(() => "[]"));
 const kolList = JSON.parse(await readFile("data/kol-list.json", "utf8").catch(() => "[]"));
@@ -108,7 +106,7 @@ const payload = {
   },
   videos,
 };
-await writeFile("data/videos.js", `window.VOD_DATA = ${JSON.stringify(payload, null, 2)};\n`, "utf8");
+await writeGameDataset("zenless-zone-zero", payload);
 console.log(JSON.stringify({
   previous: current.videos.length,
   added: videos.length - current.videos.length,

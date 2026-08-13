@@ -37,10 +37,10 @@ await run("scripts/collect-youtube-data-api.mjs", [
 await run("scripts/sync-ad-task-tags.mjs", []);
 await run("scripts/apply-youtube-update.mjs", [updateFile]);
 
-const videosSource = await readFile("data/videos.js", "utf8");
+const videosSource = await readFile("data/wuthering-waves.js", "utf8");
 const total = Number(videosSource.match(/"videos": \[/) ? (videosSource.match(/\n      "id": /g) || []).length : 0);
 if (!total) throw new Error("Could not determine refreshed video count");
-const html = await readFile("index.html", "utf8");
-const refreshedHtml = html.replace(/data\/videos\.js\?v=[^"]+/, `data/videos.js?v=refresh-${compactEnd}-${total}`);
-await writeFile("index.html", refreshedHtml, "utf8");
+const html = await readFile("dashboard.html", "utf8");
+const refreshedHtml = html.replace(/data\/wuthering-waves\.js\?v=[^"]+/, `data/wuthering-waves.js?v=refresh-${compactEnd}-${total}`);
+await writeFile("dashboard.html", refreshedHtml, "utf8");
 console.log(JSON.stringify({ timeZone, start, end, total, updateFile }));

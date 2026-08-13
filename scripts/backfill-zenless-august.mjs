@@ -15,5 +15,5 @@ await run("scripts/collect-zenless-youtube-data-api.mjs", [
   `--start=${start}`, `--end=${end}`, "--windowDays=4", "--maxPages=2", `--output=${updateFile}`,
 ]);
 await run("scripts/apply-zenless-youtube-update.mjs", [updateFile]);
-const source = await readFile("index.html", "utf8");
-await writeFile("index.html", source.replace(/data\/videos\.js\?v=[^"]+/, `data/videos.js?v=zenless-august-${Date.now()}`));
+const source = await readFile("dashboard.html", "utf8");
+await writeFile("dashboard.html", source.replace(/data\/zenless-zone-zero\.js\?v=[^"]+/, `data/zenless-zone-zero.js?v=zenless-august-${Date.now()}`));

@@ -2,7 +2,7 @@ import vm from "node:vm";
 
 const spreadsheetToken = process.env.SPREADSHEET_TOKEN || "V9C1sSLU4hOweEtvDRdcBnENnMh";
 const sheetId = process.env.ZENLESS_VOD_SHEET_ID || "XJKrFe";
-const sourceUrl = process.env.ZENLESS_VOD_DATA_URL || "https://raw.githubusercontent.com/krksw96/wuthering-waves-vod-dashboard/main/data/videos.js";
+const sourceUrl = process.env.ZENLESS_VOD_DATA_URL || "https://raw.githubusercontent.com/krksw96/wuthering-waves-vod-dashboard/main/data/zenless-zone-zero.js";
 const appId = process.env.FEISHU_APP_ID;
 const appSecret = process.env.FEISHU_APP_SECRET;
 if (!appId || !appSecret) throw new Error("FEISHU_APP_ID and FEISHU_APP_SECRET are required");
@@ -24,9 +24,9 @@ const auth = await request("/open-apis/auth/v3/tenant_access_token/internal", {
 const token = auth.tenant_access_token;
 const sourceResponse = await fetch(sourceUrl);
 if (!sourceResponse.ok) throw new Error(`Zenless VOD data download failed: ${sourceResponse.status}`);
-const sandbox = { window: {} };
+const sandbox = { window: { GAME_DATA: {} } };
 vm.runInNewContext(await sourceResponse.text(), sandbox);
-const videos = sandbox.window.VOD_DATA?.videos;
+const videos = sandbox.window.GAME_DATA?.["zenless-zone-zero"]?.videos;
 if (!Array.isArray(videos)) throw new Error("Zenless VOD data is invalid");
 
 const headers = ["NO.", "유튜버 이름", "유튜버 구독자 수", "제목", "링크", "형식", "날짜", "조회수", "좋아요 수", "댓글 수", "검색 키워드"];

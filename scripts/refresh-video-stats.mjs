@@ -2,11 +2,9 @@
 
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { readGameDataset } from "./game-dataset.mjs";
 
-globalThis.window = {};
-await import(`${pathToFileURL(resolve("data/videos.js")).href}?v=${Date.now()}`);
-const videos = window.VOD_DATA.videos;
+const videos = (await readGameDataset("wuthering-waves")).videos;
 const output = resolve("data/stats-overrides.json");
 const headers = {
   "accept-language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
