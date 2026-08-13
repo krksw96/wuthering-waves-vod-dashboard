@@ -304,6 +304,9 @@ function initDataCity(THREE) {
     yawOffset: 0,
     pitch: 0.866,
     distance: 10.5,
+    targetDistance: 10.5,
+    minDistance: 5.5,
+    maxDistance: 24,
     dragging: false,
     pointerId: null,
     lastX: 0,
@@ -393,13 +396,20 @@ function initDataCity(THREE) {
   canvas.addEventListener("lostpointercapture", releaseCameraDrag);
   canvas.addEventListener("wheel", (event) => {
     if (!state.started) return;
-    cameraOrbit.distance = THREE.MathUtils.clamp(cameraOrbit.distance + event.deltaY * 0.008, 7.5, 18);
+    const deltaScale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1;
+    const wheelDelta = THREE.MathUtils.clamp(event.deltaY * deltaScale, -240, 240);
+    cameraOrbit.targetDistance = THREE.MathUtils.clamp(
+      cameraOrbit.targetDistance + wheelDelta * 0.018,
+      cameraOrbit.minDistance,
+      cameraOrbit.maxDistance,
+    );
     event.preventDefault();
   }, { passive: false });
   canvas.addEventListener("dblclick", () => {
     cameraOrbit.yawOffset = 0;
     cameraOrbit.pitch = 0.866;
     cameraOrbit.distance = 10.5;
+    cameraOrbit.targetDistance = 10.5;
   });
   addEventListener("blur", () => {
     clearInputs();
@@ -420,6 +430,7 @@ function initDataCity(THREE) {
     cameraOrbit.yawOffset = 0;
     cameraOrbit.pitch = 0.866;
     cameraOrbit.distance = 10.5;
+    cameraOrbit.targetDistance = 10.5;
     cameraPosition.set(0, 11.8, 14);
     cameraTarget.set(0, 0.9, -2.4);
     clock.getDelta();
@@ -1754,6 +1765,11 @@ function initDataCity(THREE) {
     forward.set(Math.sin(state.yaw), 0, -Math.cos(state.yaw));
     right.set(Math.cos(state.yaw), 0, Math.sin(state.yaw));
     const speedRatio = Math.min(Math.abs(state.speed) / vehicle.boostedMaxForwardSpeed, 1);
+    cameraOrbit.distance = THREE.MathUtils.lerp(
+      cameraOrbit.distance,
+      cameraOrbit.targetDistance,
+      1 - Math.exp(-8 * delta),
+    );
     const orbitDistance = cameraOrbit.distance + speedRatio * 1.2;
     const horizontalDistance = Math.cos(cameraOrbit.pitch) * orbitDistance;
     const orbitAngle = -state.yaw + cameraOrbit.yawOffset;
@@ -1772,7 +1788,9 @@ function initDataCity(THREE) {
     cameraTarget.lerp(targetCameraLook, lookDamping);
     camera.position.copy(cameraPosition);
     camera.lookAt(cameraTarget);
-    camera.fov = THREE.MathUtils.lerp(camera.fov, 55 + speedRatio * 4, 1 - Math.exp(-3 * delta));
+    const zoomRatio = (cameraOrbit.distance - cameraOrbit.minDistance) / (cameraOrbit.maxDistance - cameraOrbit.minDistance);
+    const targetFov = THREE.MathUtils.lerp(49, 62, zoomRatio) + speedRatio * 3;
+    camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, 1 - Math.exp(-5 * delta));
     camera.updateProjectionMatrix();
   }
 
