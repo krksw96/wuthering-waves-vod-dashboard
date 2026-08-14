@@ -43,26 +43,43 @@ function parseCsvLine(line) {
   return values;
 }
 
+const workbookResponse = run([
+  "sheets", "+workbook-info",
+  "--spreadsheet-token", workbook
+]);
+if (!workbookResponse.ok) throw new Error("Failed to read the Neverness workbook structure");
+const rowCount = workbookResponse.data.sheets.find((item) => item.sheet_id === sheet)?.row_count;
+if (!Number.isInteger(rowCount) || rowCount < 2) throw new Error("Invalid Neverness source sheet size");
+
 const csvResponse = run([
   "sheets", "+csv-get",
   "--spreadsheet-token", workbook,
   "--sheet-id", sheet,
-  "--range", "A1:K59"
+  "--range", `A1:K${rowCount}`,
+  "--max-chars", String(Math.max(150000, rowCount * 1000))
 ]);
+
+if (!csvResponse.ok || csvResponse.data.has_more) throw new Error("The Neverness source sheet was not read completely");
+
+const lines = csvResponse.data.annotated_csv.split(/\r?\n/);
+const rows = lines.slice(1).map((line) => {
+  const match = line.match(/^\[row=(\d+)\] ([\s\S]*)$/);
+  if (!match) throw new Error(`Missing row marker: ${line}`);
+  return { row: Number(match[1]), values: parseCsvLine(match[2]) };
+}).filter(({ values }) => values.some((value) => value !== ""));
+
+const lastRow = rows.at(-1)?.row;
+if (!lastRow || lastRow < 2) throw new Error("No Neverness videos were found");
 
 const linkResponse = run([
   "sheets", "+cells-get",
   "--spreadsheet-token", workbook,
   "--sheet-id", sheet,
-  "--range", "D1:E59",
+  "--range", `D1:E${lastRow}`,
   "--include", "value",
-  "--max-chars", "100000"
+  "--max-chars", "150000"
 ]);
-
-if (!csvResponse.ok || !linkResponse.ok) throw new Error("Failed to read the Neverness source sheet");
-if (csvResponse.data.actual_range !== "A1:K59") throw new Error(`Unexpected source range: ${csvResponse.data.actual_range}`);
-if (csvResponse.data.row_count !== 59 || csvResponse.data.has_more) throw new Error("The Neverness source sheet was not read completely");
-if (linkResponse.data.has_more || linkResponse.data.returned_cell_count !== 118) throw new Error("The Neverness source links were not read completely");
+if (!linkResponse.ok || linkResponse.data.has_more) throw new Error("The Neverness source links were not read completely");
 
 const linksByRow = new Map();
 const linkRange = linkResponse.data.ranges[0];
@@ -71,15 +88,6 @@ linkRange.row_indices.forEach((row, index) => {
   const link = linkCell?.rich_text?.find((part) => part.type === "link")?.link;
   if (link) linksByRow.set(row, link);
 });
-
-const lines = csvResponse.data.annotated_csv.split(/\r?\n/);
-const rows = lines.slice(1).map((line) => {
-  const match = line.match(/^\[row=(\d+)\] ([\s\S]*)$/);
-  if (!match) throw new Error(`Missing row marker: ${line}`);
-  return { row: Number(match[1]), values: parseCsvLine(match[2]) };
-});
-
-if (rows.length !== 58) throw new Error(`Expected 58 videos, found ${rows.length}`);
 
 const videos = rows.map(({ row, values }) => {
   const [, creator, subscribers, title, , sourceFormat, date, views, likes, comments] = values;

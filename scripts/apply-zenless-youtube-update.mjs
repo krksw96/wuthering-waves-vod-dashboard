@@ -20,7 +20,7 @@ const aliases = (items) => new Map(items.flatMap((item) => item.aliases.map((ali
 const kocAliases = aliases(kocList);
 const kolAliases = aliases(kolList);
 const adIds = new Set(adVideos.rows.map((row) => row.youtubeId));
-const byId = new Map();
+const byId = new Map(current.videos.map((video) => [video.id, video]));
 
 for (const row of update.rows) {
   const creatorKey = normalize(row.channelTitle);
@@ -101,8 +101,8 @@ const payload = {
   ...current,
   generatedAt: new Date().toISOString(),
   period: {
-    start: update.meta.start,
-    end: update.meta.end,
+    start: [current.period.start, update.meta.start].filter(Boolean).sort().at(0),
+    end: [current.period.end, update.meta.end].filter(Boolean).sort().at(-1),
   },
   videos,
 };

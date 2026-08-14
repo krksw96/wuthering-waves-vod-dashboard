@@ -21,7 +21,9 @@ const output = resolve(String(args.output || "../data/zenless-youtube-data-api-a
 const apiKey = process.env.YOUTUBE_API_KEY;
 if (!apiKey) throw new Error("YOUTUBE_API_KEY is not configured");
 
-const related = /젠레스(?:\s*존\s*제로)?|젠존제|zenless\s*zone\s*zero|\bzzz\b|絶区零|레미엘/i;
+const related = args.relatedPattern
+  ? new RegExp(String(args.relatedPattern), "i")
+  : /젠레스(?:\s*존\s*제로)?|젠존제|zenless\s*zone\s*zero|\bzzz\b|絶区零|레미엘/i;
 const aiNamedTool = /\b(?:suno|udio|chatgpt|rvc|tts)\b|인공지능|생성형\s*ai/i;
 const aiInTitle = /(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$)/i;
 const aiDisclosure = /(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$).{0,40}(?:만들|제작|생성|변환|보정|활용|이용|도움|업스케일|보이스|음악|노래|이미지|영상|목소리)|(?:만들|제작|생성|변환|보정|활용|이용|도움|업스케일|보이스|음악|노래|이미지|영상|목소리).{0,40}(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$)|\busing\s+ai\b|ai[-\s]?(?:generated|made|voice|music|image|video|animation|art|cover)/is;

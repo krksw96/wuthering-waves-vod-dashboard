@@ -6,6 +6,7 @@
   "scripts": {
     "sync": "node scripts/sync-vod-data.mjs",
     "sync-neverness": "node scripts/build-neverness-data.mjs",
+    "apply-neverness-update": "node scripts/apply-neverness-youtube-update.mjs",
     "sync-ad-tags": "node scripts/sync-ad-task-tags.mjs",
     "apply-update": "node scripts/apply-youtube-update.mjs",
     "serve": "node scripts/serve.mjs"
