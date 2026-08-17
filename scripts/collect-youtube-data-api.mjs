@@ -3,12 +3,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
-const queries = [
-  "명조", "명조 워더링 웨이브", "워더링 웨이브", "wuthering waves 명조",
-  "명조 3.5", "명조 양양", "명조 현령", "명조 수수",
-  "명조 공략", "명조 스토리", "명조 다시보기", "명조 리액션",
-  "명조 쇼츠", "명조 shorts", "워더링 웨이브 쇼츠", "워더링 웨이브 shorts",
-];
+await import("../config/wuthering-waves-search-config.js");
+const { baseQueries, characters, characterQueries, allQueries } = globalThis.WUTHERING_WAVES_SEARCH_CONFIG;
 const args = Object.fromEntries(process.argv.slice(2).map((arg) => {
   const [key, ...value] = arg.replace(/^--/, "").split("=");
   return [key, value.join("=") || true];
@@ -18,13 +14,19 @@ const end = String(args.end || "2026-07-13");
 const maxPages = Math.min(Number.parseInt(args.maxPages || "5", 10), 5);
 const windowDays = Number.parseInt(args.windowDays || "0", 10);
 const requestedQueries = String(args.queries || "").split("|").map((query) => query.trim()).filter(Boolean);
-const searchQueries = requestedQueries.length ? requestedQueries : (args.coreQueries ? queries.slice(0, 4) : queries);
+const selectedQueries = requestedQueries.length ? requestedQueries : (args.coreQueries ? baseQueries.slice(0, 4) : allQueries);
+const searchQueries = selectedQueries.map((query) => ({
+  query,
+  pages: requestedQueries.length || args.coreQueries || !characterQueries.includes(query) ? maxPages : Math.min(maxPages, 1),
+}));
 const includeIds = String(args.includeIds || "").split(",").map((id) => id.trim()).filter(Boolean);
 const output = resolve(String(args.output || "../data/youtube_data_api_audit.json"));
 const apiKey = process.env.YOUTUBE_API_KEY;
 if (!apiKey) throw new Error("YOUTUBE_API_KEY is not configured");
 
-const related = /명조|워더링\s*웨이브|wuthering\s*waves|\bwuwa\b|鳴潮/i;
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const characterPattern = characters.map(escapeRegex).sort((a, b) => b.length - a.length).join("|");
+const related = new RegExp(`명조|워더링\\s*웨이브|wuthering\\s*waves|\\bwuwa\\b|鳴潮|${characterPattern}`, "i");
 const aiNamedTool = /\b(?:suno|udio|chatgpt|rvc|tts)\b|인공지능|생성형\s*ai/i;
 const aiInTitle = /(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$)/i;
 const aiDisclosure = /(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$).{0,40}(?:만들|제작|생성|변환|보정|활용|이용|도움|업스케일|보이스|음악|노래|이미지|영상|목소리)|(?:만들|제작|생성|변환|보정|활용|이용|도움|업스케일|보이스|음악|노래|이미지|영상|목소리).{0,40}(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$)|\busing\s+ai\b|ai[-\s]?(?:generated|made|voice|music|image|video|animation|art|cover)/is;
@@ -75,10 +77,10 @@ if (windowDays > 0) {
 } else {
   windows.push({ after: rangeStart.toISOString(), before: endExclusive.toISOString() });
 }
-for (const query of searchQueries) {
+for (const { query, pages } of searchQueries) {
   for (const window of windows) {
     let pageToken = "";
-    for (let page = 0; page < maxPages; page += 1) {
+    for (let page = 0; page < pages; page += 1) {
       const result = await api("search", {
       part: "snippet",
       q: query,
@@ -94,7 +96,11 @@ for (const query of searchQueries) {
       searchCalls += 1;
       for (const item of result.items || []) {
         const id = item.id?.videoId;
-        if (id) candidates.set(id, { query, searchSnippet: item.snippet });
+        if (id) {
+          const existing = candidates.get(id) || { queries: new Set(), searchSnippet: item.snippet };
+          existing.queries.add(query);
+          candidates.set(id, existing);
+        }
       }
       pageToken = result.nextPageToken || "";
       if (!pageToken) break;
@@ -102,7 +108,7 @@ for (const query of searchQueries) {
   }
   console.error(`${query}: ${candidates.size} unique candidates`);
 }
-for (const id of includeIds) candidates.set(id, { query: "explicit video ID" });
+for (const id of includeIds) candidates.set(id, { queries: new Set(["explicit video ID"]) });
 
 const details = [];
 for (const ids of batches([...candidates.keys()])) {
@@ -144,7 +150,7 @@ const rows = details.flatMap((item) => {
     format: seconds != null && seconds <= 180 ? "Shorts" : "VOD",
     description: snippet.description || "",
     gameTitle: "",
-    sources: `YouTube Data API v3 search.list / ${candidates.get(item.id)?.query || ""}`,
+    sources: `YouTube Data API v3 search.list / ${[...(candidates.get(item.id)?.queries || [])].join(", ")}`,
   }];
 }).sort((a, b) => b.date.localeCompare(a.date) || b.viewCount - a.viewCount);
 
