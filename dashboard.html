@@ -586,9 +586,9 @@
     <script>
       const requestedGame = new URLSearchParams(location.search).get("game");
       const gameDataPaths = {
-        "wuthering-waves": "data/wuthering-waves.js?v=refresh-20260904-41787",
+        "wuthering-waves": "data/wuthering-waves.js?v=refresh-20260905-41907",
         "neverness-to-everness": "data/neverness-to-everness.js?v=refresh-20260814-360",
-        "zenless-zone-zero": "data/zenless-zone-zero.js?v=refresh-20260904-2614"
+        "zenless-zone-zero": "data/zenless-zone-zero.js?v=refresh-20260905-2740"
       };
       const initialGame = gameDataPaths[requestedGame] ? requestedGame : "wuthering-waves";
       document.write(`<script src="${gameDataPaths[initialGame]}"><\/script>`);
