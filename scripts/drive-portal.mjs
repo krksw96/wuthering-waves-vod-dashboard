@@ -1,20 +1,29 @@
 const fatalError = document.querySelector("#fatal-error");
 const bootStartButton = document.querySelector("#start-button");
 const bootLoadingCopy = document.querySelector("#loading-copy");
+document.querySelector("#preview-launch")?.addEventListener("click", () => bootStartButton?.click());
 const musicToggle = document.querySelector("#music-toggle");
 const youtubeAudio = document.querySelector("#youtube-audio");
 const MUSIC_VIDEO_ID = "eg_yMhrRD0A";
+function setStartButtonText(value) {
+  const label = bootStartButton?.querySelector('[data-i18n="startButton"]') || bootStartButton;
+  if (label) label.textContent = value;
+}
 const translations = {
   ko: {
     title: "DATA DRIVE — 게임 YouTube 데이터 시티",
     description: "자동차를 운전해 명조, 이환, 젠레스 존 제로 YouTube 데이터 구역을 탐험하세요.",
     worldAria: "세 게임의 데이터 구역을 자동차로 탐험하는 3D 화면",
     quickLinksAria: "대시보드 바로가기", languageAria: "언어 변경", controlsAria: "조작 방법",
-    startDescription: "비 내리는 네온 시티를 직접 운전해 명조, 이환, 젠레스 존 제로 구역을 찾아가세요. 빛나는 데이터 포털 안에 잠시 머무르면 해당 대시보드가 열립니다.",
-    startButton: "시동 걸기", accelerator: "액셀", brakeReverse: "브레이크 · 후진", steering: "앞바퀴 조향",
+    startDescription: "게임 콘텐츠의 흐름을 읽는 새로운 방법. 세 개의 데이터 구역을 탐험하고, 다음 인사이트를 발견하세요.",
+    startButton: "도시 탐험하기", chooseDistrict: "목적지를 선택하세요", districtDescription: "궁금한 게임의 데이터로 바로 이동하세요.",
+    openDashboard: "대시보드 열기", exploreCity: "도시 탐험하기", skipDrive: "데이터 바로 보기", cityPreview: "탐험을 기다리는 데이터 시티",
+    districtCount: "3개 게임 데이터 구역", keyboardHint: "WASD로 이동 · 마우스로 시야 조절", backToLobby: "로비로 돌아가기",
+    footerNote: "게임 콘텐츠를, 데이터의 관점으로.", controlsTitle: "드라이빙 조작법",
+    accelerator: "액셀", brakeReverse: "브레이크 · 후진", steering: "앞바퀴 조향",
     boost: "부스터", drift: "핸드브레이크 · 드리프트", driftShort: "드리프트", resetCar: "차량 복귀", resetShort: "복귀", driveHint: "액셀·브레이크", cameraView: "드래그·휠 시야",
     loadingCity: "데이터 시티를 불러오는 중…", loadingRequested: "준비되는 즉시 자동으로 출발합니다",
-    ready: "준비 완료 · 시동을 걸어 출발하세요", departing: "출발합니다", loadingButton: "도시 불러오는 중…",
+    ready: "탐험 준비 완료", departing: "출발합니다", loadingButton: "도시 불러오는 중…",
     nearestDistrict: "NEAREST DATA DISTRICT", calculating: "거리 계산 중", portalHint: "원 안에 머무르면 대시보드가 열립니다",
     musicOn: "배경 음악 켜짐", musicOff: "배경 음악 꺼짐",
     games: { "wuthering-waves": "명조", "neverness-to-everness": "이환", "zenless-zone-zero": "젠레스" },
@@ -24,11 +33,15 @@ const translations = {
     description: "驾驶汽车探索鸣潮、异环和绝区零的 YouTube 数据区域。",
     worldAria: "驾驶汽车探索三个游戏数据区域的 3D 场景",
     quickLinksAria: "数据看板快捷入口", languageAria: "切换语言", controlsAria: "驾驶操作",
-    startDescription: "驾驶汽车穿过雨夜霓虹都市，前往鸣潮、异环和绝区零数据区。在发光传送门内停留片刻即可打开相应数据看板。",
-    startButton: "启动引擎", accelerator: "油门", brakeReverse: "刹车 · 倒车", steering: "前轮转向",
+    startDescription: "用新的方式读懂游戏内容趋势。探索三个数据区域，发现下一份洞察。",
+    startButton: "探索数据城", chooseDistrict: "选择目的地", districtDescription: "直接打开你关注的游戏数据。",
+    openDashboard: "打开数据看板", exploreCity: "探索数据城", skipDrive: "直接查看数据", cityPreview: "等待你探索的数据城",
+    districtCount: "3 个游戏数据区域", keyboardHint: "WASD 移动 · 鼠标调整视角", backToLobby: "返回大厅",
+    footerNote: "从数据的角度，看游戏内容。", controlsTitle: "驾驶操作指南",
+    accelerator: "油门", brakeReverse: "刹车 · 倒车", steering: "前轮转向",
     boost: "加速器", drift: "手刹漂移", driftShort: "漂移", resetCar: "车辆复位", resetShort: "复位", driveHint: "油门·刹车", cameraView: "拖动·滚轮视角",
     loadingCity: "正在加载数据城…", loadingRequested: "准备完成后将自动出发",
-    ready: "准备完成 · 启动引擎即可出发", departing: "出发", loadingButton: "正在加载城市…",
+    ready: "探索准备就绪", departing: "出发", loadingButton: "正在加载城市…",
     nearestDistrict: "最近的数据区域", calculating: "正在计算距离", portalHint: "停留在圆环内即可打开数据看板",
     musicOn: "背景音乐已开启", musicOff: "背景音乐已关闭",
     games: { "wuthering-waves": "鸣潮", "neverness-to-everness": "异环", "zenless-zone-zero": "绝区零" },
@@ -38,17 +51,21 @@ const translations = {
     description: "Drive through the YouTube data districts for Wuthering Waves, NTE, and ZZZ.",
     worldAria: "A 3D driving world connecting three game data districts",
     quickLinksAria: "Dashboard shortcuts", languageAria: "Change language", controlsAria: "Driving controls",
-    startDescription: "Drive through the rain-soaked neon city to the Wuthering Waves, NTE, and ZZZ districts. Stay inside a glowing portal to open its dashboard.",
-    startButton: "START ENGINE", accelerator: "Accelerate", brakeReverse: "Brake · Reverse", steering: "Front-wheel steering",
+    startDescription: "A new way to read the flow of gaming content. Explore three data districts and discover your next insight.",
+    startButton: "Explore the city", chooseDistrict: "Choose your destination", districtDescription: "Go straight to the game data you want to explore.",
+    openDashboard: "Open dashboard", exploreCity: "Explore the city", skipDrive: "Explore the data", cityPreview: "A data city waiting to be explored",
+    districtCount: "3 game data districts", keyboardHint: "WASD to drive · Mouse to look around", backToLobby: "Back to the lobby",
+    footerNote: "Gaming content, seen through data.", controlsTitle: "Driving controls",
+    accelerator: "Accelerate", brakeReverse: "Brake · Reverse", steering: "Front-wheel steering",
     boost: "Boost", drift: "Handbrake drift", driftShort: "Drift", resetCar: "Reset car", resetShort: "Reset", driveHint: "Accelerate·Brake", cameraView: "Drag·wheel view",
     loadingCity: "Loading Data City…", loadingRequested: "Departure begins as soon as the city is ready",
-    ready: "Ready · Start the engine to depart", departing: "Departing", loadingButton: "Loading city…",
+    ready: "Ready to explore", departing: "Departing", loadingButton: "Loading city…",
     nearestDistrict: "NEAREST DATA DISTRICT", calculating: "Calculating distance", portalHint: "Stay inside the ring to open the dashboard",
     musicOn: "Background music on", musicOff: "Background music off",
     games: { "wuthering-waves": "Wuthering Waves", "neverness-to-everness": "NTE", "zenless-zone-zero": "ZZZ" },
   },
 };
-let currentLanguage = readPreference("data-city-language", "ko");
+let currentLanguage = readPreference("data-city-language", readPreference("vodLanguage", "ko"));
 let musicWanted = readPreference("data-city-music", "on") !== "off";
 const bootState = { launch: null, requested: false };
 
@@ -105,7 +122,10 @@ function applyLanguage(language, persist = true) {
     button.setAttribute("aria-pressed", String(active));
   });
   updateMusicButton();
-  if (persist) writePreference("data-city-language", currentLanguage);
+  if (persist) {
+    writePreference("data-city-language", currentLanguage);
+    writePreference("vodLanguage", currentLanguage);
+  }
   dispatchEvent(new CustomEvent("datacitylanguagechange", { detail: { language: currentLanguage } }));
 }
 
@@ -129,7 +149,7 @@ bootStartButton?.addEventListener("click", () => {
     return;
   }
   bootState.requested = true;
-  bootStartButton.textContent = copy().loadingButton;
+  setStartButtonText(copy().loadingButton);
   bootStartButton.setAttribute("aria-busy", "true");
   if (bootLoadingCopy) bootLoadingCopy.textContent = copy().loadingRequested;
 });
@@ -140,7 +160,7 @@ try {
 } catch (error) {
   console.error("Failed to start the 3D data city", error);
   bootStartButton?.removeAttribute("aria-busy");
-  if (bootStartButton) bootStartButton.textContent = "3D 실행 불가 · 바로가기 이용";
+  setStartButtonText("3D 실행 불가 · 바로가기 이용");
   fatalError?.classList.add("visible");
 }
 
@@ -148,6 +168,8 @@ function initDataCity(THREE) {
   const canvas = document.querySelector("#world");
   const startScreen = document.querySelector("#start-screen");
   const startButton = document.querySelector("#start-button");
+  const exitButton = document.querySelector("#exit-drive");
+  const canvasMount = document.querySelector("#city-canvas-mount") || canvas?.parentElement;
   const loadingCopy = document.querySelector("#loading-copy");
   const speedValue = document.querySelector("#speed-value");
   const gear = document.querySelector("#gear");
@@ -160,15 +182,36 @@ function initDataCity(THREE) {
   const liveStatus = document.querySelector("#live-status");
 
   if (!canvas || !startButton) throw new Error("Required lobby elements are missing");
+  if (!canvas.hasAttribute("tabindex")) canvas.tabIndex = -1;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let previewNeedsRender = true;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x030c12);
   scene.fog = new THREE.FogExp2(0x07171d, 0.018);
 
-  const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 210);
+  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 210);
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
-  renderer.setSize(innerWidth, innerHeight, false);
+  canvas.addEventListener("webglcontextrestored", () => { previewNeedsRender = true; });
+  let renderWidth = 0;
+  let renderHeight = 0;
+  let renderPixelRatio = 0;
+  function resizeRenderer() {
+    const bounds = canvas.getBoundingClientRect();
+    const width = Math.max(1, Math.round(canvas.clientWidth || bounds.width));
+    const height = Math.max(1, Math.round(canvas.clientHeight || bounds.height));
+    const pixelRatio = Math.min(devicePixelRatio || 1, 1.75);
+    if (width === renderWidth && height === renderHeight && pixelRatio === renderPixelRatio) return;
+    renderWidth = width;
+    renderHeight = height;
+    renderPixelRatio = pixelRatio;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(width, height, false);
+    previewNeedsRender = true;
+  }
+  resizeRenderer();
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.32;
@@ -379,14 +422,53 @@ function initDataCity(THREE) {
   camera.lookAt(cameraTarget);
   const launchDrive = () => {
     if (state.started) return;
+    clearInputs();
     state.started = true;
+    document.body.append(canvas);
     document.body.classList.add("started");
     startScreen.classList.add("hidden");
     startButton.removeAttribute("aria-busy");
+    loadingCopy.textContent = copy().departing;
+    camera.position.copy(cameraPosition);
+    camera.lookAt(cameraTarget);
+    camera.fov = 55;
+    resizeRenderer();
+    camera.updateProjectionMatrix();
+    window.scrollTo({ top: 0, behavior: "instant" });
     startMusic();
-    canvas.focus();
+    canvas.focus({ preventScroll: true });
     clock.getDelta();
   };
+  const exitDrive = () => {
+    if (!state.started) return;
+    state.started = false;
+    clearInputs();
+    resetCar();
+    if (cameraOrbit.pointerId !== null && canvas.hasPointerCapture?.(cameraOrbit.pointerId)) {
+      canvas.releasePointerCapture(cameraOrbit.pointerId);
+    }
+    cameraOrbit.dragging = false;
+    cameraOrbit.pointerId = null;
+    cameraOrbit.yawOffset = 0;
+    cameraOrbit.pitch = 0.866;
+    cameraOrbit.distance = 10.5;
+    cameraOrbit.targetDistance = 10.5;
+    cameraPosition.set(0, 11.8, 14);
+    cameraTarget.set(0, 0.9, -2.4);
+    stopMusic();
+    document.body.classList.remove("started", "camera-dragging");
+    startScreen.classList.remove("hidden");
+    canvasMount?.append(canvas);
+    bootState.requested = false;
+    loadingCopy.textContent = copy().ready;
+    setStartButtonText(copy().startButton);
+    previewNeedsRender = true;
+    resizeRenderer();
+    window.scrollTo({ top: 0, behavior: "instant" });
+    startButton.focus({ preventScroll: true });
+    clock.getDelta();
+  };
+  exitButton?.addEventListener("click", exitDrive);
   bootState.launch = launchDrive;
   startButton.disabled = false;
   startButton.removeAttribute("aria-busy");
@@ -399,8 +481,19 @@ function initDataCity(THREE) {
     ["KeyA", "left"], ["ArrowLeft", "left"],
     ["KeyD", "right"], ["ArrowRight", "right"],
   ]);
+  const isInteractiveTarget = (target) => Boolean(target?.closest?.(
+    "button, a, input, select, textarea, details, [contenteditable]:not([contenteditable='false'])",
+  ));
 
   addEventListener("keydown", (event) => {
+    if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || isInteractiveTarget(event.target)) return;
+    if (!state.started) {
+      if ((event.code === "Space" || event.code === "Enter") && !event.repeat) {
+        event.preventDefault();
+        startButton.click();
+      }
+      return;
+    }
     if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
       inputs.boost = true;
       state.boostUntil = performance.now() + 280;
@@ -411,26 +504,19 @@ function initDataCity(THREE) {
       event.preventDefault();
     }
     if (event.code === "Space") {
-      if (state.started) inputs.drift = true;
-      else if (!event.repeat) startButton.click();
+      inputs.drift = true;
       event.preventDefault();
     }
     if (event.code === "KeyR" && !event.repeat) resetCar();
-    if (event.code === "Enter" && !state.started) startButton.click();
   });
   addEventListener("keyup", (event) => {
-    if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
-      inputs.boost = false;
-      event.preventDefault();
-      return;
-    }
-    if (event.code === "Space") {
-      inputs.drift = false;
-      event.preventDefault();
-      return;
-    }
-    if (!keyMap.has(event.code)) return;
-    inputs[keyMap.get(event.code)] = false;
+    const control = event.code === "ShiftLeft" || event.code === "ShiftRight"
+      ? "boost"
+      : event.code === "Space" ? "drift" : keyMap.get(event.code);
+    if (!control) return;
+    // Always release held controls, even if focus moved to a button mid-drive.
+    inputs[control] = false;
+    if (!state.started || isInteractiveTarget(event.target)) return;
     event.preventDefault();
   });
   canvas.addEventListener("pointerdown", (event) => {
@@ -475,6 +561,7 @@ function initDataCity(THREE) {
     event.preventDefault();
   }, { passive: false });
   canvas.addEventListener("dblclick", () => {
+    if (!state.started) return;
     cameraOrbit.yawOffset = 0;
     cameraOrbit.pitch = 0.866;
     cameraOrbit.distance = 10.5;
@@ -488,6 +575,7 @@ function initDataCity(THREE) {
   });
   document.addEventListener("visibilitychange", () => {
     clearInputs();
+    previewNeedsRender = true;
     clock.getDelta();
   });
   addEventListener("pageshow", (event) => {
@@ -502,6 +590,8 @@ function initDataCity(THREE) {
     cameraOrbit.targetDistance = 10.5;
     cameraPosition.set(0, 11.8, 14);
     cameraTarget.set(0, 0.9, -2.4);
+    previewNeedsRender = true;
+    resizeRenderer();
     clock.getDelta();
     if (state.started && musicWanted) {
       stopMusic();
@@ -510,6 +600,7 @@ function initDataCity(THREE) {
   });
   addEventListener("datacitylanguagechange", () => {
     loadingCopy.textContent = state.started ? copy().departing : copy().ready;
+    previewNeedsRender = true;
     zones.forEach((zone) => {
       zone.shortName = copy().games[zone.id];
       if (zone.label && zone.district) {
@@ -531,6 +622,7 @@ function initDataCity(THREE) {
   document.querySelectorAll("[data-control]").forEach((button) => {
     const control = button.dataset.control;
     const press = (event) => {
+      if (!state.started) return;
       event.preventDefault();
       inputs[control] = true;
       button.classList.add("active");
@@ -547,12 +639,9 @@ function initDataCity(THREE) {
     button.addEventListener("lostpointercapture", release);
   });
 
-  addEventListener("resize", () => {
-    camera.aspect = innerWidth / innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
-    renderer.setSize(innerWidth, innerHeight, false);
-  });
+  addEventListener("resize", resizeRenderer);
+  if (typeof ResizeObserver !== "undefined") new ResizeObserver(resizeRenderer).observe(canvas);
+  reducedMotion.addEventListener("change", () => { previewNeedsRender = true; });
 
   renderer.setAnimationLoop(animate);
 
@@ -2214,6 +2303,7 @@ function initDataCity(THREE) {
     zonePrompt.classList.remove("visible");
     zonePrompt.style.setProperty("--entry-progress", "0%");
     document.body.classList.remove("boosting", "drifting");
+    boostTrails.visible = false;
     driftSmoke.visible = false;
   }
 
@@ -2487,10 +2577,10 @@ function initDataCity(THREE) {
         nearestDistance = distance;
         nearest = zone;
       }
-      const pulse = 1 + Math.sin(state.elapsed * 2.2 + index * 1.9) * 0.035;
+      const pulse = reducedMotion.matches ? 1 : 1 + Math.sin(state.elapsed * 2.2 + index * 1.9) * 0.035;
       zone.portalRing.scale.setScalar(pulse);
-      zone.portalGlow.material.opacity = 0.085 + Math.sin(state.elapsed * 2.6 + index) * 0.025;
-      if (zone.hazard) zone.hazard.rotation.y += delta * 0.75;
+      zone.portalGlow.material.opacity = reducedMotion.matches ? 0.085 : 0.085 + Math.sin(state.elapsed * 2.6 + index) * 0.025;
+      if (zone.hazard && !reducedMotion.matches) zone.hazard.rotation.y += delta * 0.75;
     });
 
     if (nearest !== state.nearestZone) {
@@ -2537,8 +2627,23 @@ function initDataCity(THREE) {
 
   function animate() {
     const delta = Math.min(clock.getDelta(), 0.05);
+    if (document.hidden) return;
+    if (!state.started) {
+      if (!previewNeedsRender) return;
+      camera.position.set(34, 36, 45);
+      camera.lookAt(0, 0, 0);
+      camera.fov = 50;
+      camera.updateProjectionMatrix();
+      proximityFadeMeshes.forEach((object) => {
+        object.material.opacity = object.userData.proximityFade.originalOpacity;
+        object.material.depthWrite = object.userData.proximityFade.originalDepthWrite;
+      });
+      renderer.render(scene, camera);
+      previewNeedsRender = false;
+      return;
+    }
     state.elapsed += delta;
-    if (atmosphere.rain) {
+    if (atmosphere.rain && !reducedMotion.matches) {
       const rainPositions = atmosphere.rain.geometry.attributes.position.array;
       for (let index = 1; index < rainPositions.length; index += 3) {
         rainPositions[index] -= delta * 13;
@@ -2546,24 +2651,26 @@ function initDataCity(THREE) {
       }
       atmosphere.rain.geometry.attributes.position.needsUpdate = true;
     }
-    if (atmosphere.hologram) {
+    if (atmosphere.hologram && !reducedMotion.matches) {
       atmosphere.hologram.position.y = 0.15 + Math.sin(state.elapsed * 1.8) * 0.09;
       atmosphere.hologram.children.forEach((part, index) => {
         part.material.opacity = 0.16 + Math.sin(state.elapsed * 4.2 + index) * 0.055;
       });
     }
-    if (atmosphere.petals) {
+    if (atmosphere.petals && !reducedMotion.matches) {
       atmosphere.petals.rotation.y = state.elapsed * 0.045;
       atmosphere.petals.position.y = Math.sin(state.elapsed * 0.7) * 0.22;
     }
-    atmosphere.lanterns.forEach((lantern) => {
-      lantern.rotation.z = Math.sin(state.elapsed * 1.15 + lantern.userData.phase) * 0.055;
-    });
-    atmosphere.clouds.forEach((cloud) => {
-      cloud.position.x += delta * cloud.userData.drift;
-      if (cloud.position.x > 58) cloud.position.x = -58;
-    });
-    if (state.started && !document.hidden) updateCar(delta);
+    if (!reducedMotion.matches) {
+      atmosphere.lanterns.forEach((lantern) => {
+        lantern.rotation.z = Math.sin(state.elapsed * 1.15 + lantern.userData.phase) * 0.055;
+      });
+      atmosphere.clouds.forEach((cloud) => {
+        cloud.position.x += delta * cloud.userData.drift;
+        if (cloud.position.x > 58) cloud.position.x = -58;
+      });
+    }
+    updateCar(delta);
     updatePortals(delta);
     updateCamera(delta);
     updateProximityFades(delta);
