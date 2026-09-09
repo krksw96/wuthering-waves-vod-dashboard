@@ -12,6 +12,7 @@
 .hero-actions { margin-top: 16px; }
 .hero-meta { margin-top: 25px; }
 .city-preview { min-height: 510px; }
+.preview-caption p { word-break: keep-all; }
 
 .drive-toolbar { position: fixed; z-index: 9; top: 94px; left: 24px; right: 24px; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
 .drive-mode-switch { display: flex; padding: 4px; gap: 3px; border: 1px solid #e6ebcf35; border-radius: 9px; background: #17261fe8; box-shadow: 0 3px 18px #23382015; pointer-events: auto; backdrop-filter: blur(16px); }
@@ -23,6 +24,8 @@
 .drive-restart kbd { margin-left: 8px; }
 .drive-restart:hover { background: #30412b; }
 .mission-card { top: 155px; background: #17261feb; }
+.scenic-visit { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; margin-top: 12px; padding: 8px 0 0; border: 0; border-top: 1px solid #d3e1bd26; color: #cee4ac; background: transparent; font-size: 10px; pointer-events: auto; }
+.scenic-visit:hover { color: #f0fad6; }
 .challenge-card { position: fixed; left: 24px; top: 155px; z-index: 8; width: 276px; padding: 19px 20px 17px; color: #f6f5e8; background: #17261feb; backdrop-filter: blur(16px); border: 1px solid #d1dfc338; border-radius: 10px; }
 .challenge-heading, .challenge-stats, .challenge-best { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .challenge-heading { font-size: 12px; font-weight: 650; }
@@ -37,6 +40,9 @@
 .challenge-best { border-top: 1px solid #e5edcb22; margin-top: 16px; padding-top: 12px; font-size: 10px; color: #a6b89b; }
 .challenge-best strong { color: #e6ecdc; font: 11px var(--dd-mono); }
 .challenge-hint { color: #adbea3; margin: 12px 0 0; font-size: 10px; line-height: 1.65; word-break: keep-all; }
+.jump-route-picker { display: flex; gap: 4px; margin-top: 13px; pointer-events: auto; }
+.jump-route-picker button { flex: 1; min-width: 0; padding: 8px 3px; min-height: 44px; background: #314231; color: #c4d1b8; border: 1px solid #63735a; border-radius: 5px; font-size: 10px; }
+.jump-route-picker button.active { color: #213021; background: #d2e5ad; border-color: #d2e5ad; font-weight: 700; }
 .challenge-countdown { position: fixed; left: 50%; top: 41%; z-index: 10; transform: translate(-50%, -50%); color: #fffdf1; font: 750 110px var(--dd-font); line-height: 1; letter-spacing: -.07em; text-shadow: 0 4px 40px #162b2080; }
 .challenge-countdown:empty { display: none; }
 .challenge-finish { position: fixed; left: 50%; top: 43%; transform: translate(-50%, -50%); z-index: 11; width: min(345px, calc(100vw - 36px)); padding: 29px; border-radius: 12px; border: 1px solid #d8e8b86b; background: #18271ff2; box-shadow: 0 20px 60px #18362040; text-align: center; pointer-events: auto; }
@@ -52,6 +58,8 @@
 .map-road { fill: none; stroke: #728368; stroke-linecap: round; stroke-linejoin: round; }
 .map-road.circuit { stroke: #c6d4b3; stroke-width: 5; }
 .map-road.practice { stroke: #819b7a; stroke-width: 3; }
+.map-lake { fill: #457c83; stroke: #95b7a5; stroke-width: 1.2; }
+.map-jump { fill: #ecc57e; stroke: #17261f; stroke-width: 1; }
 .map-label { font-size: 7px; }
 .map-label::before { width: 4px; height: 4px; margin-bottom: 2px; }
 .map-car { width: 7px; height: 11px; z-index: 2; border-radius: 50% 50% 2px 2px; background: #fffceb; box-shadow: 0 0 0 2px #17251e; }
@@ -88,6 +96,8 @@ body[data-drive-mode="race"] .map-label, body[data-drive-mode="slalom"] .map-lab
   .challenge-best { margin-top: 10px; padding-top: 8px; font-size: 9px; }
   .challenge-best strong { font-size: 10px; }
   .challenge-hint, .challenge-progress-track { display: none; }
+  .jump-route-picker { margin-top: 9px; gap: 3px; }
+  .jump-route-picker button { font-size: 8px; padding: 7px 2px; line-height: 1.4; }
   .minimap { top: 130px; right: 13px; bottom: auto; width: 112px; height: 105px; }
   .map-label { font-size: 6px; }
   .speedometer { bottom: 162px; left: 18px; padding: 10px 12px; }

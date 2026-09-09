@@ -159,26 +159,65 @@ export function buildParkCar(THREE) {
   });
 
   const boostTrails = new THREE.Group();
-  boostTrails.name = "Restrained exhaust boost";
+  boostTrails.name = "Twin daylight boost jets";
   boostTrails.visible = false;
+  const boostMaterial = (color, opacity) => new THREE.MeshBasicMaterial({
+    color,
+    transparent: true,
+    opacity,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const jetProfiles = [
+    { name: "Blue outer flame", color: 0x227dff, opacity: 0.48, radius: 0.20, length: 1.72 },
+    { name: "Cyan flame", color: 0x58e9ff, opacity: 0.72, radius: 0.135, length: 1.40 },
+    { name: "Warm flame core", color: 0xffedb3, opacity: 0.90, radius: 0.082, length: 0.98 },
+  ];
   for (const x of [-0.59, 0.59]) {
-    const plume = mesh(
-      new THREE.ConeGeometry(0.075, 0.58, 10, 1, true),
-      new THREE.MeshBasicMaterial({ color: 0xefcca0, transparent: true, opacity: 0.19, side: THREE.DoubleSide, depthWrite: false }),
-      boostTrails,
-    );
-    plume.position.set(x, 0.50, 2.36);
-    plume.rotation.x = Math.PI / 2;
-    plume.userData.baseOpacity = 0.19;
-    plume.castShadow = false;
+    jetProfiles.forEach(({ name, color, opacity, radius, length }, index) => {
+      const profile = [
+        [0.048, 0],
+        [radius * 0.75, length * 0.10],
+        [radius, length * 0.24],
+        [radius * 0.62, length * 0.52],
+        [radius * 0.24, length * 0.80],
+        [0.002, length],
+      ].map(([r, y]) => new THREE.Vector2(r, y));
+      const flame = mesh(new THREE.LatheGeometry(profile, 16), boostMaterial(color, opacity), boostTrails);
+      flame.name = name;
+      // The loop stretches local Y. Baking the full flame behind Y=0 keeps
+      // its throat fixed at the exhaust instead of growing through the car.
+      flame.position.set(x, 0.50, 2.105);
+      flame.rotation.x = Math.PI / 2;
+      flame.userData.baseOpacity = opacity;
+      flame.renderOrder = index + 1;
+      flame.castShadow = false;
+    });
+    for (let index = 0; index < 3; index += 1) {
+      const angle = index / 3 * Math.PI * 2;
+      const length = 0.58 + index * 0.08;
+      const start = 1.10;
+      const geometry = new THREE.ConeGeometry(0.016, length, 7, 1, true);
+      geometry.translate(Math.cos(angle) * 0.14, start + length / 2, Math.sin(angle) * 0.14);
+      const streak = mesh(geometry, boostMaterial(0xb5f8ff, 0.72), boostTrails);
+      streak.name = "Trailing boost streak";
+      streak.position.set(x, 0.50, 2.105);
+      streak.rotation.x = Math.PI / 2;
+      streak.userData.baseOpacity = 0.72;
+      streak.renderOrder = 4;
+      streak.castShadow = false;
+    }
     const core = mesh(
-      new THREE.SphereGeometry(0.058, 10, 6),
-      new THREE.MeshBasicMaterial({ color: 0xffe5ba, transparent: true, opacity: 0.30, depthWrite: false }),
+      new THREE.CircleGeometry(0.061, 16),
+      boostMaterial(0xfff6d6, 0.92),
       boostTrails,
     );
+    core.name = "Bright exhaust throat";
     core.position.set(x, 0.50, 2.10);
-    core.userData.baseOpacity = 0.30;
+    core.userData.baseOpacity = 0.92;
     core.userData.isBoostCore = true;
+    core.renderOrder = 5;
     core.castShadow = false;
   }
   car.add(boostTrails);

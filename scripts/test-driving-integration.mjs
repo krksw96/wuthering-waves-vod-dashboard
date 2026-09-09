@@ -249,30 +249,108 @@ test("actual steering and throttle complete the full circuit without cutting che
   console.log(`Circuit feasibility: ${result.totalTime.toFixed(2)} s, all ${result.total} crossings, no grass excursions.`);
 });
 
-test("actual steering weaves through every slalom gate with no cone penalties", async () => {
+test("actual steering completes the slalom at 6.5 m/s without reversing or cone penalties", async () => {
   const browser = await boot(); browser.selectMode("slalom"); browser.start(); browser.frame(181);
-  const { car, park } = browser.drive;
-  for (let frame = 0; frame < 6000 && browser.drive.challenge.snapshot().phase !== "finished"; frame += 1) {
-    const snapshot = browser.drive.challenge.snapshot();
-    const gate = park.slalomGates[snapshot.nextCheckpoint];
+  const { car, park, state } = browser.drive;
+  const firstCone = park.conePositions[0];
+  const lastCone = park.conePositions.at(-1);
+  const coneSpacing = Math.abs(park.conePositions[1].z - firstCone.z);
+  const startGate = park.slalomGates[0];
+  const finishGate = park.slalomGates.at(-1);
+  let drivenDistance = 0;
+  let frameCount = 0;
+  let peakSpeed = 0;
+  let offRoadFrames = 0;
+  let reverseFrames = 0;
+  for (; frameCount < 3000 && browser.drive.challenge.snapshot().phase !== "finished"; frameCount += 1) {
     // Follow a continuous weave so the rear of the car clears each cone before
-    // the next change of direction, rather than aiming corner-to-corner.
-    const firstCone = park.conePositions[0];
-    const lastCone = park.conePositions.at(-1);
-    const coneSpacing = Math.abs(park.conePositions[1].z - firstCone.z);
-    const targetZ = car.position.z - 2.1;
-    const waveX = firstCone.x - 3.6 * Math.cos(Math.PI * (firstCone.z - targetZ) / coneSpacing);
-    const target = targetZ > firstCone.z + 7 || targetZ < lastCone.z - 3
-      ? { x: gate.x, z: gate.z - 1 }
-      : { x: waveX, z: targetZ };
-    steerToward(browser, target, 2.8, 0.012);
+    // the next change of direction. Smooth entry/exit join the +/-3.6 m weave.
+    const targetZ = car.position.z - 3.5;
+    let offset = -3.6 * Math.cos(Math.PI * (firstCone.z - targetZ) / coneSpacing);
+    if (targetZ > firstCone.z) {
+      const phase = THREE.MathUtils.clamp((startGate.z - targetZ) / (startGate.z - firstCone.z), 0, 1);
+      offset = -3.6 * (1 - Math.cos(phase * Math.PI)) / 2;
+    } else if (targetZ < lastCone.z) {
+      const phase = THREE.MathUtils.clamp((lastCone.z - targetZ) / (lastCone.z - finishGate.z), 0, 1);
+      offset = -3.6 * (1 + Math.cos(phase * Math.PI)) / 2;
+    }
+    const previous = car.position.clone();
+    steerToward(browser, { x: firstCone.x + offset, z: targetZ }, 6.5, 0.012);
     browser.frame();
+    drivenDistance += previous.distanceTo(car.position);
+    peakSpeed = Math.max(peakSpeed, state.speed);
+    if (state.speed < -1e-6 || car.position.z > previous.z + 1e-6) reverseFrames += 1;
+    if (!browser.drive.isOnRoad(car.position.x, car.position.z)) offRoadFrames += 1;
   }
   browser.release();
   const result = browser.drive.challenge.snapshot();
+  const averageSpeed = drivenDistance / (frameCount * STEP);
   assert.equal(result.phase, "finished", `slalom progress ${result.progress}/${result.total} at ${car.position.x.toFixed(1)},${car.position.z.toFixed(1)}, ${result.hits} hits`);
   assert.equal(result.hits, 0, `clean route should be feasible, received ${result.hits} cone hits`);
-  console.log(`Slalom feasibility: ${result.totalTime.toFixed(2)} s, ${result.progress} gates, no cone hits.`);
+  assert.equal(reverseFrames, 0, "every slalom movement is forward toward the finish");
+  assert.equal(offRoadFrames, 0, "the faster slalom fits the paved corridor");
+  assert.ok(peakSpeed >= 6.3, `peak speed ${peakSpeed.toFixed(2)} m/s reaches the 6.5 m/s cruise`);
+  assert.ok(averageSpeed >= 2 * 2.8, `average ${averageSpeed.toFixed(2)} m/s must exceed twice the old 2.8 m/s cruise`);
+  console.log(`Slalom feasibility: ${result.totalTime.toFixed(2)} s, ${result.progress} gates, ${averageSpeed.toFixed(2)} m/s average, no reverse, grass or cone hits.`);
+});
+
+test("all four launch ramps and the double-jump flow line work with forward throttle", async () => {
+  const coveredLaunches = new Set();
+  const expectedLaunches = new Set();
+  for (const routeId of ["big-air", "flow-line", "warm-up"]) {
+    const browser = await boot(); browser.selectMode("jump"); browser.start();
+    const { park, state, car } = browser.drive;
+    const route = park.jumpRoutes.find((candidate) => candidate.id === routeId);
+    assert.ok(route, `${routeId} has a shared park route`);
+    park.ramps.filter((ramp) => ramp.launch).forEach((ramp) => expectedLaunches.add(ramp.id));
+    browser.button(`[data-jump-route="${route.id}"]`).click();
+    assert.ok(Math.hypot(car.position.x - route.x, car.position.z - route.z) < 1e-8, `${routeId} picker selects the shared park spawn`);
+    assert.equal(state.yaw, route.yaw);
+    assert.equal(state.speed, 0);
+    assert.equal(browser.button(`[data-jump-route="${route.id}"]`).getAttribute("aria-pressed"), "true");
+    browser.key("keydown", "KeyW");
+    const launches = [];
+    const landings = [];
+    let reverseFrames = 0;
+    let offRoadFrames = 0;
+    let stableRollout = 0;
+    for (let frame = 0; frame < 1200; frame += 1) {
+      const wasAirborne = state.airborne;
+      const previous = car.position.clone();
+      browser.frame();
+      if (state.speed < -1e-6 || car.position.z > previous.z + 1e-6) reverseFrames += 1;
+      if (!browser.drive.isOnRoad(car.position.x, car.position.z)) offRoadFrames += 1;
+      if (!wasAirborne && state.airborne) {
+        const contact = browser.drive.activeJumpRampAt(state.rearAxle.x, state.rearAxle.z);
+        assert.ok(contact?.ramp.launch, `${routeId} takeoff at ${state.rearAxle.x.toFixed(2)},${state.rearAxle.z.toFixed(2)} is from a launch ramp`);
+        launches.push(contact.ramp.id);
+        coveredLaunches.add(contact.ramp.id);
+      }
+      if (wasAirborne && !state.airborne) {
+        const contact = browser.drive.activeJumpRampAt(state.rearAxle.x, state.rearAxle.z);
+        landings.push({ ramp: contact?.ramp.id || "runway", z: state.rearAxle.z, height: state.rearAxle.y });
+      }
+      if (landings.length === route.ramps.length && !state.airborne) {
+        stableRollout += 1;
+        if (stableRollout === 30) break;
+      }
+    }
+    browser.release();
+    assert.deepEqual(launches, route.ramps, `${routeId} launches every ramp exactly once and in route order`);
+    assert.equal(landings.length, route.ramps.length, `${routeId} lands after every launch`);
+    assert.equal(browser.drive.challenge.snapshot().jumpCount, route.ramps.length, `${routeId} records each completed jump`);
+    assert.equal(stableRollout, 30, `${routeId} has a stable forward rollout after its final landing`);
+    assert.equal(reverseFrames, 0, `${routeId} requires no reverse or repositioning between jumps`);
+    assert.equal(offRoadFrames, 0, `${routeId} keeps the complete jump and rollout above its paved runway`);
+    console.log(`${route.name} feasibility: ${launches.join(" → ")}; ${landings.length} landings, forward throttle only.`);
+    browser.restart();
+    assert.ok(Math.hypot(car.position.x - route.x, car.position.z - route.z) < 1e-8, `${routeId} restart retains the selected course spawn`);
+    assert.equal(state.speed, 0);
+    assert.equal(state.airborne, false);
+    assert.equal(browser.drive.challenge.snapshot().jumpCount, 0);
+  }
+  assert.equal(expectedLaunches.size, 4, "the park has four distinct launch ramps");
+  assert.deepEqual([...coveredLaunches].sort(), [...expectedLaunches].sort(), "every physical launch ramp is driven and landed");
 });
 
 test("unboosted straight jump lands on the descending ramp and completes its rollout", async () => {
@@ -388,7 +466,7 @@ test("straight jump run takes off, lands and records actual flight distance", as
   assert.ok(result.lastJump.airTime > 0.5);
   assert.equal(result.bestJump, result.lastJump.distance);
   browser.frame(6);
-  assert.equal(JSON.parse(browser.storage.get("data-drive-records-v1")).jump, result.bestJump, "landing best is persisted by the HUD update");
+  assert.equal(JSON.parse(browser.storage.get("data-drive-records-v2")).jump, result.bestJump, "landing best is persisted by the HUD update");
   console.log(`Jump integration: ${result.lastJump.distance.toFixed(2)} m, ${result.lastJump.airTime.toFixed(2)} s, peak ${peak.toFixed(2)} m.`);
 });
 
@@ -425,6 +503,94 @@ test("park uses its expanded bounds and applies grass drag through frame updates
   const grassSpeed = state.speed;
   assert.ok(grassSpeed < roadSpeed * 0.8, `grass ${grassSpeed.toFixed(2)} < road ${roadSpeed.toFixed(2)}`);
   assert.ok(Math.abs(car.position.x) > 54 || Math.abs(car.position.z) > 54, "vehicle remains beyond the old city clamp");
+});
+
+test("grounded lake contacts and deep airborne landings recover onto shore", async () => {
+  const browser = await boot(); browser.start();
+  const { park, car, state } = browser.drive;
+  const lake = park.lake;
+  assert.ok(lake, "park exposes the actual lake footprint");
+  function assertOnShore(label) {
+    assert.ok([car.position.x, car.position.y, car.position.z, state.speed].every(Number.isFinite), `${label} has finite position and speed`);
+    const waterRadius = Math.hypot((car.position.x - lake.x) / lake.radiusX, (car.position.z - lake.z) / lake.radiusZ);
+    assert.ok(waterRadius > 1.08, `${label} clears the waterline and its visible lobes: ${waterRadius.toFixed(4)}`);
+    for (const obstacle of park.colliders) {
+      assert.ok(Math.hypot(car.position.x - obstacle.x, car.position.z - obstacle.z) >= obstacle.radius + 0.98 - 1e-6, `${label} clears the shoreline and scenery colliders`);
+    }
+  }
+  const contacts = [
+    { label: "exact center", x: lake.x, z: lake.z, yaw: 0 },
+    { label: "near center", x: lake.x + 1e-10, z: lake.z - 1e-10, yaw: Math.PI / 2 },
+    { label: "deep eastern interior", x: lake.x + 11, z: lake.z + 6, yaw: -Math.PI / 2 },
+    { label: "deep western interior", x: lake.x - 8, z: lake.z - 15, yaw: Math.PI / 2 },
+  ];
+  for (const contact of contacts) {
+    browser.release();
+    browser.drive.resetCar(contact);
+    browser.frame();
+    assert.equal(state.airborne, false);
+    assertOnShore(`Grounded ${contact.label}`);
+    // Keep steering into the lake after recovery; real throttle and boost
+    // cannot move a grounded car back through the shoreline.
+    state.yaw = Math.atan2(lake.x - car.position.x, -(lake.z - car.position.z));
+    state.rearAxle.set(
+      car.position.x - Math.sin(state.yaw) * browser.drive.vehicle.rearAxleOffset,
+      0,
+      car.position.z + Math.cos(state.yaw) * browser.drive.vehicle.rearAxleOffset,
+    );
+    browser.key("keydown", "KeyW"); browser.key("keydown", "ShiftLeft");
+    for (let frame = 0; frame < 150; frame += 1) {
+      browser.frame();
+      assertOnShore(`Inward throttle from ${contact.label}`);
+    }
+  }
+  for (const contact of contacts.slice(0, 3)) {
+    browser.release();
+    browser.drive.resetCar(contact);
+    state.airborne = true;
+    state.rearAxle.y = car.position.y = 4;
+    state.verticalVelocity = -2;
+    // A stationary horizontal fixture isolates a genuine gravity-driven
+    // landing well inside the rim, including its zero-radius singularity.
+    browser.frame(4);
+    assert.equal(state.airborne, true, `${contact.label} remains airborne above the lake`);
+    assert.ok(Math.hypot(car.position.x - contact.x, car.position.z - contact.z) < 1e-7, "lake exclusion must not teleport a flying car");
+    let landed = false;
+    for (let frame = 0; frame < 180; frame += 1) {
+      browser.frame();
+      if (!state.airborne) { landed = true; break; }
+      assert.ok(Math.hypot(car.position.x - contact.x, car.position.z - contact.z) < 1e-7, "deep airborne approach stays untouched until landing");
+    }
+    assert.ok(landed, `${contact.label} completes a gravity-driven landing`);
+    assert.equal(state.rearAxle.y, 0);
+    assertOnShore(`Landing at ${contact.label}`);
+  }
+});
+
+test("lakeside visit clears driving state and ordinary restart returns to free spawn", async () => {
+  const browser = await boot(); browser.start();
+  const { state, car, park, inputs } = browser.drive;
+  browser.key("keydown", "KeyW"); browser.key("keydown", "ShiftLeft");
+  browser.frame(30);
+  state.airborne = true;
+  state.verticalVelocity = -2;
+  browser.byId.get("scenic-visit").click();
+  assert.ok(Math.hypot(car.position.x - park.scenicSpawn.x, car.position.z - park.scenicSpawn.z) < 1e-8);
+  assert.equal(state.yaw, park.scenicSpawn.yaw);
+  assert.equal(state.speed, 0);
+  assert.equal(state.airborne, false);
+  assert.equal(state.verticalVelocity, 0);
+  assert.ok(Object.values(inputs).every((value) => value === false), "visit releases held controls");
+  assert.equal(browser.document.activeElement, browser.byId.get("world"));
+  browser.frame(30);
+  assert.ok(Math.hypot(car.position.x - park.scenicSpawn.x, car.position.z - park.scenicSpawn.z) < 1e-8, "scenic spawn is stable and clear of colliders");
+  browser.restart();
+  assertAtSpawn(browser, "free");
+  browser.selectMode("race");
+  const before = browser.drive.challenge.snapshot();
+  browser.byId.get("scenic-visit").click();
+  assertAtSpawn(browser, "race");
+  assert.equal(browser.drive.challenge.snapshot().phase, before.phase, "hidden scenic visit cannot interrupt a timed challenge");
 });
 
 test("portal dwell navigates only during free drive", async () => {

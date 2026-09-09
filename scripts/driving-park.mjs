@@ -1,9 +1,11 @@
+import { buildParkScenery } from "./park-scenery.mjs";
+
 /** Geometry and a shared, renderer-independent course contract. Units are metres. */
 export function buildDrivingPark(THREE, { makeLabel } = {}) {
   const group = new THREE.Group();
   group.name = "Meadow motor park";
   const roadHalfWidth = 6.5;
-  const bounds = { minX: -105, maxX: 105, minZ: -98, maxZ: 98 };
+  const bounds = { minX: -142, maxX: 244, minZ: -123, maxZ: 121 };
   let seed = 47261;
   const random = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
   const mat = (color, roughness = 0.95) => new THREE.MeshStandardMaterial({ color, roughness });
@@ -108,9 +110,14 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
 
   const ground = mesh(new THREE.PlaneGeometry(850, 850), grass, 0, -0.025, 0);
   ground.rotation.x = -Math.PI / 2;
-  const anchors = [[0, 72], [37, 59], [67, 34], [77, -12], [62, -49], [24, -70], [-28, -70], [-68, -46], [-82, 0], [-78, 42], [-52, 70]];
-  const curve = new THREE.CatmullRomCurve3(anchors.map(([x, z]) => new THREE.Vector3(x, 0, z)), true, "catmullrom", 0.4);
-  const circuitPoints = curve.getSpacedPoints(384).slice(0, -1).map(({ x, z }) => ({ x, z }));
+  const anchors = [
+    [0, 94], [35, 87], [70, 95], [105, 68], [119, 33], [103, 7],
+    [114, -24], [95, -61], [62, -88], [32, -82], [8, -101],
+    [-30, -104], [-67, -93], [-103, -65], [-91, -28], [-114, 5],
+    [-104, 42], [-115, 75], [-81, 99], [-42, 90],
+  ];
+  const curve = new THREE.CatmullRomCurve3(anchors.map(([x, z]) => new THREE.Vector3(x, 0, z)), true, "centripetal");
+  const circuitPoints = curve.getSpacedPoints(640).slice(0, -1).map(({ x, z }) => ({ x, z }));
   const roadPaths = [{ points: circuitPoints, halfWidth: roadHalfWidth, closed: true }];
   road(circuitPoints, roadHalfWidth, true);
   ribbon(circuitPoints, -6.02, -5.88, palePaint, 0.056, true);
@@ -122,10 +129,11 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
     ribbon(segment, 6.5, 7.12, material, 0.067);
     ribbon(segment, -7.12, -6.5, material, 0.067);
   }
-  const checkpoints = Array.from({ length: 10 }, (_, index) => {
-    const pointIndex = Math.floor(index / 10 * circuitPoints.length);
+  const checkpointCount = 20;
+  const checkpoints = Array.from({ length: checkpointCount }, (_, index) => {
+    const pointIndex = Math.floor(index / checkpointCount * circuitPoints.length);
     const point = circuitPoints[pointIndex];
-    const before = circuitPoints[(pointIndex + 383) % 384], after = circuitPoints[(pointIndex + 1) % 384];
+    const before = circuitPoints[(pointIndex + circuitPoints.length - 1) % circuitPoints.length], after = circuitPoints[(pointIndex + 1) % circuitPoints.length];
     const length = Math.hypot(after.x - before.x, after.z - before.z);
     return { id: `circuit-${index}`, index: pointIndex, ...point, nx: (after.x - before.x) / length, nz: (after.z - before.z) / length, width: 13 };
   });
@@ -149,7 +157,7 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
     tile.rotation.x = -Math.PI / 2;
   }
   group.add(finishStripe);
-  label("MOTOR PARK", "START / FINISH", 12, 86, 7);
+  label("MOTOR PARK", "START / FINISH", 12, 109, 7);
 
   const addRoad = (anchors, halfWidth) => {
     const points = anchors.length > 2
@@ -159,18 +167,26 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
     roadPaths.push({ points, halfWidth, closed: false });
     road(points, halfWidth);
   };
-  addRoad([{ x: -45, z: 49 }, { x: -45, z: -47 }], 5.5);
+  addRoad([{ x: -45, z: 80 }, { x: -45, z: -80 }], 7);
   addRoad([{ x: 46, z: 51 }, { x: 46, z: -47 }], 6);
+  addRoad([{ x: 67, z: 57 }, { x: 67, z: -58 }], 5.5);
+  addRoad([{ x: 85, z: 38 }, { x: 85, z: -32 }], 5);
+  addRoad([{ x: 46, z: 50 }, { x: 67, z: 51 }, { x: 85, z: 35 }], 4);
+  addRoad([{ x: 46, z: -46 }, { x: 67, z: -50 }, { x: 85, z: -29 }], 4);
   addRoad([{ x: -45, z: 47 }, { x: -20, z: 46 }, { x: 0, z: 33 }, { x: 24, z: 43 }, { x: 46, z: 47 }], 3.6);
   addRoad([{ x: -45, z: -45 }, { x: -26, z: -38 }, { x: 0, z: -34 }, { x: 25, z: -38 }, { x: 46, z: -45 }], 3.5);
   addRoad([{ x: -28, z: -12 }, { x: 0, z: 0 }, { x: 28, z: -12 }], 3.4);
-  addRoad([{ x: 0, z: -34 }, { x: 0, z: 0 }, { x: 0, z: 33 }, { x: 0, z: 72 }], 3.5);
+  addRoad([{ x: 0, z: -34 }, { x: 0, z: 0 }, { x: 0, z: 33 }, { x: 0, z: 94 }], 3.5);
   addRoad([{ x: -45, z: 0 }, { x: -28, z: -12 }], 3.1);
   addRoad([{ x: 46, z: 0 }, { x: 28, z: -12 }], 3.1);
+  addRoad([{ x: -45, z: 77 }, { x: -22, z: 70 }, { x: 0, z: 65 }], 3.8);
+  addRoad([{ x: -45, z: -76 }, { x: -17, z: -78 }, { x: 0, z: -70 }], 3.8);
+  addRoad([{ x: 0, z: 65 }, { x: 45, z: 65 }, { x: 84, z: 67 }, { x: 110, z: 60 }, { x: 130, z: 65 }, { x: 225, z: 65 }], 4);
+  addRoad([{ x: 155, z: 65 }, { x: 150, z: 53 }, { x: 160, z: 49 }, { x: 178, z: 53 }], 3);
   const roadPads = [{ x: 0, z: 4, radius: 9 }, { x: -28, z: -12, radius: 6 }, { x: 28, z: -12, radius: 6 }, { x: 0, z: 33, radius: 6 }];
   for (const pad of roadPads) disc(pad.radius, asphalt, pad.x, pad.z, 0.048);
 
-  const conePositions = Array.from({ length: 7 }, (_, index) => ({ id: `slalom-cone-${index}`, x: -45, z: 30 - index * 10, radius: 0.46 }));
+  const conePositions = Array.from({ length: 7 }, (_, index) => ({ id: `slalom-cone-${index}`, x: -45, z: 54 - index * 18, radius: 0.46 }));
   const coneMeshes = conePositions.map((position) => {
     const cone = new THREE.Group();
     cone.name = position.id;
@@ -184,19 +200,25 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
     return cone;
   });
   const slalomGates = [
-    { id: "slalom-start", x: -45, z: 38, nx: 0, nz: -1, width: 9 },
-    ...conePositions.map((cone, index) => ({ id: `slalom-gate-${index}`, x: -45 + (index % 2 ? 2.65 : -2.65), z: cone.z, nx: 0, nz: -1, width: 3.2 })),
-    { id: "slalom-finish", x: -45, z: -38, nx: 0, nz: -1, width: 9 },
+    { id: "slalom-start", x: -45, z: 68, nx: 0, nz: -1, width: 12 },
+    ...conePositions.map((cone, index) => ({ id: `slalom-gate-${index}`, x: -45 + (index % 2 ? 3.3 : -3.3), z: cone.z, nx: 0, nz: -1, width: 4.3 })),
+    { id: "slalom-finish", x: -45, z: -68, nx: 0, nz: -1, width: 12 },
   ];
   slalomGates.forEach((gate) => {
     paintLine({ x: gate.x - gate.width / 2, z: gate.z }, { x: gate.x + gate.width / 2, z: gate.z }, 0.20, sagePaint, 0.077);
     for (const side of [-1, 1]) disc(0.15, sagePaint, gate.x + side * gate.width / 2, gate.z, 0.08);
   });
-  label("SLALOM", "PRECISION / 07 CONES", -54, 39, 5);
+  label("SLALOM", "18 M / FLOW COURSE", -56, 70, 5);
 
   const ramps = [
     { id: "hero-jump", centerX: 46, centerZ: 10, halfLength: 5, halfWidth: 4, height: 2.4, directionX: 0, directionZ: -1, baseHeight: 0, launch: true },
     { id: "jump-landing", centerX: 46, centerZ: -14, halfLength: 7, halfWidth: 5, height: 2.4, directionX: 0, directionZ: 1, baseHeight: 0, launch: false },
+    { id: "flow-jump-1", centerX: 67, centerZ: 20, halfLength: 5, halfWidth: 4.2, height: 1.4, directionX: 0, directionZ: -1, baseHeight: 0, launch: true },
+    { id: "flow-landing-1", centerX: 67, centerZ: 0, halfLength: 6, halfWidth: 4.6, height: 1.4, directionX: 0, directionZ: 1, baseHeight: 0, launch: false },
+    { id: "flow-jump-2", centerX: 67, centerZ: -23, halfLength: 5, halfWidth: 4.2, height: 1.8, directionX: 0, directionZ: -1, baseHeight: 0, launch: true },
+    { id: "flow-landing-2", centerX: 67, centerZ: -43, halfLength: 6, halfWidth: 4.6, height: 1.8, directionX: 0, directionZ: 1, baseHeight: 0, launch: false },
+    { id: "starter-jump", centerX: 85, centerZ: 9, halfLength: 5, halfWidth: 3.8, height: 1, directionX: 0, directionZ: -1, baseHeight: 0, launch: true },
+    { id: "starter-landing", centerX: 85, centerZ: -11, halfLength: 6, halfWidth: 4.3, height: 1, directionX: 0, directionZ: 1, baseHeight: 0, launch: false },
   ];
   for (const ramp of ramps) {
     const rampGroup = new THREE.Group();
@@ -226,9 +248,14 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
       marker.position.set(54.5, 1.1, z); marker.scale.set(2.3, 0.66, 1); group.add(marker);
     }
   }
-  label("AIRFIELD", "ACCELERATE / TAKE OFF", 56, 32, 5);
+  label("BIG AIR", "01 / LONG JUMP", 54, 36, 4.5);
+  label("FLOW LINE", "02 / DOUBLE JUMP", 74.5, 49, 4.5);
+  label("WARM UP", "03 / LOW JUMP", 93, 32, 4.5);
 
-  const colliders = [];
+  const scenery = buildParkScenery(THREE);
+  group.add(scenery.group);
+  const colliders = [...scenery.colliders];
+  const inScenery = (x, z, padding = 0) => scenery.exclusions.some((area) => Math.hypot(x - area.x, z - area.z) < area.radius + padding);
   function roadDistance(x, z) {
     let best = Infinity;
     for (const path of roadPaths) for (let index = 0; index < path.points.length - (path.closed ? 0 : 1); index += 1) {
@@ -244,9 +271,9 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
   const trunkGeometry = new THREE.CylinderGeometry(0.18, 0.32, 3.7, 7);
   const crownGeometry = new THREE.IcosahedronGeometry(1, 1);
   let treeCount = 0;
-  for (let attempt = 0; attempt < 360 && treeCount < 82; attempt += 1) {
-    const x = (random() - 0.5) * 230, z = (random() - 0.5) * 214;
-    if (roadDistance(x, z) < 7 || Math.hypot(x + 15, z + 51) < 14) continue;
+  for (let attempt = 0; attempt < 460 && treeCount < 88; attempt += 1) {
+    const x = -132 + random() * 368, z = -116 + random() * 230;
+    if (roadDistance(x, z) < 7 || Math.hypot(x + 15, z + 51) < 14 || inScenery(x, z, 4)) continue;
     const height = 0.8 + random() * 0.8;
     const trunk = mesh(trunkGeometry, timber, x, 1.85 * height, z); trunk.scale.y = height; trunk.castShadow = true;
     const crown = mesh(crownGeometry, leafMaterials[treeCount % 4], x, 4.5 * height, z);
@@ -258,8 +285,8 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
   }
   const rockMaterial = mat(0x8a9081);
   for (let index = 0; index < 28; index += 1) {
-    const x = (random() - 0.5) * 230, z = (random() - 0.5) * 214;
-    if (roadDistance(x, z) < 4) continue;
+    const x = -130 + random() * 370, z = -114 + random() * 228;
+    if (roadDistance(x, z) < 4 || inScenery(x, z, 2)) continue;
     const size = 0.4 + random() * 1.0;
     const rock = mesh(crownGeometry, rockMaterial, x, size * 0.35, z);
     rock.scale.set(size * 1.3, size * 0.7, size); rock.rotation.y = random() * 6.28; rock.castShadow = true;
@@ -273,14 +300,14 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
   label("PIT STOP", "MEADOW SERVICE", -15, -51, 6);
   for (let index = 0; index < 15; index += 1) {
     const angle = index / 15 * Math.PI * 2;
-    const radius = 205 + random() * 50;
-    const hill = mesh(new THREE.SphereGeometry(1, 22, 12), mat(index % 2 ? 0x93a784 : 0x869c7c), Math.sin(angle) * radius, -9, Math.cos(angle) * radius);
+    const radius = 265 + random() * 70;
+    const hill = mesh(new THREE.SphereGeometry(1, 22, 12), mat(index % 2 ? 0x93a784 : 0x869c7c), 50 + Math.sin(angle) * radius, -9, Math.cos(angle) * radius);
     hill.scale.set(50 + random() * 30, 16 + random() * 24, 45 + random() * 35);
     hill.userData.disableProximityFade = true;
   }
   // A simple wooden boundary reads as a park, without blocking the race line.
   for (let index = -2; index <= 2; index += 1) for (const side of [-1, 1]) {
-    const x = index * 17, z = side * 96;
+    const x = index * 17, z = side * 119;
     box(15, 0.12, 0.12, timber, x, 0.9, z);
     box(15, 0.12, 0.12, timber, x, 1.4, z);
     for (const edge of [-1, 1]) box(0.14, 1.6, 0.14, timber, x + edge * 7.5, 0.8, z);
@@ -289,8 +316,14 @@ export function buildDrivingPark(THREE, { makeLabel } = {}) {
     group, circuitPoints, roadHalfWidth, checkpoints, slalomGates, conePositions, coneMeshes, ramps,
     spawns: {
       race: { x: startGate.x - startGate.nx * 7, z: startGate.z - startGate.nz * 7, yaw: Math.atan2(startGate.nx, -startGate.nz) },
-      slalom: { x: -45, z: 44, yaw: 0 }, jump: { x: 46, z: 40, yaw: 0 }, free: { x: 0, z: 8, yaw: 0 },
+      slalom: { x: -45, z: 75, yaw: 0 }, jump: { x: 46, z: 40, yaw: 0 }, free: { x: 0, z: 8, yaw: 0 },
     },
-    bounds, roadPaths, roadPads, colliders,
+    bounds, roadPaths, roadPads, colliders, lake: scenery.lake,
+    scenicSpawn: { x: 176, z: 53, yaw: 0 },
+    jumpRoutes: [
+      { id: "big-air", name: "BIG AIR", x: 46, z: 40, yaw: 0, ramps: ["hero-jump"] },
+      { id: "flow-line", name: "FLOW LINE", x: 67, z: 50, yaw: 0, ramps: ["flow-jump-1", "flow-jump-2"] },
+      { id: "warm-up", name: "WARM UP", x: 85, z: 34, yaw: 0, ramps: ["starter-jump"] },
+    ],
   };
 }

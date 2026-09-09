@@ -122,6 +122,11 @@
         <div class="challenge-progress-track"><span id="challenge-progress-fill"></span></div>
         <div class="challenge-best"><span data-i18n="bestRecord">최고 기록</span><strong id="challenge-best">—</strong></div>
         <p class="challenge-hint" id="challenge-hint"></p>
+        <div class="jump-route-picker" id="jump-route-picker" role="group" aria-label="점프 코스" data-i18n-aria="jumpRoutesAria" hidden>
+          <button type="button" data-jump-route="big-air" aria-pressed="true" class="active" data-i18n="jumpBig">큰 점프</button>
+          <button type="button" data-jump-route="flow-line" aria-pressed="false" data-i18n="jumpFlow">연속 점프</button>
+          <button type="button" data-jump-route="warm-up" aria-pressed="false" data-i18n="jumpWarm">연습 점프</button>
+        </div>
       </aside>
       <div class="challenge-countdown" id="challenge-countdown" role="status" aria-live="polite"></div>
       <div class="challenge-finish" id="challenge-finish" hidden>
@@ -135,10 +140,11 @@
         <div class="mission-name"><span class="mission-dot"></span><span id="mission-name">명조 데이터 구역</span></div>
         <div class="mission-distance" id="mission-distance">거리 계산 중</div>
         <div class="mission-track"><span></span></div>
+        <button class="scenic-visit" id="scenic-visit" type="button"><span data-i18n="visitLake">호숫가로 이동</span><span aria-hidden="true">↗</span></button>
       </aside>
 
       <aside class="minimap" aria-label="드라이빙 파크 미니맵" data-i18n-aria="mapAria">
-        <svg class="map-routes" id="map-routes" viewBox="-105 -98 210 196" aria-hidden="true"></svg>
+        <svg class="map-routes" id="map-routes" viewBox="-138 -122 276 244" preserveAspectRatio="none" aria-hidden="true"></svg>
         <span class="map-label" style="left:36.67%;top:43.88%;--map-color:#65e8de" data-game-label="wuthering-waves">명조</span>
         <span class="map-label" style="left:63.33%;top:43.88%;--map-color:#ff5c9f" data-game-label="neverness-to-everness">이환</span>
         <span class="map-label" style="left:50%;top:66.84%;--map-color:#ffd84d" data-game-label="zenless-zone-zero">젠레스</span>

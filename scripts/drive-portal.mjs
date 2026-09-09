@@ -24,7 +24,8 @@ const translations = {
     startButton: "드라이브 시작", chooseDistrict: "목적지를 선택하세요", districtDescription: "궁금한 게임의 데이터로 바로 이동하세요.",
     openDashboard: "대시보드 열기", exploreCity: "드라이브 시작", skipDrive: "데이터 바로 보기", cityPreview: "나만의 속도로 달리는 드라이빙 파크",
     modesAria: "주행 모드", mapAria: "드라이빙 파크 미니맵", modeFree: "자유 주행", modeRace: "레이싱", modeSlalom: "슬라럼", modeJump: "점프",
-    freeDescription: "파크를 자유롭게 달리고 데이터 구역을 탐험하세요.", raceDescription: "체크포인트를 순서대로 통과하며 한 바퀴의 기록에 도전하세요.", slalomDescription: "고깔 사이를 지그재그로 통과하세요. 고깔 충돌마다 2초가 추가됩니다.", jumpDescription: "가속해서 점프대에 진입하세요. 부스터로 더 멀리 날아보세요.",
+    jumpRoutesAria: "점프 코스", jumpBig: "큰 점프", jumpFlow: "연속 점프", jumpWarm: "연습 점프", visitLake: "호숫가로 이동",
+    freeDescription: "파크와 데이터 구역을 탐험하고, 오두막이 있는 호숫가도 방문하세요.", raceDescription: "연속 코너와 굽이진 서킷을 달리며 한 바퀴의 기록에 도전하세요.", slalomDescription: "18m 간격의 고깔을 지그재그로 통과하세요. 고깔 충돌마다 2초가 추가됩니다.", jumpDescription: "큰 점프, 연속 점프, 연습 점프. 세 코스에서 부스터로 더 멀리 날아보세요.",
     restart: "다시 시작", tryAgain: "다시 도전하기", bestRecord: "최고 기록", checkpoints: "체크포인트", gates: "게이트", coneHits: "충돌", airborne: "비행 중", landed: "착지 완료", readyJump: "점프 준비", attempts: "회 도전", newBest: "새로운 최고 기록", grassSurface: "잔디 · 감속", raceHint: "빛나는 게이트와 미니맵의 다음 지점을 따라가세요.", slalomHint: "표시된 게이트를 순서대로 통과하세요. 충돌 +2초.", jumpHint: "W로 가속 · Shift로 부스트 · R로 다시 도전", finishClean: "깔끔한 주행을 완주했습니다.", penaltyLabel: "페널티",
     districtCount: "3개 게임 데이터 구역", keyboardHint: "WASD로 이동 · 마우스로 시야 조절", backToLobby: "로비로 돌아가기",
     footerNote: "게임 콘텐츠를, 데이터의 관점으로.", controlsTitle: "드라이빙 조작법",
@@ -46,7 +47,8 @@ const translations = {
     startButton: "开始驾驶", chooseDistrict: "选择目的地", districtDescription: "直接打开你关注的游戏数据。",
     openDashboard: "打开数据看板", exploreCity: "开始驾驶", skipDrive: "直接查看数据", cityPreview: "以自己的节奏探索驾驶公园",
     modesAria: "驾驶模式", mapAria: "驾驶公园地图", modeFree: "自由驾驶", modeRace: "竞速", modeSlalom: "绕桩", modeJump: "飞跃",
-    freeDescription: "自由驾驶，探索公园里的游戏数据区域。", raceDescription: "按顺序通过检查点，挑战单圈最快成绩。", slalomDescription: "交替穿过锥桶之间的门，每次碰撞加罚 2 秒。", jumpDescription: "加速驶上跳台，用加速器挑战更远距离。",
+    jumpRoutesAria: "飞跃路线", jumpBig: "大跳台", jumpFlow: "连续跳", jumpWarm: "练习跳", visitLake: "前往湖畔",
+    freeDescription: "探索公园和游戏数据区域，也去湖畔的小木屋看看。", raceDescription: "驶过连续弯道和蜿蜒赛道，挑战单圈最快成绩。", slalomDescription: "交替绕过间隔 18 米的锥桶，每次碰撞加罚 2 秒。", jumpDescription: "大跳台、连续跳、练习跳，三条路线等你加速飞跃。",
     restart: "重新开始", tryAgain: "再试一次", bestRecord: "最佳成绩", checkpoints: "检查点", gates: "通过", coneHits: "碰撞", airborne: "腾空中", landed: "已着陆", readyJump: "准备飞跃", attempts: "次尝试", newBest: "新纪录", grassSurface: "草地 · 减速", raceHint: "跟随高亮门和地图上的下一个检查点。", slalomHint: "按顺序通过标记的门。碰撞 +2 秒。", jumpHint: "W 加速 · Shift 冲刺 · R 重试", finishClean: "干净利落地完成了挑战。", penaltyLabel: "罚时",
     districtCount: "3 个游戏数据区域", keyboardHint: "WASD 移动 · 鼠标调整视角", backToLobby: "返回大厅",
     footerNote: "从数据的角度，看游戏内容。", controlsTitle: "驾驶操作指南",
@@ -68,7 +70,8 @@ const translations = {
     startButton: "Start driving", chooseDistrict: "Choose your destination", districtDescription: "Go straight to the game data you want to explore.",
     openDashboard: "Open dashboard", exploreCity: "Start driving", skipDrive: "Explore the data", cityPreview: "A motor park at your own pace",
     modesAria: "Driving mode", mapAria: "Motor park map", modeFree: "Free drive", modeRace: "Race", modeSlalom: "Slalom", modeJump: "Jump",
-    freeDescription: "Explore the park and discover the three data districts.", raceDescription: "Follow the checkpoints and set your best single-lap time.", slalomDescription: "Weave through the gates. Every cone hit adds 2 seconds.", jumpDescription: "Accelerate up the ramp. Use boost to stretch your airtime.",
+    jumpRoutesAria: "Jump course", jumpBig: "Big air", jumpFlow: "Flow line", jumpWarm: "Warm up", visitLake: "Visit the lakeside",
+    freeDescription: "Explore the data districts, then take a detour to the lakeside cabins.", raceDescription: "Link the winding bends and tight corners to set your best lap time.", slalomDescription: "Weave around cones spaced 18 m apart. Every hit adds 2 seconds.", jumpDescription: "Big air, flow line or warm up. Pick a course and boost into the sky.",
     restart: "Restart", tryAgain: "Try again", bestRecord: "Personal best", checkpoints: "Checkpoint", gates: "Gate", coneHits: "Hits", airborne: "In the air", landed: "Landed", readyJump: "Ready to jump", attempts: "attempts", newBest: "New personal best", grassSurface: "Grass · slow down", raceHint: "Follow the highlighted gate and the next point on the map.", slalomHint: "Pass each marked gate in order. Cone hits add 2 seconds.", jumpHint: "W to accelerate · Shift to boost · R to retry", finishClean: "A clean run, all the way to the finish.", penaltyLabel: "Penalty",
     districtCount: "3 game data districts", keyboardHint: "WASD to drive · Mouse to look around", backToLobby: "Back to the lobby",
     footerNote: "Gaming content, seen through data.", controlsTitle: "Driving controls",
@@ -205,9 +208,9 @@ function initDataCity(THREE) {
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xc8dce0);
-  scene.fog = new THREE.Fog(0xc8dce0, 190, 510);
+  scene.fog = new THREE.Fog(0xc8dce0, 230, 720);
 
-  const camera = new THREE.PerspectiveCamera(55, 1, 0.5, 480);
+  const camera = new THREE.PerspectiveCamera(55, 1, 0.5, 850);
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
   canvas.addEventListener("webglcontextrestored", () => { previewNeedsRender = true; });
   let renderWidth = 0;
@@ -237,10 +240,12 @@ function initDataCity(THREE) {
 
   scene.add(new THREE.HemisphereLight(0xd8edf4, 0x62734a, 2.3));
   const sunlight = new THREE.DirectionalLight(0xffe5b5, 3.15);
-  sunlight.position.set(-48, 80, 32);
+  sunlight.position.set(-55, 175, 70);
+  sunlight.target.position.set(45, 0, 0);
+  scene.add(sunlight.target);
   sunlight.castShadow = true;
   sunlight.shadow.mapSize.set(2048, 2048);
-  Object.assign(sunlight.shadow.camera, { left: -112, right: 112, top: 106, bottom: -106, near: 1, far: 220 });
+  Object.assign(sunlight.shadow.camera, { left: -205, right: 205, top: 175, bottom: -175, near: 1, far: 540 });
   sunlight.shadow.normalBias = 0.03;
   sunlight.shadow.bias = -0.00008;
   sunlight.shadow.radius = 3;
@@ -319,9 +324,12 @@ function initDataCity(THREE) {
   });
   zones.forEach(buildDataTerminal);
   let selectedMode = "free";
+  let selectedJumpRoute = "big-air";
+  const recordsKey = "data-drive-records-v2";
+  let mapBounds = { minX: -138, maxX: 138, minZ: -122, maxZ: 122 };
   const challenge = createDrivingChallenges({ circuitCheckpoints: park.checkpoints, slalomGates: park.slalomGates });
   try {
-    const records = JSON.parse(readPreference("data-drive-records-v1", "{}"));
+    const records = JSON.parse(readPreference(recordsKey, "{}"));
     for (const mode of ["race", "slalom", "jump"]) {
       if (Number.isFinite(records[mode]) && records[mode] > 0) challenge.setBest(mode, records[mode]);
     }
@@ -497,6 +505,25 @@ function initDataCity(THREE) {
     });
   });
   document.querySelectorAll("[data-restart]").forEach((button) => button.addEventListener("click", restartChallenge));
+  document.querySelector("#scenic-visit").addEventListener("click", () => {
+    if (!state.started || selectedMode !== "free") return;
+    clearInputs();
+    resetCar(park.scenicSpawn);
+    cameraOrbit.yawOffset = -0.42;
+    snapCameraToCar();
+    canvas.focus({ preventScroll: true });
+  });
+  document.querySelectorAll("[data-jump-route]").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedJumpRoute = button.dataset.jumpRoute;
+      document.querySelectorAll("[data-jump-route]").forEach((item) => {
+        const active = item.dataset.jumpRoute === selectedJumpRoute;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      if (state.started && selectedMode === "jump") restartChallenge();
+    });
+  });
   buildMinimap();
   document.querySelector("#mode-description").textContent = copy().freeDescription;
   bootState.launch = launchDrive;
@@ -708,6 +735,15 @@ function initDataCity(THREE) {
   function buildMinimap() {
     const svg = document.querySelector("#map-routes");
     const ns = "http://www.w3.org/2000/svg";
+    if (park.lake) {
+      const lake = document.createElementNS(ns, "ellipse");
+      lake.setAttribute("cx", String(park.lake.x));
+      lake.setAttribute("cy", String(park.lake.z));
+      lake.setAttribute("rx", String(park.lake.radiusX));
+      lake.setAttribute("ry", String(park.lake.radiusZ));
+      lake.setAttribute("class", "map-lake");
+      svg.append(lake);
+    }
     park.roadPaths.forEach((path, index) => {
       const line = document.createElementNS(ns, "polyline");
       const points = path.closed ? [...path.points, path.points[0]] : path.points;
@@ -715,6 +751,29 @@ function initDataCity(THREE) {
       line.setAttribute("class", `map-road ${index === 0 ? "circuit" : "practice"}`);
       line.setAttribute("stroke-width", "2");
       svg.append(line);
+    });
+    park.ramps.filter((ramp) => ramp.launch).forEach((ramp) => {
+      const marker = document.createElementNS(ns, "path");
+      marker.setAttribute("d", `M ${ramp.centerX} ${ramp.centerZ - 3} l -2.5 5 h 5 Z`);
+      marker.setAttribute("class", "map-jump");
+      svg.append(marker);
+    });
+    updateMapBounds();
+  }
+
+  function mapPosition(x, z) {
+    return { x: (x - mapBounds.minX) / (mapBounds.maxX - mapBounds.minX) * 100, y: (z - mapBounds.minZ) / (mapBounds.maxZ - mapBounds.minZ) * 100 };
+  }
+
+  function updateMapBounds() {
+    mapBounds = selectedMode === "free"
+      ? { minX: -145, maxX: 245, minZ: -183, maxZ: 183 }
+      : { minX: -138, maxX: 138, minZ: -122, maxZ: 122 };
+    document.querySelector("#map-routes").setAttribute("viewBox", `${mapBounds.minX} ${mapBounds.minZ} ${mapBounds.maxX - mapBounds.minX} ${mapBounds.maxZ - mapBounds.minZ}`);
+    zones.forEach((zone) => {
+      const label = document.querySelector(`.map-label[data-game-label="${zone.id}"]`);
+      const position = mapPosition(zone.position.x, zone.position.z);
+      if (label) { label.style.left = `${position.x}%`; label.style.top = `${position.y}%`; }
     });
   }
 
@@ -727,6 +786,7 @@ function initDataCity(THREE) {
     const text = copy();
     const timed = selectedMode === "race" || selectedMode === "slalom";
     const playingChallenge = selectedMode !== "free";
+    document.querySelector("#jump-route-picker").hidden = selectedMode !== "jump";
     missionCard.hidden = playingChallenge;
     challengeElements.card.hidden = !playingChallenge;
     challengeElements.mode.textContent = text[modeTitles[selectedMode]];
@@ -766,7 +826,7 @@ function initDataCity(THREE) {
       const resultKey = `${selectedMode}:${snapshot.jumpCount}:${JSON.stringify(snapshot.result)}`;
       if (resultKey !== lastResultKey) {
         lastResultKey = resultKey;
-        writePreference("data-drive-records-v1", JSON.stringify(snapshot.bests));
+        writePreference(recordsKey, JSON.stringify(snapshot.bests));
         liveStatus.textContent = `${snapshot.newBest ? text.newBest : text.landed} · ${challengeElements.value.textContent}${challengeElements.unit.textContent}`;
       }
     }
@@ -779,8 +839,9 @@ function initDataCity(THREE) {
       checkpointMarker.position.set(nextGate.x, 0.09, nextGate.z);
       checkpointMarker.rotation.y = -Math.atan2(nextGate.nx, -nextGate.nz);
       checkpointMarker.scale.x = nextGate.width;
-      target.style.left = `${50 + nextGate.x / 2.1}%`;
-      target.style.top = `${50 + nextGate.z / 1.96}%`;
+      const position = mapPosition(nextGate.x, nextGate.z);
+      target.style.left = `${position.x}%`;
+      target.style.top = `${position.y}%`;
     }
   }
 
@@ -799,10 +860,11 @@ function initDataCity(THREE) {
 
   function snapCameraToCar() {
     const horizontalDistance = Math.cos(cameraOrbit.pitch) * cameraOrbit.distance;
+    const angle = -state.yaw + cameraOrbit.yawOffset;
     cameraPosition.copy(car.position).add(new THREE.Vector3(
-      -Math.sin(state.yaw) * horizontalDistance,
+      Math.sin(angle) * horizontalDistance,
       Math.sin(cameraOrbit.pitch) * cameraOrbit.distance,
-      Math.cos(state.yaw) * horizontalDistance,
+      Math.cos(angle) * horizontalDistance,
     ));
     cameraTarget.copy(car.position).add(new THREE.Vector3(Math.sin(state.yaw) * 2.4, 0.72, -Math.cos(state.yaw) * 2.4));
     camera.position.copy(cameraPosition);
@@ -813,6 +875,31 @@ function initDataCity(THREE) {
     if (state.rearAxle.y > 2.5) return;
     const fx = Math.sin(state.yaw);
     const fz = -Math.cos(state.yaw);
+    if (!state.airborne && park.lake) {
+      const centerX = state.rearAxle.x + fx * vehicle.rearAxleOffset;
+      const centerZ = state.rearAxle.z + fz * vehicle.rearAxleOffset;
+      const dx = centerX - park.lake.x;
+      const dz = centerZ - park.lake.z;
+      // Fill the shoreline ring: a jump can land beyond its small colliders.
+      // This margin clears their outer edges and the irregular waterline.
+      const radiusX = park.lake.radiusX + 3.8;
+      const radiusZ = park.lake.radiusZ + 3.8;
+      const normalizedDistance = Math.hypot(dx / radiusX, dz / radiusZ);
+      if (normalizedDistance < 1) {
+        const nearCenter = normalizedDistance < 1e-8;
+        const directionX = nearCenter ? -fx : dx;
+        const directionZ = nearCenter ? -fz : dz;
+        const scale = 1 / Math.hypot(directionX / radiusX, directionZ / radiusZ);
+        const shoreX = directionX * scale;
+        const shoreZ = directionZ * scale;
+        state.rearAxle.x += park.lake.x + shoreX - centerX;
+        state.rearAxle.z += park.lake.z + shoreZ - centerZ;
+        const normalX = shoreX / (radiusX * radiusX);
+        const normalZ = shoreZ / (radiusZ * radiusZ);
+        if ((fx * normalX + fz * normalZ) * state.speed < 0) state.speed *= -0.18;
+        state.lateralVelocity *= 0.4;
+      }
+    }
     for (const obstacle of park.colliders) {
       const centerX = state.rearAxle.x + fx * vehicle.rearAxleOffset;
       const centerZ = state.rearAxle.z + fz * vehicle.rearAxleOffset;
@@ -1064,8 +1151,11 @@ function initDataCity(THREE) {
     });
   }
 
-  function resetCar() {
-    const spawn = park.spawns[selectedMode] || park.spawns.free;
+  function resetCar(spawnOverride = null) {
+    const spawn = spawnOverride || (selectedMode === "jump"
+      ? park.jumpRoutes.find((route) => route.id === selectedJumpRoute) || park.spawns.jump
+      : park.spawns[selectedMode] || park.spawns.free);
+    updateMapBounds();
     state.speed = 0;
     state.yaw = spawn.yaw;
     state.yawRate = 0;
@@ -1429,8 +1519,9 @@ function initDataCity(THREE) {
   function updateHud() {
     speedValue.textContent = String(Math.round(Math.abs(state.speed) * 3.6)).padStart(2, "0");
     gear.textContent = state.speed > 0.15 ? "D" : state.speed < -0.15 ? "R" : "N";
-    const mapX = THREE.MathUtils.clamp(50 + car.position.x / 2.1, 9, 91);
-    const mapY = THREE.MathUtils.clamp(50 + car.position.z / 1.96, 9, 91);
+    const position = mapPosition(car.position.x, car.position.z);
+    const mapX = THREE.MathUtils.clamp(position.x, 2, 98);
+    const mapY = THREE.MathUtils.clamp(position.y, 2, 98);
     mapCar.style.left = `${mapX}%`;
     mapCar.style.top = `${mapY}%`;
     mapCar.style.transform = `rotate(${state.yaw}rad)`;
@@ -1442,9 +1533,9 @@ function initDataCity(THREE) {
     if (document.hidden) return;
     if (!state.started) {
       if (!previewNeedsRender) return;
-      scene.fog.near = 320;
-      camera.position.set(126, 137, 152);
-      camera.lookAt(0, 0, 0);
+      scene.fog.near = 420;
+      camera.position.set(204, 244, 268);
+      camera.lookAt(45, 0, 0);
       camera.fov = 54;
       camera.updateProjectionMatrix();
       proximityFadeMeshes.forEach((object) => {
