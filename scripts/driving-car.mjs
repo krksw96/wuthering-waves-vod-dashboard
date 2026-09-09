@@ -159,7 +159,7 @@ export function buildParkCar(THREE) {
   });
 
   const boostTrails = new THREE.Group();
-  boostTrails.name = "Twin daylight boost jets";
+  boostTrails.name = "Twin fire boost jets";
   boostTrails.visible = false;
   const boostMaterial = (color, opacity) => new THREE.MeshBasicMaterial({
     color,
@@ -170,9 +170,11 @@ export function buildParkCar(THREE) {
     toneMapped: false,
   });
   const jetProfiles = [
-    { name: "Blue outer flame", color: 0x227dff, opacity: 0.48, radius: 0.20, length: 1.72 },
-    { name: "Cyan flame", color: 0x58e9ff, opacity: 0.72, radius: 0.135, length: 1.40 },
-    { name: "Warm flame core", color: 0xffedb3, opacity: 0.90, radius: 0.082, length: 0.98 },
+    { name: "Red outer flame", color: 0xff3522, opacity: 0.62, radius: 0.23, length: 1.85 },
+    { name: "Orange flame", color: 0xff8b24, opacity: 0.78, radius: 0.175, length: 1.57 },
+    { name: "Yellow inner flame", color: 0xffdc3d, opacity: 0.92, radius: 0.12, length: 1.28 },
+    { name: "Hot flame core", color: 0xfff2bc, opacity: 0.94, radius: 0.066, length: 0.83 },
+    { name: "Blue exhaust base", color: 0x52caff, opacity: 0.78, radius: 0.069, length: 0.24 },
   ];
   for (const x of [-0.59, 0.59]) {
     jetProfiles.forEach(({ name, color, opacity, radius, length }, index) => {
@@ -191,6 +193,7 @@ export function buildParkCar(THREE) {
       flame.position.set(x, 0.50, 2.105);
       flame.rotation.x = Math.PI / 2;
       flame.userData.baseOpacity = opacity;
+      flame.userData.flickerPhase = (x < 0 ? 0 : 1.9) + index * 0.8;
       flame.renderOrder = index + 1;
       flame.castShadow = false;
     });
@@ -200,12 +203,13 @@ export function buildParkCar(THREE) {
       const start = 1.10;
       const geometry = new THREE.ConeGeometry(0.016, length, 7, 1, true);
       geometry.translate(Math.cos(angle) * 0.14, start + length / 2, Math.sin(angle) * 0.14);
-      const streak = mesh(geometry, boostMaterial(0xb5f8ff, 0.72), boostTrails);
-      streak.name = "Trailing boost streak";
+      const streak = mesh(geometry, boostMaterial(index % 2 ? 0xffd84b : 0xff672c, 0.78), boostTrails);
+      streak.name = "Trailing fire streak";
       streak.position.set(x, 0.50, 2.105);
       streak.rotation.x = Math.PI / 2;
-      streak.userData.baseOpacity = 0.72;
-      streak.renderOrder = 4;
+      streak.userData.baseOpacity = 0.78;
+      streak.userData.flickerPhase = (x < 0 ? 0.5 : 2.4) + index * 1.3;
+      streak.renderOrder = 6;
       streak.castShadow = false;
     }
     const core = mesh(
@@ -217,7 +221,7 @@ export function buildParkCar(THREE) {
     core.position.set(x, 0.50, 2.10);
     core.userData.baseOpacity = 0.92;
     core.userData.isBoostCore = true;
-    core.renderOrder = 5;
+    core.renderOrder = 7;
     core.castShadow = false;
   }
   car.add(boostTrails);

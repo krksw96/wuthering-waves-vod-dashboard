@@ -376,7 +376,7 @@ function initDataCity(THREE) {
     rearAxleOffset: 1.12,
     wheelRadius: 0.42,
     maxForwardSpeed: 18,
-    boostedMaxForwardSpeed: 30,
+    boostedMaxForwardSpeed: 40,
     maxReverseSpeed: 7,
     fixedStep: 1 / 120,
   };
@@ -1206,7 +1206,7 @@ function initDataCity(THREE) {
     if (inputs.forward) {
       state.reverseHold = 0;
       if (state.speed < -0.12) longitudinalForce = 25;
-      else if (boostActive) longitudinalForce = 22;
+      else if (boostActive) longitudinalForce = 48;
       else longitudinalForce = 11.4 * (1 - Math.max(0, state.speed) / (vehicle.maxForwardSpeed * 1.45));
     } else if (inputs.backward) {
       if (state.speed > 0.12) {
@@ -1371,11 +1371,16 @@ function initDataCity(THREE) {
     boostTrails.visible = boostActive;
     if (boostActive) {
       const boostRatio = THREE.MathUtils.clamp(state.speed / vehicle.boostedMaxForwardSpeed, 0.2, 1);
-      const pulse = 0.88 + Math.sin(state.elapsed * 32) * 0.12;
       boostTrails.children.forEach((trail) => {
         if (trail.isMesh) {
+          const phase = trail.userData.flickerPhase || 0;
+          const pulse = 0.88 + Math.sin(state.elapsed * 32 + phase) * 0.08 + Math.sin(state.elapsed * 53 + phase * 0.7) * 0.04;
           if (trail.userData.isBoostCore) trail.scale.setScalar(0.9 + pulse * 0.2);
-          else trail.scale.y = (0.8 + boostRatio * 1.25) * pulse;
+          else {
+            trail.scale.y = (0.8 + boostRatio * 1.25) * pulse;
+            trail.scale.x = 1 + Math.sin(state.elapsed * 21 + phase) * 0.09;
+            trail.scale.z = 1 + Math.sin(state.elapsed * 27 + phase) * 0.06;
+          }
           trail.material.opacity = trail.userData.baseOpacity * (0.78 + boostRatio * 0.3);
         }
         if (trail.userData.boostLight) trail.intensity = 5 + boostRatio * 8 + Math.sin(state.elapsed * 25) * 1.2;

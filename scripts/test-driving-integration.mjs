@@ -184,7 +184,7 @@ async function boot({ queued = false } = {}) {
   const instrumented = source
     .replace(/^import \{([^}]+)\} from "([^"]+)";/gm, (_, names, path) => `const {${names}} = globalThis.__modules[${JSON.stringify(path)}];`)
     .replace('await import("./vendor/three.module.min.js")', "await globalThis.__loadThree()")
-    .replace("renderer.setAnimationLoop(animate);", "globalThis.__drive = { state, inputs, car, park, challenge, vehicle, activeJumpRampAt, isOnRoad, resetCar, get mode() { return selectedMode; } }; renderer.setAnimationLoop(animate);");
+    .replace("renderer.setAnimationLoop(animate);", "globalThis.__drive = { state, inputs, car, boostTrails, park, challenge, vehicle, activeJumpRampAt, isOnRoad, resetCar, get mode() { return selectedMode; } }; renderer.setAnimationLoop(animate);");
   await vm.runInContext(`(async () => { ${instrumented}\n})()`, browser.context);
   assert.equal(browser.errors.length, 0, browser.errors.map((entry) => entry.map(String).join(" ")).join("\n"));
   assert.ok(browser.renderer?.animate, "controller installed its frame loop");
@@ -214,6 +214,65 @@ function steerToward(browser, target, cruiseSpeed, deadband = 0.025) {
   browser.key(state.speed < cruiseSpeed ? "keydown" : "keyup", "KeyW");
   browser.key(state.speed > cruiseSpeed + 1.0 ? "keydown" : "keyup", "KeyS");
 }
+
+test("boost exceeds the old speed limit on asphalt and releases back to normal throttle without stuck effects", async () => {
+  const browser = await boot(); browser.start();
+  const { car, park, state, vehicle, inputs, boostTrails } = browser.drive;
+  // A stationary fixture on the real wide slalom road leaves all cones four
+  // metres to the side. Both runs use identical road and production physics.
+  const spawn = { x: park.spawns.slalom.x - 4, z: park.spawns.slalom.z, yaw: 0 };
+  function startRun(boost) {
+    browser.release();
+    browser.drive.resetCar(spawn);
+    browser.key("keydown", "KeyW");
+    if (boost) browser.key("keydown", "ShiftLeft");
+  }
+  function assertClearRoad() {
+    assert.ok(browser.drive.isOnRoad(car.position.x, car.position.z), "boost comparison remains on asphalt");
+    assert.equal(state.airborne, false, "boost comparison does not touch a launch ramp");
+    assert.ok(Math.abs(car.position.x - spawn.x) < 1e-7, "straight run remains clear of lateral collision displacement");
+    assert.ok(state.speed > 0 && state.speed <= vehicle.boostedMaxForwardSpeed + 1e-8);
+    assert.ok(park.coneMeshes.every((cone) => !cone.userData.physics.knocked), "comparison does not hit cones");
+  }
+  startRun(false);
+  let normalAfterOneSecond = 0;
+  for (let frame = 0; frame < 240; frame += 1) {
+    browser.frame(); assertClearRoad();
+    if (frame === 59) normalAfterOneSecond = state.speed;
+  }
+  const normalCruise = state.speed;
+  assert.equal(boostTrails.visible, false);
+  startRun(true);
+  let boostedAfterOneSecond = 0;
+  let timePastOldLimit = null;
+  for (let frame = 0; frame < 120; frame += 1) {
+    browser.frame(); assertClearRoad();
+    if (frame === 59) boostedAfterOneSecond = state.speed;
+    if (timePastOldLimit === null && state.speed > 30) timePastOldLimit = (frame + 1) * STEP;
+  }
+  const boostedPeak = state.speed;
+  assert.ok(timePastOldLimit !== null && timePastOldLimit <= 1.2, `boost passes the old 30 m/s limit promptly: ${timePastOldLimit} s`);
+  assert.ok(boostedAfterOneSecond > normalAfterOneSecond * 2, "boost makes acceleration noticeably stronger than normal throttle");
+  assert.ok(boostedPeak >= 38 && boostedPeak >= vehicle.boostedMaxForwardSpeed * 0.98, `boost approaches its cap on asphalt: ${boostedPeak.toFixed(2)} m/s`);
+  assert.equal(boostTrails.visible, true);
+  assert.equal(browser.document.body.classList.contains("boosting"), true);
+  browser.key("keyup", "ShiftLeft");
+  let speedAfterOneSecond = 0;
+  for (let frame = 0; frame < 210; frame += 1) {
+    const previousSpeed = state.speed;
+    browser.frame(); assertClearRoad();
+    assert.equal(inputs.forward, true, "normal throttle stays held after boost release");
+    assert.equal(inputs.boost, false);
+    assert.equal(boostTrails.visible, false, "flames stop on the first released frame and stay stopped");
+    assert.equal(browser.document.body.classList.contains("boosting"), false, "boosting presentation does not stick");
+    assert.ok(state.speed <= previousSpeed + 1e-6, "release sheds the extra speed without a second boost pulse");
+    if (frame === 59) speedAfterOneSecond = state.speed;
+  }
+  assert.ok(speedAfterOneSecond <= vehicle.maxForwardSpeed + 1, `speed returns toward normal promptly: ${speedAfterOneSecond.toFixed(2)} m/s after one second`);
+  assert.ok(Math.abs(state.speed - normalCruise) < 1.5, `held throttle returns to normal cruise: ${state.speed.toFixed(2)} vs ${normalCruise.toFixed(2)} m/s`);
+  browser.release();
+  console.log(`Boost integration: 30 m/s in ${timePastOldLimit.toFixed(2)} s, ${boostedPeak.toFixed(2)} m/s peak; after release ${speedAfterOneSecond.toFixed(2)} m/s at 1 s and ${state.speed.toFixed(2)} m/s at 3.5 s; effects off.`);
+});
 
 test("actual steering and throttle complete the full circuit without cutting checkpoints", async () => {
   const browser = await boot(); browser.selectMode("race"); browser.start(); browser.frame(181);
