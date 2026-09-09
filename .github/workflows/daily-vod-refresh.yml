@@ -52,6 +52,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ad-videos.json data/wuthering-waves.js data/zenless-zone-zero.js data/youtube-update-*.json data/zenless-youtube-update-*.json dashboard.html
+          git add data/ad-videos.json data/wuthering-waves.js data/zenless-zone-zero.js data/kol-search-wuthering-waves.json data/kol-search-zenless-zone-zero.json data/youtube-update-*.json data/zenless-youtube-update-*.json dashboard.html
           git commit -m "Daily multi-game VOD refresh $(date -u +%Y-%m-%d)"
           git push origin main

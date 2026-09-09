@@ -1,0 +1,125 @@
+/* A quiet interface around a bright, open motor park. */
+#city-canvas-mount #world { filter: none; }
+.city-preview { background: #b6cbb5; }
+.city-preview::after { background: linear-gradient(180deg, #20382980 0, transparent 25%, transparent 60%, #14251de8 100%); }
+.preview-topline > span:last-child { color: #e0e8d9; }
+.mode-picker { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 430px; gap: 6px; margin-top: 25px; }
+.mode-button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 7px; color: #aab7a7; background: #1a221b; border: 1px solid #344133; border-radius: 6px; font-size: 11px; white-space: nowrap; transition: border-color .15s, background .15s; }
+.mode-button > span:first-child { font: 18px var(--dd-mono); }
+.mode-button.active { background: #2b3826; border-color: #b7d787; color: #d8edae; }
+.mode-button:hover { border-color: #91a37e; }
+.mode-description { color: #a7b6a0; min-height: 34px; max-width: 435px; margin: 10px 0 0; font-size: 11px; line-height: 1.6; word-break: keep-all; }
+.hero-actions { margin-top: 16px; }
+.hero-meta { margin-top: 25px; }
+.city-preview { min-height: 510px; }
+.preview-caption p { word-break: keep-all; }
+
+.drive-toolbar { position: fixed; z-index: 9; top: 94px; left: 24px; right: 24px; display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
+.drive-mode-switch { display: flex; padding: 4px; gap: 3px; border: 1px solid #e6ebcf35; border-radius: 9px; background: #17261fe8; box-shadow: 0 3px 18px #23382015; pointer-events: auto; backdrop-filter: blur(16px); }
+.drive-mode-switch button { min-height: 36px; border: 0; padding: 0 15px; border-radius: 5px; color: #c0cbb9; background: transparent; font-size: 11px; }
+.drive-mode-switch button.active { background: #d5e6ae; color: #283423; font-weight: 750; }
+.drive-mode-switch button:not(.active):hover { background: #ffffff14; color: #fff; }
+.drive-restart { display: flex; align-items: center; gap: 9px; min-height: 43px; padding: 8px 13px; border: 1px solid #d1dfc347; border-radius: 9px; color: #eff2e5; background: #17261fe8; pointer-events: auto; font-size: 11px; }
+.drive-restart > span:first-child { font-size: 23px; line-height: 1; }
+.drive-restart kbd { margin-left: 8px; }
+.drive-restart:hover { background: #30412b; }
+.mission-card { top: 155px; background: #17261feb; }
+.scenic-visit { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; margin-top: 12px; padding: 8px 0 0; border: 0; border-top: 1px solid #d3e1bd26; color: #cee4ac; background: transparent; font-size: 10px; pointer-events: auto; }
+.scenic-visit:hover { color: #f0fad6; }
+.challenge-card { position: fixed; left: 24px; top: 155px; z-index: 8; width: 276px; padding: 19px 20px 17px; color: #f6f5e8; background: #17261feb; backdrop-filter: blur(16px); border: 1px solid #d1dfc338; border-radius: 10px; }
+.challenge-heading, .challenge-stats, .challenge-best { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.challenge-heading { font-size: 12px; font-weight: 650; }
+.challenge-tag { color: #c0d49d; font: 8px var(--dd-mono); letter-spacing: .08em; }
+.challenge-score { display: flex; align-items: baseline; gap: 7px; margin-top: 17px; }
+.challenge-score strong { font: 500 36px var(--dd-mono); line-height: 1.1; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
+.challenge-score > span { color: #b9c7ad; font: 11px var(--dd-mono); }
+.challenge-stats { margin-top: 12px; font-size: 10px; color: #d0dac7; }
+.challenge-stats > span:last-child { color: #d7df9f; }
+.challenge-progress-track { height: 3px; margin-top: 12px; background: #ffffff16; border-radius: 4px; overflow: hidden; }
+.challenge-progress-track > span { display: block; height: 100%; width: 0%; background: #d0e5a5; transition: width .2s; }
+.challenge-best { border-top: 1px solid #e5edcb22; margin-top: 16px; padding-top: 12px; font-size: 10px; color: #a6b89b; }
+.challenge-best strong { color: #e6ecdc; font: 11px var(--dd-mono); }
+.challenge-hint { color: #adbea3; margin: 12px 0 0; font-size: 10px; line-height: 1.65; word-break: keep-all; }
+.jump-route-picker { display: flex; gap: 4px; margin-top: 13px; pointer-events: auto; }
+.jump-route-picker button { flex: 1; min-width: 0; padding: 8px 3px; min-height: 44px; background: #314231; color: #c4d1b8; border: 1px solid #63735a; border-radius: 5px; font-size: 10px; }
+.jump-route-picker button.active { color: #213021; background: #d2e5ad; border-color: #d2e5ad; font-weight: 700; }
+.challenge-countdown { position: fixed; left: 50%; top: 41%; z-index: 10; transform: translate(-50%, -50%); color: #fffdf1; font: 750 110px var(--dd-font); line-height: 1; letter-spacing: -.07em; text-shadow: 0 4px 40px #162b2080; }
+.challenge-countdown:empty { display: none; }
+.challenge-finish { position: fixed; left: 50%; top: 43%; transform: translate(-50%, -50%); z-index: 11; width: min(345px, calc(100vw - 36px)); padding: 29px; border-radius: 12px; border: 1px solid #d8e8b86b; background: #18271ff2; box-shadow: 0 20px 60px #18362040; text-align: center; pointer-events: auto; }
+.finish-eyebrow { display: block; color: #c8dda1; font: 10px var(--dd-mono); letter-spacing: .2em; }
+.challenge-finish > strong { display: block; margin-top: 18px; color: #f7f7e9; font: 38px var(--dd-mono); letter-spacing: -.06em; }
+.challenge-finish p { color: #bac8ad; margin: 13px 0 22px; font-size: 12px; }
+.challenge-finish button { width: 100%; display: flex; justify-content: space-between; align-items: center; border: 0; border-radius: 6px; background: #d3e4ab; color: #283921; min-height: 45px; padding: 0 15px; font-size: 12px; font-weight: 650; }
+[hidden] { display: none !important; }
+
+.minimap { width: 186px; height: 174px; border-radius: 11px; background: #17261feb; right: 24px; bottom: 32px; }
+.minimap::before, .minimap::after { display: none; }
+.map-routes { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-road { fill: none; stroke: #728368; stroke-linecap: round; stroke-linejoin: round; }
+.map-road.circuit { stroke: #c6d4b3; stroke-width: 5; }
+.map-road.practice { stroke: #819b7a; stroke-width: 3; }
+.map-lake { fill: #457c83; stroke: #95b7a5; stroke-width: 1.2; }
+.map-jump { fill: #ecc57e; stroke: #17261f; stroke-width: 1; }
+.map-label { font-size: 7px; }
+.map-label::before { width: 4px; height: 4px; margin-bottom: 2px; }
+.map-car { width: 7px; height: 11px; z-index: 2; border-radius: 50% 50% 2px 2px; background: #fffceb; box-shadow: 0 0 0 2px #17251e; }
+.map-target { position: absolute; z-index: 1; width: 12px; height: 12px; margin: -6px; border: 2px solid #edf1ae; border-radius: 50%; background: #e1eea835; }
+.map-title { color: #e1e7d3; padding: 5px 8px; bottom: -23px; border-radius: 3px; background: #17261fd9; }
+body[data-drive-mode="race"] .map-label, body[data-drive-mode="slalom"] .map-label, body[data-drive-mode="jump"] .map-label { display: none; }
+.speedometer { padding: 14px 16px; left: 24px; bottom: 26px; border-radius: 9px; background: #17261feb; border: 1px solid #e6ebcf35; }
+.speed-value { color: #f6f5e8; font: 500 44px var(--dd-mono); letter-spacing: -.06em; }
+.surface-pill { position: absolute; top: -27px; left: 0; padding: 5px 8px; border-radius: 4px; color: #f7f0cd; background: #546747ed; font-size: 9px; white-space: nowrap; }
+.mobile-pad.utility { left: 18px; bottom: max(86px, calc(env(safe-area-inset-bottom) + 66px)); grid-template-columns: repeat(2, 56px); }
+.mobile-pad.utility .drive-button { height: 37px; border-radius: 7px; padding: 0 2px; font-size: 9px; }
+.boost-control { color: #dbebb2; }
+.control-hint { bottom: 33px; font-size: 8px; gap: 7px; }
+@media (max-width: 1200px) { .control-hint { display: none; } .mode-button { font-size: 10px; gap: 5px; } }
+@media (max-width: 900px) { .mode-button > span:first-child { display: none; } .drive-mode-switch button { padding: 0 12px; } }
+@media (max-width: 680px) {
+  .city-preview { min-height: 325px; }
+  .mode-picker { max-width: none; margin-top: 21px; }
+  .mode-button { font-size: 11px; }
+  .mode-button > span:first-child { display: inline; font-size: 15px; }
+  .mode-description { min-height: 34px; font-size: 10px; }
+  .hero-actions { margin-top: 13px; }
+  .drive-toolbar { top: 77px; left: 13px; right: 13px; gap: 6px; }
+  .drive-mode-switch { flex: 1; gap: 0; padding: 3px; }
+  .drive-mode-switch button { flex: 1; padding: 0 7px; font-size: 10px; min-height: 32px; }
+  .drive-restart { min-height: 40px; padding: 3px 10px; }
+  .drive-restart > span:nth-child(2), .drive-restart kbd { display: none; }
+  .mission-card, .challenge-card { top: 130px; left: 13px; width: calc(100vw - 147px); padding: 13px; max-width: 258px; }
+  .challenge-heading { font-size: 10px; }
+  .challenge-tag { display: none; }
+  .challenge-score { margin-top: 10px; }
+  .challenge-score strong { font-size: 28px; }
+  .challenge-stats { font-size: 9px; gap: 5px; flex-wrap: wrap; }
+  .challenge-best { margin-top: 10px; padding-top: 8px; font-size: 9px; }
+  .challenge-best strong { font-size: 10px; }
+  .challenge-hint, .challenge-progress-track { display: none; }
+  .jump-route-picker { margin-top: 9px; gap: 3px; }
+  .jump-route-picker button { font-size: 8px; padding: 7px 2px; line-height: 1.4; }
+  .minimap { top: 130px; right: 13px; bottom: auto; width: 112px; height: 105px; }
+  .map-label { font-size: 6px; }
+  .speedometer { bottom: 162px; left: 18px; padding: 10px 12px; }
+  .speed-value { font-size: 33px; min-width: 45px; }
+  .speed-unit { font-size: 8px; }
+  .challenge-countdown { font-size: 85px; top: 47%; }
+  .challenge-finish { top: 49%; }
+}
+@media (pointer: coarse) and (min-width: 681px) {
+  .minimap { top: 156px; right: 24px; bottom: auto; width: 145px; height: 135px; }
+  .speedometer { bottom: 166px; }
+}
+@media (max-height: 520px) and (min-width: 681px) {
+  body.started .site-header { height: 54px; }
+  .drive-toolbar { top: 65px; }
+  .challenge-card, .mission-card { top: 121px; width: 226px; padding: 12px 16px; }
+  .challenge-score { margin-top: 8px; }
+  .challenge-score strong { font-size: 28px; }
+  .challenge-hint { display: none; }
+  .challenge-best { margin-top: 8px; padding-top: 8px; }
+  .minimap { top: 121px; width: 112px; height: 104px; }
+  .speedometer { left: 50%; bottom: 20px; transform: translateX(-50%); }
+  .challenge-countdown, .challenge-finish { top: 54%; }
+}
+@media (prefers-reduced-motion: reduce) { .challenge-progress-track > span { transition: none; } }
