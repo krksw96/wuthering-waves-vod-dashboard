@@ -8,6 +8,7 @@
     <title>DATA DRIVE — 게임 YouTube 데이터 시티</title>
     <link rel="stylesheet" href="styles/design-system.css" />
     <link rel="stylesheet" href="styles/lobby.css" />
+    <link rel="stylesheet" href="styles/driving.css" />
   </head>
   <body>
     <header class="site-header">
@@ -39,6 +40,13 @@
           <p class="eyebrow"><span class="signal-dot" aria-hidden="true"></span> THREE GAMES. ONE DATA CITY.</p>
           <h1 id="hero-title">DRIVE<br />TO <span>DATA.</span><svg class="headline-arrow" viewBox="0 0 80 80" fill="none" aria-hidden="true"><path d="M12 68 65 15M12 15h53v53" stroke="currentColor" stroke-width="7"/></svg></h1>
           <p class="start-description" data-i18n="startDescription">게임 콘텐츠의 흐름을 읽는 새로운 방법. 세 개의 데이터 구역을 탐험하고, 다음 인사이트를 발견하세요.</p>
+          <div class="mode-picker" role="group" aria-label="주행 모드" data-i18n-aria="modesAria">
+            <button type="button" class="mode-button active" data-drive-mode="free" aria-pressed="true"><span aria-hidden="true">◎</span><span data-i18n="modeFree">자유 주행</span></button>
+            <button type="button" class="mode-button" data-drive-mode="race" aria-pressed="false"><span aria-hidden="true">⚑</span><span data-i18n="modeRace">레이싱</span></button>
+            <button type="button" class="mode-button" data-drive-mode="slalom" aria-pressed="false"><span aria-hidden="true">△</span><span data-i18n="modeSlalom">슬라럼</span></button>
+            <button type="button" class="mode-button" data-drive-mode="jump" aria-pressed="false"><span aria-hidden="true">↗</span><span data-i18n="modeJump">점프</span></button>
+          </div>
+          <p class="mode-description" id="mode-description">파크를 자유롭게 달리고 데이터 구역을 탐험하세요.</p>
           <div class="hero-actions">
             <button class="start-button" id="start-button" type="button" aria-describedby="loading-copy"><span data-i18n="startButton">도시 탐험하기</span><span aria-hidden="true">↗</span></button>
             <a class="text-link" href="#districts"><span data-i18n="skipDrive">데이터 바로 보기</span><span aria-hidden="true">↓</span></a>
@@ -47,10 +55,10 @@
           <div class="hero-meta"><span>KR YOUTUBE DATA</span><span>VOD + SHORTS</span><span>DAILY UPDATE</span></div>
         </div>
         <div class="city-preview">
-          <div class="preview-topline"><span><i class="signal-dot" aria-hidden="true"></i> INTERACTIVE WORLD</span><span>3D / EXPLORER</span></div>
+          <div class="preview-topline"><span><i class="signal-dot" aria-hidden="true"></i> DATA DRIVE MOTOR PARK</span><span>4 / DRIVE MODES</span></div>
           <div id="city-canvas-mount"><canvas id="world" tabindex="-1" aria-label="세 게임의 데이터 구역을 자동차로 탐험하는 3D 화면" data-i18n-aria="worldAria"></canvas></div>
           <div class="preview-caption">
-            <div><span class="preview-label">WELCOME TO THE CITY</span><p data-i18n="cityPreview">탐험을 기다리는 데이터 시티</p></div>
+            <div><span class="preview-label">TAKE THE SCENIC ROUTE</span><p data-i18n="cityPreview">나만의 속도로 달리는 드라이빙 파크</p></div>
             <button class="preview-orbit" id="preview-launch" type="button" aria-label="도시 탐험하기" data-i18n-aria="exploreCity">↗</button>
           </div>
           <span class="preview-corner corner-tl" aria-hidden="true"></span><span class="preview-corner corner-br" aria-hidden="true"></span>
@@ -97,7 +105,31 @@
         <span class="footer-tag">BUILT FOR CURIOSITY ↗</span>
       </footer>
     </main>
-    <div class="hud" aria-live="polite">
+    <div class="hud">
+      <div class="drive-toolbar">
+        <div class="drive-mode-switch" role="group" aria-label="주행 모드" data-i18n-aria="modesAria">
+          <button type="button" data-drive-mode="free" aria-pressed="true" class="active" data-i18n="modeFree">자유 주행</button>
+          <button type="button" data-drive-mode="race" aria-pressed="false" data-i18n="modeRace">레이싱</button>
+          <button type="button" data-drive-mode="slalom" aria-pressed="false" data-i18n="modeSlalom">슬라럼</button>
+          <button type="button" data-drive-mode="jump" aria-pressed="false" data-i18n="modeJump">점프</button>
+        </div>
+        <button type="button" class="drive-restart" data-restart aria-label="다시 시작" data-i18n-aria="restart"><span aria-hidden="true">↺</span><span data-i18n="restart">다시 시작</span><kbd>R</kbd></button>
+      </div>
+      <aside class="challenge-card" id="challenge-card" hidden>
+        <div class="challenge-heading"><span id="challenge-mode"></span><span class="challenge-tag" id="challenge-tag">TIME ATTACK</span></div>
+        <div class="challenge-score"><strong id="challenge-value">00:00.00</strong><span id="challenge-unit"></span></div>
+        <div class="challenge-stats"><span id="challenge-progress"></span><span id="challenge-extra"></span></div>
+        <div class="challenge-progress-track"><span id="challenge-progress-fill"></span></div>
+        <div class="challenge-best"><span data-i18n="bestRecord">최고 기록</span><strong id="challenge-best">—</strong></div>
+        <p class="challenge-hint" id="challenge-hint"></p>
+      </aside>
+      <div class="challenge-countdown" id="challenge-countdown" role="status" aria-live="polite"></div>
+      <div class="challenge-finish" id="challenge-finish" hidden>
+        <span class="finish-eyebrow" id="finish-eyebrow">FINISH</span>
+        <strong id="finish-time"></strong>
+        <p id="finish-detail"></p>
+        <button type="button" data-restart><span data-i18n="tryAgain">다시 도전하기</span><span aria-hidden="true">↗</span></button>
+      </div>
       <aside class="mission-card" id="mission-card">
         <div class="hud-label" data-i18n="nearestDistrict">NEAREST DATA DISTRICT</div>
         <div class="mission-name"><span class="mission-dot"></span><span id="mission-name">명조 데이터 구역</span></div>
@@ -105,34 +137,40 @@
         <div class="mission-track"><span></span></div>
       </aside>
 
-      <aside class="minimap" aria-label="데이터 시티 미니맵">
-        <span class="map-label" style="left:26%;top:44%;--map-color:#65e8de" data-game-label="wuthering-waves">명조</span>
-        <span class="map-label" style="left:74%;top:44%;--map-color:#ff5c9f" data-game-label="neverness-to-everness">이환</span>
-        <span class="map-label" style="left:50%;top:79%;--map-color:#ffd84d" data-game-label="zenless-zone-zero">젠레스</span>
+      <aside class="minimap" aria-label="드라이빙 파크 미니맵" data-i18n-aria="mapAria">
+        <svg class="map-routes" id="map-routes" viewBox="-105 -98 210 196" aria-hidden="true"></svg>
+        <span class="map-label" style="left:36.67%;top:43.88%;--map-color:#65e8de" data-game-label="wuthering-waves">명조</span>
+        <span class="map-label" style="left:63.33%;top:43.88%;--map-color:#ff5c9f" data-game-label="neverness-to-everness">이환</span>
+        <span class="map-label" style="left:50%;top:66.84%;--map-color:#ffd84d" data-game-label="zenless-zone-zero">젠레스</span>
+        <span class="map-target" id="map-target" hidden></span>
         <span class="map-car" id="map-car"></span>
-        <span class="map-title">DATA CITY MAP</span>
+        <span class="map-title">MOTOR PARK / N ↑</span>
       </aside>
 
-      <div class="speedometer" aria-label="차량 속도">
-        <strong class="speed-value" id="speed-value">00</strong><span class="speed-unit">KM/H</span><span class="gear" id="gear">N</span><span class="boost-pill">BOOST</span><span class="drift-pill">DRIFT</span>
+      <div class="speedometer" aria-label="차량 속도" data-i18n-aria="speedAria">
+        <strong class="speed-value" id="speed-value">00</strong><span class="speed-unit">KM/H</span><span class="gear" id="gear">N</span><span class="boost-pill">BOOST</span><span class="drift-pill">DRIFT</span><span class="surface-pill" id="surface-pill" data-i18n="grassSurface" hidden>잔디 · 감속</span>
       </div>
       <div class="control-hint"><span><kbd>W/S</kbd> <span data-i18n="driveHint">액셀·브레이크</span></span><span>·</span><span><kbd>A/D</kbd> <span data-i18n="steering">앞바퀴 조향</span></span><span>·</span><span><kbd>Space</kbd> <span data-i18n="driftShort">드리프트</span></span><span>·</span><span><kbd>Mouse</kbd> <span data-i18n="cameraView">드래그·휠 시야</span></span><span>·</span><span><kbd>Shift</kbd> <span data-i18n="boost">부스터</span></span><span>·</span><span><kbd>R</kbd> <span data-i18n="resetShort">복귀</span></span></div>
     </div>
 
-    <div class="zone-prompt" id="zone-prompt">
+    <div class="zone-prompt" id="zone-prompt" aria-hidden="true">
       <strong id="zone-prompt-title">명조 데이터 포털 진입 중</strong>
       <p data-i18n="portalHint">원 안에 머무르면 대시보드가 열립니다</p>
       <div class="zone-progress"><span></span></div>
     </div>
 
-    <div class="mobile-controls" aria-label="모바일 차량 조작">
+    <div class="mobile-controls" aria-label="모바일 차량 조작" data-i18n-aria="touchAria">
+      <div class="mobile-pad utility">
+        <button class="drive-button" type="button" data-control="drift" data-i18n="driftShort" aria-label="핸드브레이크 드리프트" data-i18n-aria="drift">드리프트</button>
+        <button class="drive-button boost-control" type="button" data-control="boost" data-i18n="boost" aria-label="부스터" data-i18n-aria="boost">부스터</button>
+      </div>
       <div class="mobile-pad left">
-        <button class="drive-button" type="button" data-control="left" aria-label="왼쪽으로 회전">←</button>
-        <button class="drive-button" type="button" data-control="right" aria-label="오른쪽으로 회전">→</button>
+        <button class="drive-button" type="button" data-control="left" aria-label="왼쪽으로 회전" data-i18n-aria="steerLeft">←</button>
+        <button class="drive-button" type="button" data-control="right" aria-label="오른쪽으로 회전" data-i18n-aria="steerRight">→</button>
       </div>
       <div class="mobile-pad right">
-        <button class="drive-button accelerate" type="button" data-control="forward" aria-label="가속">▲</button>
-        <button class="drive-button brake" type="button" data-control="backward" aria-label="후진 또는 브레이크">▼</button>
+        <button class="drive-button accelerate" type="button" data-control="forward" aria-label="가속" data-i18n-aria="accelerator">▲</button>
+        <button class="drive-button brake" type="button" data-control="backward" aria-label="후진 또는 브레이크" data-i18n-aria="brakeReverse">▼</button>
       </div>
     </div>
 

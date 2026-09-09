@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "node --test scripts/test-driving-*.mjs",
     "sync": "node scripts/sync-vod-data.mjs",
     "sync-neverness": "node scripts/build-neverness-data.mjs",
     "apply-neverness-update": "node scripts/apply-neverness-youtube-update.mjs",
