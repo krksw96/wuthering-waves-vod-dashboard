@@ -21,7 +21,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
       KURO_API_KEY: ${{ secrets.KURO_API_KEY }}
@@ -40,11 +40,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Refresh game VOD data
-        run: |
-          node scripts/daily-refresh.mjs
-          node scripts/daily-zenless-refresh.mjs
+      - name: Refresh Wuthering Waves VOD data
+        id: wuthering
+        continue-on-error: true
+        run: node scripts/daily-refresh.mjs
+      - name: Refresh Zenless Zone Zero VOD data
+        id: zenless
+        continue-on-error: true
+        run: node scripts/daily-zenless-refresh.mjs
       - name: Commit refreshed data
+        if: ${{ always() && (steps.wuthering.outcome == 'success' || steps.zenless.outcome == 'success') }}
         run: |
           if git diff --quiet; then
             echo "No data changes."
@@ -52,6 +57,11 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ad-videos.json data/wuthering-waves.js data/zenless-zone-zero.js data/kol-search-wuthering-waves.json data/kol-search-zenless-zone-zero.json data/youtube-update-*.json data/zenless-youtube-update-*.json dashboard.html
+          git add data/ad-videos.json data/wuthering-waves.js data/wuthering-waves-channels.json data/zenless-zone-zero.js data/kol-search-wuthering-waves.json data/kol-search-zenless-zone-zero.json data/youtube-update-*.json data/zenless-youtube-update-*.json dashboard.html
           git commit -m "Daily multi-game VOD refresh $(date -u +%Y-%m-%d)"
           git push origin main
+      - name: Report incomplete game refreshes
+        if: ${{ always() && (steps.wuthering.outcome == 'failure' || steps.zenless.outcome == 'failure') }}
+        run: |
+          echo "::error::Some game refreshes failed. Successful game data was preserved in the preceding commit step. Wuthering Waves: ${{ steps.wuthering.outcome }}; Zenless Zone Zero: ${{ steps.zenless.outcome }}."
+          exit 1

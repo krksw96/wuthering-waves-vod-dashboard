@@ -1,37 +1,36 @@
 #!/usr/bin/env node
 
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
+import { classifyWutheringVideo } from "./wuthering-waves-relevance.mjs";
 
 await import("../config/wuthering-waves-search-config.js");
-const { baseQueries, characters, characterQueries, allQueries } = globalThis.WUTHERING_WAVES_SEARCH_CONFIG;
+const { baseQueries, characterQueries, relatedQueries, allQueries } = globalThis.WUTHERING_WAVES_SEARCH_CONFIG;
 const args = Object.fromEntries(process.argv.slice(2).map((arg) => {
   const [key, ...value] = arg.replace(/^--/, "").split("=");
   return [key, value.join("=") || true];
 }));
 const start = String(args.start || "2026-05-28");
 const end = String(args.end || "2026-07-13");
-const maxPages = Math.min(Number.parseInt(args.maxPages || "5", 10), 5);
+const maxPages = Math.max(1, Math.min(Number.parseInt(args.maxPages || "5", 10), 5));
+const maxSearchCalls = Math.max(0, Number.parseInt(args.maxSearchCalls ?? "100", 10));
+const noSearch = args.noSearch === true || args.noSearch === "true";
 const windowDays = Number.parseInt(args.windowDays || "0", 10);
 const requestedQueries = String(args.queries || "").split("|").map((query) => query.trim()).filter(Boolean);
 const selectedQueries = requestedQueries.length ? requestedQueries : (args.coreQueries ? baseQueries.slice(0, 4) : allQueries);
 const searchQueries = selectedQueries.map((query) => ({
   query,
-  pages: requestedQueries.length || args.coreQueries || !characterQueries.includes(query) ? maxPages : Math.min(maxPages, 1),
+  pages: requestedQueries.length || args.coreQueries || !(characterQueries.includes(query) || relatedQueries.includes(query)) ? maxPages : Math.min(maxPages, 1),
 }));
 const includeIds = String(args.includeIds || "").split(",").map((id) => id.trim()).filter(Boolean);
+if (args.includeIdsFile) {
+  const input = JSON.parse(await readFile(resolve(String(args.includeIdsFile)), "utf8"));
+  includeIds.push(...(Array.isArray(input) ? input : input.ids || input.videoIds || []).map((entry) => typeof entry === "string" ? entry : entry.youtubeId || entry.id).filter(Boolean));
+}
 const output = resolve(String(args.output || "../data/youtube_data_api_audit.json"));
 const apiKey = process.env.YOUTUBE_API_KEY;
 if (!apiKey) throw new Error("YOUTUBE_API_KEY is not configured");
 
-const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const characterPattern = characters.map(escapeRegex).sort((a, b) => b.length - a.length).join("|");
-const related = new RegExp(`명조|워더링\\s*웨이브|wuthering\\s*waves|\\bwuwa\\b|鳴潮|${characterPattern}`, "i");
-const aiNamedTool = /\b(?:suno|udio|chatgpt|rvc|tts)\b|인공지능|생성형\s*ai/i;
-const aiInTitle = /(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$)/i;
-const aiDisclosure = /(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$).{0,40}(?:만들|제작|생성|변환|보정|활용|이용|도움|업스케일|보이스|음악|노래|이미지|영상|목소리)|(?:만들|제작|생성|변환|보정|활용|이용|도움|업스케일|보이스|음악|노래|이미지|영상|목소리).{0,40}(?:^|[^a-z0-9])ai(?:[^a-z0-9]|$)|\busing\s+ai\b|ai[-\s]?(?:generated|made|voice|music|image|video|animation|art|cover)/is;
-const korean = /[가-힣]/;
-const excludedChannelIds = new Set(["UCKuq0c-RXYaulECSuu5hFug"]); // @WW_KR_Official
 const publishedDateInKorea = (value) => {
   const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Seoul",
@@ -45,10 +44,30 @@ const publishedDateInKorea = (value) => {
 async function api(resource, params) {
   const url = new URL(`https://www.googleapis.com/youtube/v3/${resource}`);
   for (const [key, value] of Object.entries({ ...params, key: apiKey })) url.searchParams.set(key, value);
-  const response = await fetch(url, { signal: AbortSignal.timeout(30_000) });
-  const body = await response.json();
-  if (!response.ok) throw new Error(`${resource}: ${body.error?.message || response.status}`);
-  return body;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      if (resource === "search") {
+        if (searchCalls >= maxSearchCalls) {
+          const error = new Error("Search call budget reached before retry");
+          error.reason = "searchCallBudgetExceeded";
+          error.retryable = false;
+          throw error;
+        }
+        searchCalls += 1;
+      } else if (resource === "videos") videosListCalls += 1;
+      else if (resource === "channels") channelsListCalls += 1;
+      const response = await fetch(url, { signal: AbortSignal.timeout(30_000) });
+      const body = await response.json();
+      if (response.ok) return body;
+      const error = new Error(`${resource}: ${body.error?.message || response.status}`);
+      error.reason = body.error?.errors?.[0]?.reason;
+      error.retryable = response.status === 429 || response.status >= 500;
+      throw error;
+    } catch (error) {
+      if (error.retryable === false || attempt === 2) throw error;
+      await new Promise((done) => setTimeout(done, 500 * 2 ** attempt));
+    }
+  }
 }
 
 function batches(values, size = 50) {
@@ -65,6 +84,8 @@ const candidates = new Map();
 let searchCalls = 0;
 let videosListCalls = 0;
 let channelsListCalls = 0;
+const cappedQueries = [];
+let searchQuotaExhausted = false;
 const rangeStart = new Date(`${start}T00:00:00+09:00`);
 const endExclusive = new Date(new Date(`${end}T00:00:00+09:00`).getTime() + 86400000);
 const windows = [];
@@ -77,11 +98,17 @@ if (windowDays > 0) {
 } else {
   windows.push({ after: rangeStart.toISOString(), before: endExclusive.toISOString() });
 }
-for (const { query, pages } of searchQueries) {
+for (const { query, pages } of noSearch ? [] : searchQueries) {
   for (const window of windows) {
     let pageToken = "";
     for (let page = 0; page < pages; page += 1) {
-      const result = await api("search", {
+      if (searchQuotaExhausted || searchCalls >= maxSearchCalls) {
+        cappedQueries.push({ query, ...window, page, nextPageToken: pageToken, reason: searchQuotaExhausted ? "search-quota-exhausted" : "search-call-budget" });
+        break;
+      }
+      let result;
+      try {
+        result = await api("search", {
       part: "snippet",
       q: query,
       type: "video",
@@ -92,8 +119,14 @@ for (const { query, pages } of searchQueries) {
       publishedAfter: window.after,
       publishedBefore: window.before,
       ...(pageToken ? { pageToken } : {}),
-    });
-      searchCalls += 1;
+        });
+      } catch (error) {
+        if (!["quotaExceeded", "dailyLimitExceeded", "searchCallBudgetExceeded"].includes(error.reason)) throw error;
+        searchQuotaExhausted = error.reason !== "searchCallBudgetExceeded";
+        cappedQueries.push({ query, ...window, page, nextPageToken: pageToken, reason: searchQuotaExhausted ? "search-quota-exhausted" : "search-call-budget" });
+        console.error("Search quota or configured budget reached; retaining discovered candidates and continuing metadata/playlist reconciliation.");
+        break;
+      }
       for (const item of result.items || []) {
         const id = item.id?.videoId;
         if (id) {
@@ -104,6 +137,7 @@ for (const { query, pages } of searchQueries) {
       }
       pageToken = result.nextPageToken || "";
       if (!pageToken) break;
+      if (page === pages - 1) cappedQueries.push({ query, ...window, page: page + 1, nextPageToken: pageToken, reason: "page-limit" });
     }
   }
   console.error(`${query}: ${candidates.size} unique candidates`);
@@ -113,14 +147,12 @@ for (const id of includeIds) candidates.set(id, { queries: new Set(["explicit vi
 const details = [];
 for (const ids of batches([...candidates.keys()])) {
   const result = await api("videos", { part: "snippet,contentDetails,statistics,status", id: ids.join(","), maxResults: "50" });
-  videosListCalls += 1;
   details.push(...(result.items || []));
 }
 const channelIds = [...new Set(details.map((item) => item.snippet?.channelId).filter(Boolean))];
 const channels = new Map();
 for (const ids of batches(channelIds)) {
   const result = await api("channels", { part: "snippet,statistics", id: ids.join(","), maxResults: "50" });
-  channelsListCalls += 1;
   for (const item of result.items || []) channels.set(item.id, item);
 }
 
@@ -128,11 +160,9 @@ const rows = details.flatMap((item) => {
   const snippet = item.snippet || {};
   const stats = item.statistics || {};
   const channel = channels.get(snippet.channelId) || {};
-  const text = [snippet.title, snippet.description, ...(snippet.tags || []), snippet.channelTitle].join(" ");
   const date = publishedDateInKorea(snippet.publishedAt);
-  const koreanEvidence = korean.test(`${snippet.title || ""} ${snippet.channelTitle || ""}`) || /^ko(?:-|$)/i.test(snippet.defaultLanguage || snippet.defaultAudioLanguage || "");
-  const disclosedAiUse = aiNamedTool.test(text) || aiInTitle.test(snippet.title || "") || aiDisclosure.test(text) || /^dear\s+ai$/i.test(snippet.channelTitle || "");
-  if (date < start || date > end || excludedChannelIds.has(snippet.channelId) || !related.test(text) || !koreanEvidence || disclosedAiUse) return [];
+  const decision = classifyWutheringVideo(item, { explicit: includeIds.includes(item.id) });
+  if (date < start || date > end || !decision.accepted) return [];
   const seconds = durationSeconds(item.contentDetails?.duration);
   return [{
     title: snippet.title,
@@ -149,6 +179,11 @@ const rows = details.flatMap((item) => {
     durationSeconds: seconds,
     format: seconds != null && seconds <= 180 ? "Shorts" : "VOD",
     description: snippet.description || "",
+    tags: snippet.tags || [],
+    defaultLanguage: snippet.defaultLanguage || "",
+    defaultAudioLanguage: snippet.defaultAudioLanguage || "",
+    relevanceReason: decision.reason,
+    explicitlyIncluded: includeIds.includes(item.id),
     gameTitle: "",
     sources: `YouTube Data API v3 search.list / ${[...(candidates.get(item.id)?.queries || [])].join(", ")}`,
   }];
@@ -156,5 +191,6 @@ const rows = details.flatMap((item) => {
 
 await mkdir(dirname(output), { recursive: true });
 const generalCalls = videosListCalls + channelsListCalls;
-await writeFile(output, `${JSON.stringify({ meta: { collectedAt: new Date().toISOString(), start, end, searchCalls, videosListCalls, channelsListCalls, generalCalls, candidateCount: candidates.size, resultCount: rows.length }, rows }, null, 2)}\n`, "utf8");
+await writeFile(output, `${JSON.stringify({ meta: { collectedAt: new Date().toISOString(), start, end, searchCalls, maxSearchCalls, searchQuotaExhausted, videosListCalls, channelsListCalls, generalCalls, candidateCount: candidates.size, resultCount: rows.length, cappedQueries, searchCoverageComplete: !cappedQueries.length }, rows }, null, 2)}\n`, "utf8");
+if (cappedQueries.length) console.error(`Search coverage warning: ${cappedQueries.length} query windows reached a page or call limit; uploads reconciliation is required.`);
 console.log(JSON.stringify({ output, searchCalls, videosListCalls, channelsListCalls, generalCalls, candidates: candidates.size, rows: rows.length }));
