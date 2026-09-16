@@ -16,10 +16,14 @@
   ];
 
   const characterQueries = characters.map((name) => `명조 ${name}`);
+  const relatedTerms = ["경연", "여우의 별자리", "쇄명"];
+  const relatedQueries = ["명조 경연", "여우의 별자리", "쇄명"];
   globalThis.WUTHERING_WAVES_SEARCH_CONFIG = Object.freeze({
     baseQueries: Object.freeze(baseQueries),
     characters: Object.freeze(characters),
     characterQueries: Object.freeze(characterQueries),
-    allQueries: Object.freeze([...new Set([...baseQueries, ...characterQueries])]),
+    relatedTerms: Object.freeze(relatedTerms),
+    relatedQueries: Object.freeze(relatedQueries),
+    allQueries: Object.freeze([...new Set([...baseQueries, ...characterQueries, ...relatedQueries])]),
   });
 })();

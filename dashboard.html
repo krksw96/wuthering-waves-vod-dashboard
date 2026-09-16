@@ -168,11 +168,11 @@
 
     <footer><div class="shell"><span id="footer-label">Multi-game YouTube Data Board</span><span id="generated-at"></span></div></footer>
 
-    <script src="config/wuthering-waves-search-config.js?v=20260817"></script>
+    <script src="config/wuthering-waves-search-config.js?v=20260916"></script>
     <script>
       const requestedGame = new URLSearchParams(location.search).get("game");
       const gameDataPaths = {
-        "wuthering-waves": "data/wuthering-waves.js?v=refresh-20260916-43310",
+        "wuthering-waves": "data/wuthering-waves.js?v=refresh-20260916-44000",
         "neverness-to-everness": "data/neverness-to-everness.js?v=refresh-20260814-360",
         "zenless-zone-zero": "data/zenless-zone-zero.js?v=refresh-20260916-4004"
       };
@@ -190,6 +190,7 @@
           csvName: "wuthering-waves-vod-filtered.csv",
           keywords: window.WUTHERING_WAVES_SEARCH_CONFIG.baseQueries,
           characters: window.WUTHERING_WAVES_SEARCH_CONFIG.characters,
+          relatedQueries: window.WUTHERING_WAVES_SEARCH_CONFIG.allQueries.filter((query) => !window.WUTHERING_WAVES_SEARCH_CONFIG.baseQueries.includes(query)),
           queryCount: window.WUTHERING_WAVES_SEARCH_CONFIG.allQueries.length,
           partnerLabels: true
         },
@@ -272,6 +273,28 @@
           csvTitle: "Title", csvLink: "Link", csvCreator: "YouTuber", csvKoc: "KOC", csvKol: "Long-term KOL", csvAd: "Ad task", csvSubscribers: "Subscribers", csvDate: "Date", csvViews: "Views", csvLikes: "Likes", csvComments: "Comments"
         }
       };
+      const collectionTranslations = {
+        "wuthering-waves": {
+          ko: {
+            criteriaIntro: "공식 YouTube Data API v3에서 대한민국·한국어 조건과 {keywordCount}개 검색어로 최근 2일의 공개 영상을 찾습니다. 등록된 채널의 업로드 목록도 최근 14일간 다시 확인해 검색에서 빠진 영상을 보완하고, 등록된 영상의 공개 지표를 갱신합니다.",
+            characterKeywords: "캐릭터·관련 검색어 {relatedCount}개 펼쳐보기",
+            relevanceBody: "제목·설명·태그·채널명의 문자 표기 차이를 정규화한 뒤 게임명, 캐릭터명과 경연·여우의 별자리·쇄명 등 관련어를 확인합니다. 다른 게임과 이름이 겹치는 경우를 구분하고 YouTube 영상 ID로 중복 제거합니다.",
+            limitsBody: "일일 검색은 최근 2일 내 검색어별 기본 최대 100개, 캐릭터·관련어 최대 50개를 확인합니다. 등록 채널의 최근 14일 업로드도 보완 확인하지만, 미등록 채널의 검색 미노출 영상·비공개 영상·관련성이 불명확한 영상은 누락될 수 있습니다."
+          },
+          zh: {
+            criteriaIntro: "通过官方 YouTube Data API v3，使用韩国地区、韩语设置及 {keywordCount} 个关键词检索最近 2 天的公开视频。同时复查已登记频道最近 14 天的上传列表，补充搜索遗漏的视频，并刷新已收录视频的公开数据。",
+            characterKeywords: "展开 {relatedCount} 个角色与相关搜索词",
+            relevanceBody: "统一标题、简介、标签和频道名中的字符表示后，检查游戏名、角色名以及 경연、여우의 별자리、쇄명 等相关词。区分其他游戏的同名内容，并按 YouTube 视频 ID 去重。",
+            limitsBody: "每日搜索覆盖最近 2 天，每个基础词最多检查 100 条、每个角色或相关词最多检查 50 条，并补查已登记频道最近 14 天的上传。未登记频道中未被搜索收录的视频、非公开视频或相关性不明确的视频仍可能遗漏。"
+          },
+          en: {
+            criteriaIntro: "The official YouTube Data API v3 searches the last 2 days using Korea/Korean settings and {keywordCount} queries. Upload lists from registered channels are also checked over the last 14 days to recover videos missed by search, and saved public metrics are refreshed.",
+            characterKeywords: "Show {relatedCount} character and related queries",
+            relevanceBody: "Titles, descriptions, tags and channel names are normalized for equivalent character forms, then checked for game names, characters and related terms including 경연, 여우의 별자리 and 쇄명. Cross-game name collisions are distinguished, and duplicates are removed by YouTube video ID.",
+            limitsBody: "Daily searches cover the last 2 days, checking up to 100 results per base query and 50 per character or related query. Registered channels' uploads are also checked over the last 14 days. Unindexed videos from unregistered channels, private videos and unclear matches may still be missed."
+          }
+        }
+      };
       const languageFromBrowser = () => navigator.language?.toLowerCase().startsWith("zh") ? "zh" : navigator.language?.toLowerCase().startsWith("en") ? "en" : "ko";
       const savedLanguage = (() => { try { return localStorage.getItem("vodLanguage") || localStorage.getItem("data-city-language"); } catch { return null; } })();
       const state = { language: translations[savedLanguage] ? savedLanguage : languageFromBrowser(), creatorQuery: "", titleQuery: "", startDate: data.period.start || "", endDate: data.period.end || "", format: "all", koc: "all", topic: "all", sort: "views" };
@@ -283,9 +306,11 @@
           game: gameConfig.labels[state.language] || gameConfig.labels.ko,
           keywordCount: gameConfig.queryCount || gameConfig.keywords.length,
           characterCount: gameConfig.characters?.length || 0,
+          relatedCount: gameConfig.relatedQueries?.length || 0,
           keywords: gameConfig.keywords.join(", ")
         };
-        return Object.entries({ ...defaults, ...values }).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, value), translations[state.language][key] || translations.ko[key] || key);
+        const text = collectionTranslations[activeGame]?.[state.language]?.[key] || translations[state.language][key] || translations.ko[key] || key;
+        return Object.entries({ ...defaults, ...values }).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, value), text);
       };
 
       const topicOf = (video) => {
@@ -518,8 +543,9 @@
         keywordList.setAttribute("aria-label", t("searchKeywords"));
         const characterKeywords = document.getElementById("character-keywords");
         const characterKeywordList = document.getElementById("character-keyword-list");
-        characterKeywords.hidden = !gameConfig.characters?.length;
-        characterKeywordList.innerHTML = (gameConfig.characters || []).map((name) => `<span class="keyword">명조 ${escapeHtml(name)}</span>`).join("");
+        const relatedQueries = gameConfig.relatedQueries || (gameConfig.characters || []).map((name) => `명조 ${name}`);
+        characterKeywords.hidden = !relatedQueries.length;
+        characterKeywordList.innerHTML = relatedQueries.map((query) => `<span class="keyword">${escapeHtml(query)}</span>`).join("");
         const partnerRule = document.getElementById("partner-rule");
         partnerRule.querySelector("strong").textContent = t(gameConfig.partnerLabels ? "partnerTitle" : "competitorDataTitle");
         partnerRule.querySelector("span").textContent = t(gameConfig.partnerLabels ? "partnerBody" : "competitorDataBody");
