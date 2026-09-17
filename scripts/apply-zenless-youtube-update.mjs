@@ -3,6 +3,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { readGameDataset, writeGameDataset } from "./game-dataset.mjs";
+import { createPartnerIdentityMatcher } from "./partner-identity.mjs";
 
 const source = resolve(process.argv[2] || "data/zenless-youtube-update-2026-08-01_2026-08-31.json");
 const apiKey = process.env.YOUTUBE_API_KEY;
@@ -15,20 +16,23 @@ const kolList = JSON.parse(await readFile("data/kol-list.json", "utf8").catch(()
 const adVideos = JSON.parse(await readFile("data/ad-videos.json", "utf8").catch(() => '{"rows":[]}'));
 const statsOverrides = JSON.parse(await readFile("data/stats-overrides.json", "utf8").catch(() => "{}"));
 
-const normalize = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
-const aliases = (items) => new Map(items.flatMap((item) => item.aliases.map((alias) => [normalize(alias), item.name])));
-const kocAliases = aliases(kocList);
-const kolAliases = aliases(kolList);
+const matchKoc = createPartnerIdentityMatcher(kocList);
+const matchKol = createPartnerIdentityMatcher(kolList);
 const adIds = new Set(adVideos.rows.map((row) => row.youtubeId));
 const byId = new Map(current.videos.map((video) => [video.id, video]));
 
 for (const row of update.rows) {
-  const creatorKey = normalize(row.channelTitle);
+  const channelId = row.channelId || byId.get(row.youtubeId)?.channelId || null;
+  const identity = { channelId, channelTitle: row.channelTitle };
+  const kocName = matchKoc(identity);
+  const kolName = matchKol(identity);
   byId.set(row.youtubeId, {
+    ...byId.get(row.youtubeId),
     id: row.youtubeId,
     title: row.title,
     url: row.link,
     creator: row.channelTitle,
+    channelId,
     subscribers: row.subscriberCount ?? null,
     date: row.date,
     views: row.viewCount ?? 0,
@@ -36,10 +40,10 @@ for (const row of update.rows) {
     comments: row.commentCount ?? 0,
     duration: row.durationSeconds ?? null,
     format: row.format,
-    isKoc: kocAliases.has(creatorKey),
-    kocName: kocAliases.get(creatorKey) || null,
-    isKol: kolAliases.has(creatorKey),
-    kolName: kolAliases.get(creatorKey) || null,
+    isKoc: Boolean(kocName),
+    kocName,
+    isKol: Boolean(kolName),
+    kolName,
     isAdTask: adIds.has(row.youtubeId),
     searchKeyword: row.searchKeyword || "",
   });
@@ -71,7 +75,7 @@ for (const ids of batches([...byId.keys()])) {
     video.likes = stats.likeCount == null ? null : Number(stats.likeCount);
     video.comments = stats.commentCount == null ? 0 : Number(stats.commentCount);
     if (item.snippet?.channelId) channelIds.set(item.snippet.channelId, video.creator);
-    video.channelId = item.snippet?.channelId || video.channelId;
+    video.channelId = item.snippet?.channelId || video.channelId || null;
     refreshed += 1;
   }
 }
@@ -87,19 +91,19 @@ for (const video of byId.values()) {
   const override = statsOverrides[video.id];
   if (override && Object.prototype.hasOwnProperty.call(override, "likes")) video.likes = override.likes;
   if (override && Object.prototype.hasOwnProperty.call(override, "comments")) video.comments = override.comments;
-  const creatorKey = normalize(video.creator);
-  video.isKoc = kocAliases.has(creatorKey);
-  video.kocName = kocAliases.get(creatorKey) || null;
-  video.isKol = kolAliases.has(creatorKey);
-  video.kolName = kolAliases.get(creatorKey) || null;
+  video.kocName = matchKoc(video);
+  video.isKoc = Boolean(video.kocName);
+  video.kolName = matchKol(video);
+  video.isKol = Boolean(video.kolName);
   video.isAdTask = adIds.has(video.id);
-  delete video.channelId;
 }
 
 const videos = [...byId.values()].sort((a, b) => b.date.localeCompare(a.date) || b.views - a.views);
 const payload = {
   ...current,
   generatedAt: new Date().toISOString(),
+  kocList,
+  kolList,
   period: {
     start: [current.period.start, update.meta.start].filter(Boolean).sort().at(0),
     end: [current.period.end, update.meta.end].filter(Boolean).sort().at(-1),
