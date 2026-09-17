@@ -2,6 +2,7 @@ import { mkdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeGameDataset } from "./game-dataset.mjs";
+import { createPartnerIdentityMatcher } from "./partner-identity.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(here, "..");
@@ -21,15 +22,8 @@ const kolVideos = JSON.parse(await readFile(kolVideosSource, "utf8"));
 const stats = JSON.parse(await readFile(statsSource, "utf8").catch(() => "{}"));
 const adVideos = JSON.parse(await readFile(adVideosSource, "utf8"));
 const supplementalVideos = JSON.parse(await readFile(supplementalVideosSource, "utf8"));
-const normalizeName = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
-const kocAliases = new Map();
-for (const koc of kocList) {
-  for (const alias of koc.aliases) kocAliases.set(normalizeName(alias), koc.name);
-}
-const kolAliases = new Map();
-for (const kol of kolList) {
-  for (const alias of kol.aliases) kolAliases.set(normalizeName(alias), kol.name);
-}
+const matchKoc = createPartnerIdentityMatcher(kocList);
+const matchKol = createPartnerIdentityMatcher(kolList);
 const rowsById = new Map();
 for (const row of [...input.rows, ...kolVideos.rows, ...adVideos.rows, ...supplementalVideos.rows]) {
   const existing = rowsById.get(row.youtubeId) || {};
@@ -40,6 +34,7 @@ const videos = [...rowsById.values()].map((row) => ({
   title: row.title,
   url: row.link,
   creator: row.channelTitle,
+  channelId: row.channelId || null,
   subscribers: row.subscriberCount ?? null,
   date: row.date,
   views: row.viewCount ?? 0,
@@ -47,10 +42,10 @@ const videos = [...rowsById.values()].map((row) => ({
   comments: stats[row.youtubeId]?.comments ?? row.commentCount ?? 0,
   duration: row.durationSeconds ?? null,
   format: row.format,
-  isKoc: kocAliases.has(normalizeName(row.channelTitle)),
-  kocName: kocAliases.get(normalizeName(row.channelTitle)) || null,
-  isKol: kolAliases.has(normalizeName(row.channelTitle)),
-  kolName: kolAliases.get(normalizeName(row.channelTitle)) || null,
+  isKoc: Boolean(matchKoc(row)),
+  kocName: matchKoc(row),
+  isKol: Boolean(matchKol(row)),
+  kolName: matchKol(row),
   isAdTask: adVideos.rows.some((video) => video.youtubeId === row.youtubeId),
 }));
 
