@@ -8,7 +8,7 @@
     "channelsListCalls": 12,
     "generalCalls": 1388,
     "candidateCount": 1034,
-    "resultCount": 1743,
+    "resultCount": 1738,
     "playlistItemsListCalls": 1260,
     "seedFiles": [
       "youtube-update-2025-09-01_2025-09-30-search.json"
@@ -51,8 +51,14 @@
     "preFilterResultCount": 1743,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 5,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "cross-game-collision": 5,
+      "official-channel": 0,
+      "disclosed-ai-use": 0
+    },
+    "lastAuditedAt": "2026-09-22T10:00:36.794Z"
   },
   "rows": [
     {
@@ -11990,24 +11996,6 @@
       "sources": "YouTube Data API v3 uploads playlist / 찐감자TV"
     },
     {
-      "title": "2025 09 20 10 32 06 [붕괴: 스타레일] 나부 스토리 다시보기_03 | 팰까 풀영상",
-      "link": "https://www.youtube.com/watch?v=0NOp39VF8K0",
-      "shortsLink": "https://www.youtube.com/shorts/0NOp39VF8K0",
-      "youtubeId": "0NOp39VF8K0",
-      "channelTitle": "팰까다시보기",
-      "channelId": "UCDeMQ80aqcUFLKX5bvkBd8w",
-      "subscriberCount": 9,
-      "date": "2025-09-20",
-      "viewCount": 4,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 3886,
-      "format": "VOD",
-      "description": "#팰까 #팰까다시보기 #팰까생방송 #명조 #명조다시보기 #명조생방송 #명조스토리 #원신 #원신스토리 #붕괴스타레일 #붕스 #스타레일",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
       "title": "명조:워더링 웨이브_2.7 4",
       "link": "https://www.youtube.com/watch?v=8xnFNRfjPWE",
       "shortsLink": "https://www.youtube.com/shorts/8xnFNRfjPWE",
@@ -12042,24 +12030,6 @@
       "description": "명조 _ # 2 스토리 컷신 [한글더빙/한글자막]\nWuthering Waves _ # 2 Story Cutscenes [Lang:KOR/Sub:KOR]",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 비닐의 숲"
-    },
-    {
-      "title": "2025 09 20 05 32 05 [붕괴: 스타레일] 나부 스토리 다시보기_02 | 팰까 풀영상",
-      "link": "https://www.youtube.com/watch?v=p1dt_nUa6lo",
-      "shortsLink": "https://www.youtube.com/shorts/p1dt_nUa6lo",
-      "youtubeId": "p1dt_nUa6lo",
-      "channelTitle": "팰까다시보기",
-      "channelId": "UCDeMQ80aqcUFLKX5bvkBd8w",
-      "subscriberCount": 9,
-      "date": "2025-09-20",
-      "viewCount": 1,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 18001,
-      "format": "VOD",
-      "description": "#팰까 #팰까다시보기 #팰까생방송 #명조 #명조다시보기 #명조생방송 #명조스토리 #원신 #원신스토리 #붕괴스타레일 #붕스 #스타레일",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
     },
     {
       "title": "명조:워더링 웨이브_2.7 2",
@@ -20792,60 +20762,6 @@
       "sources": "YouTube Data API v3 uploads playlist / 찐감자TV"
     },
     {
-      "title": "[원신 스토리] 프롤로그 1/3 생방송 다시보기 (2025 09 12)",
-      "link": "https://www.youtube.com/watch?v=v3SYCDRLGDQ",
-      "shortsLink": "https://www.youtube.com/shorts/v3SYCDRLGDQ",
-      "youtubeId": "v3SYCDRLGDQ",
-      "channelTitle": "팰까다시보기",
-      "channelId": "UCDeMQ80aqcUFLKX5bvkBd8w",
-      "subscriberCount": 9,
-      "date": "2025-09-13",
-      "viewCount": 3,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 18001,
-      "format": "VOD",
-      "description": "#팰까 #팰까다시보기 #팰까생방송 #명조 #명조다시보기 #명조생방송 #명조스토리",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
-      "title": "[원신 스토리] 프롤로그 3/3 생방송 다시보기 (2025 09 12)",
-      "link": "https://www.youtube.com/watch?v=8h9Ps1sTPVs",
-      "shortsLink": "https://www.youtube.com/shorts/8h9Ps1sTPVs",
-      "youtubeId": "8h9Ps1sTPVs",
-      "channelTitle": "팰까다시보기",
-      "channelId": "UCDeMQ80aqcUFLKX5bvkBd8w",
-      "subscriberCount": 9,
-      "date": "2025-09-13",
-      "viewCount": 2,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 11261,
-      "format": "VOD",
-      "description": "#팰까 #팰까다시보기 #팰까생방송 #명조 #명조다시보기 #명조생방송 #명조스토리",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
-      "title": "[원신 스토리] 프롤로그 2/3 생방송 다시보기 (2025 09 12)",
-      "link": "https://www.youtube.com/watch?v=l24yM77mUr4",
-      "shortsLink": "https://www.youtube.com/shorts/l24yM77mUr4",
-      "youtubeId": "l24yM77mUr4",
-      "channelTitle": "팰까다시보기",
-      "channelId": "UCDeMQ80aqcUFLKX5bvkBd8w",
-      "subscriberCount": 9,
-      "date": "2025-09-13",
-      "viewCount": 2,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 18001,
-      "format": "VOD",
-      "description": "#팰까 #팰까다시보기 #팰까생방송 #명조 #명조다시보기 #명조생방송 #명조스토리",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
       "title": "대놓고 역대급 개사기인 게임 캐릭터",
       "link": "https://www.youtube.com/watch?v=tt0EmHqcCEE",
       "shortsLink": "https://www.youtube.com/shorts/tt0EmHqcCEE",
@@ -23444,16 +23360,16 @@
       "youtubeId": "1rAhpvqg5nI",
       "channelTitle": "Kuko__Ne",
       "channelId": "UC4h4ordWME9rE3qmI96Lr8A",
-      "subscriberCount": 16200,
+      "subscriberCount": 17400,
       "date": "2025-09-09",
-      "viewCount": 33736,
-      "likeCount": 2329,
+      "viewCount": 33967,
+      "likeCount": 2338,
       "commentCount": 36,
       "durationSeconds": 61,
       "format": "Shorts",
-      "description": "Credit to : Unknown \n\nBefore record gameplay or streaming Wuthering Waves need turn off this game music to avoid getting Copyright Strike😭 \n_______________________________________\nIf you are the rightful owner of any content (video or music) featured in this video and you would like it removed or would prefer proper credit, please feel free to contact me at ( https://twitter.com/Kuko__Ne ). I will respond promptly to resolve the issue. Thank you for your understanding!\n_______________________________________\n\njapan comiket 106 summer 2025 \n\nwo ai ni cartethyia \nkurofest 2025 \nC106コスプレ \n今汐 jinhsi \nスカー 스카 scar \nカルロッタ carlotta \n秧秧 양양 yangyang \nツバキ 카멜리아 camellya \nフローヴァ 플로로 phrolova \nカルテジア 카르티시아 cartethyia \nフルールドリス 플뢰르 드 리스 fleurdelys \nwuwa meme \nmeme wuwa\nwuwa mascot\nmascot wuwa\njinhsi meme\nmeme jinhsi\nphrolova meme \nmeme phrolova\nscar meme \nmeme scar\ncarlotta meme\nmeme carlotta\ncamellya meme\nmeme camellya\ncamellya meme\nmeme camellya\nyangyang meme\nmeme yangyang\ncartethyia meme\nmeme yangyang\nfleurdelys meme\nmeme yangyang\ncamellya brainrot\nbrainrot camellya\njinhsi mascot\nphrolova mascot\nmascot phrolova \nscar mascot\nmascot scar \nmascot jinhsi\ncarlotta mascot\nmascot carlotta\ncamellya mascot\nmascot camellya\nyangyang mascot\nmascot yangyang\ncartethyia mascot\nmascot yangyang\nfleurdelys mascot\nmascot yangyang\n鳴潮 명조\r\nwuwa\r\nwuthering\r\nwuthering sea\r\nwuthering mobile\r\nwuthering android\r\nwuthering japan\r\nwuthering khmer\r\nwuthering waves\r\nwuthering waves sea\r\nwuthering waves mobile\r\nwuthering waves android\r\nwuthering waves japan\r\nwuthering waves khmer\nwuthering waves mascot\nmascot wuthering waves\nwuthering waves meme\nmeme wuthering waves\nwuthering waves camellya costume\nwuthering waves yangyang costume\nwuthering waves cartethyia costume\nwuthering waves fleurdelys costume\nwuthering waves camellya mascot\nwuthering waves yangyang mascot\nwuthering waves cartethyia mascot\nwuthering waves fleurdelys mascot\nwuthering waves phrolova costume \nwuthering waves scar costume",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / Kuko__Ne"
+      "description": "Wuthering Waves cosplay metadata; no AI-use disclosure.",
+      "sources": "historical audit restoration",
+      "relevanceReason": "manual-audit-preserved"
     },
     {
       "title": "이딴게..저점..???  [ 명조 아우구스타 돌파실험소 ]",

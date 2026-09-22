@@ -8,7 +8,7 @@
     "channelsListCalls": 13,
     "generalCalls": 1782,
     "candidateCount": 947,
-    "resultCount": 1520,
+    "resultCount": 1517,
     "playlistItemsListCalls": 1652,
     "seedFiles": [
       "youtube-update-2025-05-01_2025-05-31-search.json"
@@ -54,8 +54,14 @@
     "preFilterResultCount": 1520,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 3,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 3,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:21.876Z"
   },
   "rows": [
     {
@@ -2343,24 +2349,6 @@
       "description": "00:00  인트로\n00:22  명조 - 2.4 버전 특별 방송\n04:01  2.4 버전 신 캐릭터들: 카르티시아와 루파\n05:29  2.4 버전 신규 지역\n06:45  쿠키 영상 1\n08:40  짧은 특별 방송 소감\n09:25  쿠키 영상 2 - 충격의 신 캐릭터 공개\n11:10  브라이트의 신 캐릭터 선택은?\n\n#명조 #명조워더링웨이브 #카르티시아\n\n*비즈니스 문의 : louis4891@naver.com",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / 명조 리액션"
-    },
-    {
-      "title": "【명일방주】 「루실라」 신규 스킨",
-      "link": "https://www.youtube.com/watch?v=o3uOhcU-1ao",
-      "shortsLink": "https://www.youtube.com/shorts/o3uOhcU-1ao",
-      "youtubeId": "o3uOhcU-1ao",
-      "channelTitle": "카베이라",
-      "channelId": "UCUIZwArSONpF2VKVOHdUxcw",
-      "subscriberCount": 1740,
-      "date": "2025-05-30",
-      "viewCount": 2524,
-      "likeCount": 22,
-      "commentCount": 0,
-      "durationSeconds": 36,
-      "format": "Shorts",
-      "description": "Official Site：https://ak.hypergryph.com\n\n#명일방주 #Arknights #アークナイツ #Shorts",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 카베이라"
     },
     {
       "title": "[명조: WuWa] 카를로타 장리 벨리나 퀵스왑 가이드",
@@ -11129,24 +11117,6 @@
       "sources": "YouTube Data API v3 search.list / 워더링 웨이브"
     },
     {
-      "title": "붕괴 스타레일 히아킨 개척임무 스토리 같이보기 스누피냥 [05/21]",
-      "link": "https://www.youtube.com/watch?v=9fXqf8NOmp4",
-      "shortsLink": "https://www.youtube.com/shorts/9fXqf8NOmp4",
-      "youtubeId": "9fXqf8NOmp4",
-      "channelTitle": "누피냥",
-      "channelId": "UC0ks1Pr-KocGUPMTdHQy_bw",
-      "subscriberCount": 2180,
-      "date": "2025-05-22",
-      "viewCount": 157,
-      "likeCount": 1,
-      "commentCount": 0,
-      "durationSeconds": 33978,
-      "format": "VOD",
-      "description": "게임에 진심인 스누피냥 입니다.\n명조 워더링 웨이브, 원신, 붕괴 스타레일, 젠레스 존 제로가 주 게임이며, 종합 게임 하고 있습니다.\n\n[스누피의 유튜브 후원]\n도네-https://toon.at/donate/consul910\n\n[스누피의 컨설팅]\nhttps://pls.gg/snoopyang\n\n[스누피의 커뮤니티]\n블로그-http://blog.naver.com/consul910\n홈페이지-https://www.snoopy.space\n\n✍일러스트 아티스트✍ : 아기쥐작업소\nhttp://artmug.kr/index.php?channel=view&uid=3743\n\n스누피의 유튜브 구독과 좋아요, 그리고 알림 설정 감사합니다.\n\n1부 젠린이의 젠레스 존 제로 스토리 플레이 스누피냥 방송 [05/21]\n2부 리메멘토 스토리 밀어보자 누피냥 [05/21]\n3부 원신 나타 월드 탐사 스누피냥 방송 [05/21]\n4부 명조 콘텐츠 상담소 운영 중 역경의탑, 페허, 홀로그램 대리&계정 상담은 스누피냥 방송 [05/21] #명조 #명조워더링웨이브\n5부 붕괴 스타레일 스토리&이벤트 콘텐츠 플레이 스누피냥 [05/21]\n\n제목 : 명조 워더링 웨이브 스누피냥\n게임 : 鸣潮 Wuthering Waves\n플랫폼 : PC/IOS\n내용 : \n『명조: 워더링 웨이브』는 자유도가 높은 컨텐츠와 다채로운 스토리를 지닌 오픈월드 액션 어드벤처 게임이다. \n플레이어는 기나긴 잠에서 깨어난 방랑자가 되어 새로운 환경, 새로운 기술로 이루어진 드넓은 세상 속에서 모험을 떠난다.\n\n#명조 #명조워더링웨이브\n\n제목 : 원신 나타 플레이\n게임 : 원신 Genshin Impact 原神 \n플랫폼 : 아이패드 미니 6세대, PC\n내용 : \n원신은 '티바트'라는 세계에서 사람들은 세계의 기준에 만족하면 '신의 눈'을 가지게 되고 '신의 눈' 능력을 부여받고 원소의 힘을 다스릴 수 있게 되는 세계관이다. 티바트 대륙의 여행자가 된 유저는 드넓은 대륙에서 자유롭게 여행하고 다양한 동료들을 만나 원소의 힘을 지닌 동료들과 티바트 대륙에서 모험을 하게 된다. 잃어버린 혈육을 찾아 떠난 길에서 '원신'의 진실을 발견하게 된다.\n\n제목 : 붕괴 스타레일 플레이\n플랫폼 : 아이패드 미니 6세대, PC\n내용 : \n‘붕괴: 스타레일’은 HoYoverse의 신작 은하 판타지 RPG 게임입니다. 「은하열차」를 타고 은하계의 신비롭고 환상적인 풍경을 경험하며, 모험과 짜릿함이 가득한 여정의 선율을 즐겨보세요.\n플레이어는 여러 세계에서 새로운 친구를 만나고 반가운 친구와 재회하며 함께 「스텔라론」으로 인한 분쟁을 해결하고 비밀을 파헤치게 됩니다.",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 스토리"
-    },
-    {
       "title": "명조 in 강남 행사 구경 가기 ! #명조_워더링_웨이브",
       "link": "https://www.youtube.com/watch?v=1AbOXIhgCB8",
       "shortsLink": "https://www.youtube.com/shorts/1AbOXIhgCB8",
@@ -12891,24 +12861,6 @@
       "description": "#명조 #Wuthering Waves #wuthering #wutheringwaves",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / wuthering waves 명조"
-    },
-    {
-      "title": "[스타레일] 랩하는 방랑자 영혼을 뒤흔드는 트랩 '여명' !!! 직캠! #starrail",
-      "link": "https://www.youtube.com/watch?v=EmC1OcmDXdo",
-      "shortsLink": "https://www.youtube.com/shorts/EmC1OcmDXdo",
-      "youtubeId": "EmC1OcmDXdo",
-      "channelTitle": "이무기원이랑 반디랑~ (겜더빙쇼츠!) 시즌2!!",
-      "channelId": "UCsYMuvTXVZcmfKokc7vPZsw",
-      "subscriberCount": 40,
-      "date": "2025-05-20",
-      "viewCount": 29,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 75,
-      "format": "Shorts",
-      "description": "사용 BGM 'MUSMUS' 더빙은 본인(NO A.I)",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 이무기원이랑 반디랑~ (겜더빙쇼츠!) 시즌2!!"
     },
     {
       "title": "[명조:워더링 웨이브] 카르티시아 모션 [Wuthering Waves] Cartethyia Animations #shorts",

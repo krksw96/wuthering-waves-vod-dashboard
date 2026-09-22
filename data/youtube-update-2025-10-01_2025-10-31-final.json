@@ -8,7 +8,7 @@
     "channelsListCalls": 13,
     "generalCalls": 1381,
     "candidateCount": 1036,
-    "resultCount": 1910,
+    "resultCount": 1907,
     "playlistItemsListCalls": 1244,
     "seedFiles": [
       "youtube-update-2025-10-01_2025-10-31-search.json"
@@ -50,8 +50,14 @@
     "preFilterResultCount": 1910,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 3,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 3,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:22.421Z"
   },
   "rows": [
     {
@@ -26065,24 +26071,6 @@
       "sources": "YouTube Data API v3 search.list / 워더링 웨이브"
     },
     {
-      "title": "《다시보기》싸펑_주간컨텐츠_이벤트_젠존제_강습전.MP4『2025년 10월 6일』",
-      "link": "https://www.youtube.com/watch?v=Ofy0tzAecQg",
-      "shortsLink": "https://www.youtube.com/shorts/Ofy0tzAecQg",
-      "youtubeId": "Ofy0tzAecQg",
-      "channelTitle": "인눈",
-      "channelId": "UCFz-fIRLbDZuR-4iZkeXxow",
-      "subscriberCount": 23,
-      "date": "2025-10-10",
-      "viewCount": 10,
-      "likeCount": 1,
-      "commentCount": 1,
-      "durationSeconds": 17529,
-      "format": "VOD",
-      "description": "안녕하세요 ! 인눈이 입니다. #명조 #젠존제 #붕괴스타레일 #\n\n이번 영상은 2025년 10월 06일 방송 다시보기 입니다.",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
       "title": "[명조:워더링 웨이브] 명식을 처단한다 #030 (4K 60fps)",
       "link": "https://www.youtube.com/watch?v=vD8CdwzpzXY",
       "shortsLink": "https://www.youtube.com/shorts/vD8CdwzpzXY",
@@ -32635,24 +32623,6 @@
       "sources": "YouTube Data API v3 uploads playlist / NEPTUNE TV"
     },
     {
-      "title": "팰까 생방송 다시보기 니케 미니게임 2025 10 02 11 15 40",
-      "link": "https://www.youtube.com/watch?v=U7E_0WvdnYM",
-      "shortsLink": "https://www.youtube.com/shorts/U7E_0WvdnYM",
-      "youtubeId": "U7E_0WvdnYM",
-      "channelTitle": "팰까다시보기",
-      "channelId": "UCDeMQ80aqcUFLKX5bvkBd8w",
-      "subscriberCount": 9,
-      "date": "2025-10-03",
-      "viewCount": 16,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 6106,
-      "format": "VOD",
-      "description": "#팰까 #팰까다시보기 #팰까생방송 #명조 #명조다시보기 #명조생방송 #명조스토리 #원신 #원신스토리 #붕괴스타레일 #붕스 #스타레일",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
       "title": "『명조 워더링 웨이브』 카르티시아 어깨를 나란히 하고 다시보기",
       "link": "https://www.youtube.com/watch?v=XKNSsT0yBBk",
       "shortsLink": "https://www.youtube.com/shorts/XKNSsT0yBBk",
@@ -32759,24 +32729,6 @@
       "description": "",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 리키"
-    },
-    {
-      "title": "팰까 생방송 다시보기 스타레일 페나코니 스토리 2025 10 02 17 57 29",
-      "link": "https://www.youtube.com/watch?v=s5uHXJ85yMc",
-      "shortsLink": "https://www.youtube.com/shorts/s5uHXJ85yMc",
-      "youtubeId": "s5uHXJ85yMc",
-      "channelTitle": "팰까다시보기",
-      "channelId": "UCDeMQ80aqcUFLKX5bvkBd8w",
-      "subscriberCount": 9,
-      "date": "2025-10-03",
-      "viewCount": 1,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 2169,
-      "format": "VOD",
-      "description": "#팰까 #팰까다시보기 #팰까생방송 #명조 #명조다시보기 #명조생방송 #명조스토리 #원신 #원신스토리 #붕괴스타레일 #붕스 #스타레일",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
     },
     {
       "title": "명조:워더링 웨이브_20251003181638",

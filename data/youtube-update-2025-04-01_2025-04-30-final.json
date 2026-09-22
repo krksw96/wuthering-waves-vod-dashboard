@@ -8,7 +8,7 @@
     "channelsListCalls": 12,
     "generalCalls": 1820,
     "candidateCount": 870,
-    "resultCount": 1363,
+    "resultCount": 1362,
     "playlistItemsListCalls": 1705,
     "seedFiles": [
       "youtube-update-2025-04-01_2025-04-30-search.json"
@@ -56,8 +56,14 @@
     "preFilterResultCount": 1363,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 1,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 1,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:21.747Z"
   },
   "rows": [
     {
@@ -1445,24 +1451,6 @@
       "description": "#시엘로 #다시보기\n영상원본: 놀랍게도 이것이 원본\n본채널: @siLlo_00233\n녹화일: 25년 04월 29일",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
-      "title": "젠레스 존 제로 - 1주년 이벤트와 젠니 스토리 보면서 가챠!",
-      "link": "https://www.youtube.com/watch?v=Z8J7-7tWo8M",
-      "shortsLink": "https://www.youtube.com/shorts/Z8J7-7tWo8M",
-      "youtubeId": "Z8J7-7tWo8M",
-      "channelTitle": "아기팡팡",
-      "channelId": "UCl2zMbMLiW98LR41XM_vZlQ",
-      "subscriberCount": 186,
-      "date": "2025-04-30",
-      "viewCount": 13,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 15739,
-      "format": "VOD",
-      "description": "",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 아기팡팡"
     },
     {
       "title": "2025.04.29.GAME뿌라 게임 방송 On~! (명조, Wuthering Waves)",

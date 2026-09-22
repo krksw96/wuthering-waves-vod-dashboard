@@ -8,7 +8,7 @@
     "channelsListCalls": 14,
     "generalCalls": 1977,
     "candidateCount": 1021,
-    "resultCount": 1850,
+    "resultCount": 1848,
     "playlistItemsListCalls": 1834,
     "seedFiles": [
       "youtube-update-2025-06-01_2025-06-30-search.json"
@@ -53,8 +53,14 @@
     "preFilterResultCount": 1850,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 2,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 2,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:22.061Z"
   },
   "rows": [
     {
@@ -20524,24 +20530,6 @@
       "sources": "YouTube Data API v3 uploads playlist / 안티노라의 게임방송"
     },
     {
-      "title": "[라이브 다시보기] 1부 카르티시아 뽑기 2부 원신 중간장밀기",
-      "link": "https://www.youtube.com/watch?v=Rq5BK6fg2u4",
-      "shortsLink": "https://www.youtube.com/shorts/Rq5BK6fg2u4",
-      "youtubeId": "Rq5BK6fg2u4",
-      "channelTitle": "꽃이필무렵",
-      "channelId": "UCy7kbPaxpr3cdB3JTC_cUBg",
-      "subscriberCount": 7100,
-      "date": "2025-06-13",
-      "viewCount": 75,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 10870,
-      "format": "VOD",
-      "description": "#명조 #원신 #카르티시아 #중간장\nThis stream is created with #PRISMLiveStudio",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
       "title": "【다시보기】[명조] 2.4 ｢환호 속에서 던져진 영예의 왕관｣ 업데이트!!!!! (2025.06.12)",
       "link": "https://www.youtube.com/watch?v=tSlqnkljFNk",
       "shortsLink": "https://www.youtube.com/shorts/tSlqnkljFNk",
@@ -21926,24 +21914,6 @@
       "description": "#명조:워더링 웨이브 #카르티시아 #루파",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 스토리폴더"
-    },
-    {
-      "title": "[붕스3.1메인스 리액션] 낭만 치사량",
-      "link": "https://www.youtube.com/watch?v=QO6zectN98A",
-      "shortsLink": "https://www.youtube.com/shorts/QO6zectN98A",
-      "youtubeId": "QO6zectN98A",
-      "channelTitle": "G스토리",
-      "channelId": "UCfdZ-RB_QxycTiTAG3LVd0w",
-      "subscriberCount": 29200,
-      "date": "2025-06-12",
-      "viewCount": 1471,
-      "likeCount": 47,
-      "commentCount": 3,
-      "durationSeconds": 761,
-      "format": "VOD",
-      "description": "#G스토리\n#명조워더링웨이브\n#Wuwa\n#이환\n#젠레스존제로 이메일\nsphiecrier12@gmail.com\n#명조\n#젠레스존제로\n#원신\n#니케\n#붕괴스타레일",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 리액션"
     },
     {
       "title": "성 갈랐다고.... | #명조 #wutheringwaves #카르티시아",

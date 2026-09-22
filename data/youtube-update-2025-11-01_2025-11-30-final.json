@@ -8,7 +8,7 @@
     "channelsListCalls": 12,
     "generalCalls": 1344,
     "candidateCount": 820,
-    "resultCount": 1750,
+    "resultCount": 1746,
     "playlistItemsListCalls": 1207,
     "seedFiles": [
       "youtube-update-2025-11-01_2025-11-30-search.json"
@@ -50,8 +50,14 @@
     "preFilterResultCount": 1750,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 4,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 4,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:22.569Z"
   },
   "rows": [
     {
@@ -2285,24 +2291,6 @@
       "description": "치사와의 데이트 시작 치사는 당연히 풀돌\n\n리나시타2장 12 2막 두번째",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / wuthering waves 명조"
-    },
-    {
-      "title": "모니에도 떴네",
-      "link": "https://www.youtube.com/watch?v=ik6NJtuJg3g",
-      "shortsLink": "https://www.youtube.com/shorts/ik6NJtuJg3g",
-      "youtubeId": "ik6NJtuJg3g",
-      "channelTitle": "명완",
-      "channelId": "UCiPFljJAdsAXNB2IVcX_5cQ",
-      "subscriberCount": 59,
-      "date": "2025-11-29",
-      "viewCount": 3,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 101,
-      "format": "Shorts",
-      "description": "#명조 #wutheringwaves #퍼니싱그레이레이븐 #punishinggrayraven",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 명완"
     },
     {
       "title": "(명조)리나시타2장 12 1막 치사Wuthering Waves 2025 11 21   22 12 15 01",
@@ -13609,24 +13597,6 @@
       "sources": "YouTube Data API v3 search.list / wuthering waves 명조"
     },
     {
-      "title": "젠니스킨 구경 / 라면  / 원신 특별 방송 같이 보기",
-      "link": "https://www.youtube.com/watch?v=4iNHlKnC2Ww",
-      "shortsLink": "https://www.youtube.com/shorts/4iNHlKnC2Ww",
-      "youtubeId": "4iNHlKnC2Ww",
-      "channelTitle": "성우 김가령",
-      "channelId": "UCm1JuixwDoQEDi5RfcRuHJg",
-      "subscriberCount": 114000,
-      "date": "2025-11-21",
-      "viewCount": 19746,
-      "likeCount": 310,
-      "commentCount": 12,
-      "durationSeconds": 10872,
-      "format": "VOD",
-      "description": "출연\n페이몬 성우 김가령\n헤이조, 상리요 성우 정의진\n네페르, 젠니 성우 원에스더\n\n★다른 사람이 봤을 때 불쾌한 댓글은 삭제될 수 있습니다.\n\n치지직\nhttps://chzzk.naver.com/314fd8aa23dccfedf21bcc00cd6df9ec\n맴버쉽 후원 감사합니당🩷\nhttps://www.youtube.com/channel/UCm1JuixwDoQEDi5RfcRuHJg/join\n네이버 카페\nhttps://cafe.naver.com/garyeongvoice\n\n이 영상은 공식 컨텐츠가 아닙니다.\n\n🎵Music provided by 브금대통령\n🎵Track : Game World - https://youtu.be/b6fp-OZEdLI",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 성우 김가령"
-    },
-    {
       "title": "치사 메인딜로 쓰는 돌파 & 조합 테스트 '치사 명함부터 풀돌까지 1일차 돌파 & 조합 성능 테스트' [명조]",
       "link": "https://www.youtube.com/watch?v=uqN19aUou5A",
       "shortsLink": "https://www.youtube.com/shorts/uqN19aUou5A",
@@ -20809,24 +20779,6 @@
       "sources": "YouTube Data API v3 uploads playlist / rhythm kz"
     },
     {
-      "title": "스토리는 어떨까",
-      "link": "https://www.youtube.com/watch?v=aqJF3AaYWJY",
-      "shortsLink": "https://www.youtube.com/shorts/aqJF3AaYWJY",
-      "youtubeId": "aqJF3AaYWJY",
-      "channelTitle": "명완",
-      "channelId": "UCiPFljJAdsAXNB2IVcX_5cQ",
-      "subscriberCount": 59,
-      "date": "2025-11-16",
-      "viewCount": 1243,
-      "likeCount": 8,
-      "commentCount": 1,
-      "durationSeconds": 54,
-      "format": "Shorts",
-      "description": "#명조 #wutheringwaves #퍼니싱그레이레이븐 #punishinggrayraven",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 스토리"
-    },
-    {
       "title": "Galbrena│Sugar on my tongue│[Wuthering Waves MMD] #galbrena",
       "link": "https://www.youtube.com/watch?v=nutPCbx_KZs",
       "shortsLink": "https://www.youtube.com/shorts/nutPCbx_KZs",
@@ -21545,24 +21497,6 @@
       "description": "(치지직에서 다운 받은 영상이라 화질이 조금 떨어질 수 있습니다!)\n\n#람찌는게임해 #구람찌 #대황람찌 #버츄얼 #버튜버 #vtuber #다시보기\n방송국 : https://chzzk.naver.com/8b36e226b7d7dcbd3fb360fc41d10a15\n편집본채널 : https://www.youtube.com/@구람찌\n날먹채널 : https://www.youtube.com/@뀨람찌",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 구람찌는재방해"
-    },
-    {
-      "title": "치사는 쿠로가 말아주는 덮밥",
-      "link": "https://www.youtube.com/watch?v=WuWKEaYkDcg",
-      "shortsLink": "https://www.youtube.com/shorts/WuWKEaYkDcg",
-      "youtubeId": "WuWKEaYkDcg",
-      "channelTitle": "명완",
-      "channelId": "UCiPFljJAdsAXNB2IVcX_5cQ",
-      "subscriberCount": 59,
-      "date": "2025-11-16",
-      "viewCount": 8,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 69,
-      "format": "Shorts",
-      "description": "#명조 #wutheringwaves #퍼니싱그레이레이븐 #punishinggrayraven",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 명완"
     },
     {
       "title": "202회 ： 방송1주년! 멋지다고 칭찬 바람／명조 스토리 11장 리나시타 최종장 ㅠㅜ 진짜 좋았다",

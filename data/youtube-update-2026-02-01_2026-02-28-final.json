@@ -8,7 +8,7 @@
     "channelsListCalls": 15,
     "generalCalls": 1184,
     "candidateCount": 1092,
-    "resultCount": 2486,
+    "resultCount": 2479,
     "playlistItemsListCalls": 1026,
     "seedFiles": [
       "youtube-update-2026-02-01_2026-02-28-search.json"
@@ -49,8 +49,14 @@
     "preFilterResultCount": 2486,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 7,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 7,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:24.183Z"
   },
   "rows": [
     {
@@ -862,24 +868,6 @@
       "description": "지금 생각하면 별거 아니지만 그때 당시 최신 스토리에서 최애캐의 죽음은 가히 트럭을 정면으로 맞는 충격과 비슷했다\n\n\n#명조워더링웨이브 #sooyou",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / 명조 스토리"
-    },
-    {
-      "title": "일페 댱이 니케 리코리스 리코일 치사토 코스프레",
-      "link": "https://www.youtube.com/watch?v=SdfEc8HFLCE",
-      "shortsLink": "https://www.youtube.com/shorts/SdfEc8HFLCE",
-      "youtubeId": "SdfEc8HFLCE",
-      "channelTitle": "진모짱Fancam",
-      "channelId": "UCrOewqX02B0elLol61WJI9g",
-      "subscriberCount": 79800,
-      "date": "2026-02-28",
-      "viewCount": 1737,
-      "likeCount": null,
-      "commentCount": 3,
-      "durationSeconds": 38,
-      "format": "Shorts",
-      "description": "#일러스타페스 #nikke #모델 #shorts #쇼츠\n\nILLUSTAR FES 일러스타페스 일페 10 행사 2026년 2월 21일과 22일 킨텍스 개최됐습니다.\n\n코스커넥트 부스 코스어 댱이 니케 리코리스 리코일 치사토 코스프레\n\nX : https://twitter.com/@DyangYi\nInstagram : https://www.instagram.com/@dyang.yi",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 진모짱Fancam"
     },
     {
       "title": "나만 매력있어 보이나...? ) 명조 3.1 스토리+후일담",
@@ -2718,24 +2706,6 @@
       "sources": "YouTube Data API v3 uploads playlist / Everyflow흔한아재"
     },
     {
-      "title": "댱이 (DyangYi)  니케 (NIKKE) X 리코리스 리코일 (Lycoris Recoil) - 니시키기 치사토 (Chisato Nishikigi) 풀영상 💎 일러스타페스 10",
-      "link": "https://www.youtube.com/watch?v=rYKrhcXxfjY",
-      "shortsLink": "https://www.youtube.com/shorts/rYKrhcXxfjY",
-      "youtubeId": "rYKrhcXxfjY",
-      "channelTitle": "onesuk7777",
-      "channelId": "UCiaIyDxs4j4RYf-QC8iHX_Q",
-      "subscriberCount": 3800,
-      "date": "2026-02-27",
-      "viewCount": 570,
-      "likeCount": 15,
-      "commentCount": 1,
-      "durationSeconds": 172,
-      "format": "Shorts",
-      "description": "🔰 니케 (NIKKE) X 리코리스 리코일 (Lycoris Recoil) - 니시키기 치사토 (Chisato Nishikigi)\n\n👘 Cosplayer : 댱이 (DyangYi) \n   YouTube : https://www.youtube.com/@DyangYi\n   instagram : https://www.instagram.com/dyang.yi\n   TikTok : https://www.tiktok.com/@dyangyi\n   X : https://x.com/dyangyi\nACROWN\n\n💎 ONESUK7777\n  YouTube : https://www.youtube.com/@onesuk7777\n  instagram : https://www.instagram.com/onesuk7777\n  TikTok : https://www.tiktok.com/@onesuk7777\n  X : https://x.com/onesuk7777\n\n📧 email : onesuk7777@naver.com\n\n🚨 이 채널에 있는 모든 영상은 무단 사용을 금지합니다!\n🚫 영상 다운로드 / 편집 재사용 / 업로드 금지합니다!\n\n🔔 촬영문의 : 인스타그램 DM 부탁드립니다\n\n#コスプレ #nikke #cosplay #lycorisrecoil #chisato",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / onesuk7777"
-    },
-    {
       "title": "명조 루크 PV, 3.1 에필로그 컷신 반응, 후기!!!!!!!!!",
       "link": "https://www.youtube.com/watch?v=g_4z27C2LmE",
       "shortsLink": "https://www.youtube.com/shorts/g_4z27C2LmE",
@@ -3094,24 +3064,6 @@
       "description": "진짜 댕 빡셌다...\n\n시청해주셔서 감사합니다! ♡⁺◟(◍˙▾˙◍)◞⁺♡\n영상을 재밌게 보셨다면 좋아요와 구독하기 꾹꾹 눌러주세요!\n\n￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n◆ 문의 : ramzzinim@naver.com\n◆ 치지직 : https://chzzk.naver.com/8b36e226b7d7dcbd3fb360fc41d10a15\n◆ 날먹채널 : https://www.youtube.com/@종겜하는구람찌\n◆ 다시보기는 \"라이브\" 탭에서 보실 수 있습니다!\n\n#람찌는게임해 #구람찌 #대황람찌 #버츄얼 #버튜버 #vtuber #종합게임 #워더링웨이브 #wutheringwaves  #구린모 #구원 #구원메인딜 #구원4돌 #리액터허스크 #라하이로이 #홀로그램",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 구람찌는게임해"
-    },
-    {
-      "title": "니케 리코리스 리코일 콜라보 치사토 뽑기",
-      "link": "https://www.youtube.com/watch?v=0Y5V8CY4HmY",
-      "shortsLink": "https://www.youtube.com/shorts/0Y5V8CY4HmY",
-      "youtubeId": "0Y5V8CY4HmY",
-      "channelTitle": "빙하유 VOD",
-      "channelId": "UC9GBmdwFYuiirNGrPn5Wb0Q",
-      "subscriberCount": 23900,
-      "date": "2026-02-27",
-      "viewCount": 145,
-      "likeCount": 19,
-      "commentCount": 1,
-      "durationSeconds": 8070,
-      "format": "VOD",
-      "description": "빙하유 생방송 : https://chzzk.me/binghayu\n빙하유 유튜브 : https://www.youtube.com/@binghayu\n오버더월 팬카페 : https://cafe.naver.com/otwoffical\n빙하유 트위터 : https://twitter.com/binghayu\nASMR : https://www.youtube.com/@HayuASMR",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 빙하유 VOD"
     },
     {
       "title": "[흔한아재 홍보한다]알잖아 내가 이토록 방송 홍보한 나를~#명조#방송홍보#shorts",
@@ -21852,24 +21804,6 @@
       "sources": "YouTube Data API v3 uploads playlist / PS682-a"
     },
     {
-      "title": "[니케] 일단 뽑자. 치사토? 합격",
-      "link": "https://www.youtube.com/watch?v=5uT8Lw_R_Jo",
-      "shortsLink": "https://www.youtube.com/shorts/5uT8Lw_R_Jo",
-      "youtubeId": "5uT8Lw_R_Jo",
-      "channelTitle": "튜나몬",
-      "channelId": "UCmUFGWM9EVLZ2C6TsFam01w",
-      "subscriberCount": 286,
-      "date": "2026-02-13",
-      "viewCount": 34,
-      "likeCount": 2,
-      "commentCount": 0,
-      "durationSeconds": 355,
-      "format": "VOD",
-      "description": "#승리의여신니케 #니케",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 튜나몬"
-    },
-    {
       "title": "명조 가챠 영상 #명조워더링웨이브 #가챠게임 #뉴비 #게임일상 #게임",
       "link": "https://www.youtube.com/watch?v=mh6Z9REPFxE",
       "shortsLink": "https://www.youtube.com/shorts/mh6Z9REPFxE",
@@ -22102,24 +22036,6 @@
       "description": "🔔 Subscribe for daily content  and don't forget turn on notification \nThanks so much for watching !\nenjoyyy yaww 𝑴𝒆𝒐𝒘. ฅ(•- •マ\n#wutheringwaves #kurogames #shorts #mieucine #fyp \n#鳴潮 #鸣潮 #명조: 워더링 웨이브\n#lynae #mornye #aemeath #luukherssen #lahairoi\n#wuwacreator #wuwashorts #projectwave #wuwacontest31",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / Mieucine"
-    },
-    {
-      "title": "[승리의 여신: 니케] 치사토 성능 후기 -철갑 1티어 언저리-",
-      "link": "https://www.youtube.com/watch?v=lIeeWLvO8PU",
-      "shortsLink": "https://www.youtube.com/shorts/lIeeWLvO8PU",
-      "youtubeId": "lIeeWLvO8PU",
-      "channelTitle": "고뇨",
-      "channelId": "UCG70O1umzfgPpDs8sBJtvVw",
-      "subscriberCount": 95300,
-      "date": "2026-02-12",
-      "viewCount": 72616,
-      "likeCount": 821,
-      "commentCount": 206,
-      "durationSeconds": 691,
-      "format": "VOD",
-      "description": "#고뇨 #승리의여신니케 #니케 #nikke \n\n개인 이메일:pyosick1324@gmail.com\n비즈니스 메일:ad@lolq.co.kr\n치지직 : https://chzzk.naver.com/e952631cf676815f96c230001d9df3c1",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 고뇨"
     },
     {
       "title": "【#명조】 에이메스 있는 분들 이거 저만 그런가요?",
@@ -24064,24 +23980,6 @@
       "description": "무소과금·뉴비들도 쉽고 즐겁게 명조를 즐길 수 있는 꿀팁 등을 다루고 있습니다.\n\n본 채널은 개인적인 취미와 정보 공유를 주 목적으로 운영 중입니다!\n영상 내용 중 오해의 소지가 있거나 정책에 저촉되는 사항이 있다면 언제든 알려주세요.\n확인 즉시 신속하게 조치하겠습니다!\n\n문의는 채널 홈의 [채널 상세 정보]에서 메일 주소를 확인해 주세요!",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / 명조"
-    },
-    {
-      "title": "[승리의 여신: 니케] 치사토 스킬 떴다-또 방무댐 떴냐-",
-      "link": "https://www.youtube.com/watch?v=0a86WZRWWm0",
-      "shortsLink": "https://www.youtube.com/shorts/0a86WZRWWm0",
-      "youtubeId": "0a86WZRWWm0",
-      "channelTitle": "고뇨",
-      "channelId": "UCG70O1umzfgPpDs8sBJtvVw",
-      "subscriberCount": 95300,
-      "date": "2026-02-11",
-      "viewCount": 33761,
-      "likeCount": 538,
-      "commentCount": 94,
-      "durationSeconds": 572,
-      "format": "VOD",
-      "description": "#고뇨 #승리의여신니케 #니케 #nikke \n\n개인 이메일:pyosick1324@gmail.com\n비즈니스 메일:ad@lolq.co.kr\n치지직 : https://chzzk.naver.com/e952631cf676815f96c230001d9df3c1",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 고뇨"
     },
     {
       "title": "명조 메인 스토리 전후",
@@ -42316,24 +42214,6 @@
       "description": "Twitch :: https://www.twitch.tv/neojonathan\nYouTube :: https://youtube.com/c/neojonathan\n\n=Support the Stream and Channel!!!=\n\nDonations :: https://twitch.streamlabs.com/neojonathan#/\n\nBusiness Inquiry // Sponsorship // 스폰서 문의\n:: neojonathan.tv@gmail.com\n\n= 컴퓨터 스펙 // Computer Specs =\n-마우스 [Mouse] : Fnatic x Lamzu MAYA X 8K\n-키보드 [Keyboard] : FLX Virgo Alu with Zaku Switches\n-모니터 [Monitor] : Alienware AW3821DW\n-그래픽카드 [Graphics Card] : Nvidia GeForce RTX 4090 Founder's Edition\n-프로세서 [CPU] : Ryzen 5800x3D\n-메모리 [RAM] : Corsair Vengeance LPX DDR4 RAM 64GB (2x32GB) 3200MHz\n-M.2 NVMe : KC3000 PCIe 4.0 NVMe M.2 SSD 2TB\n-마이크 [Mic] : Lewitt LCT 440 Pure with Audient EVO 4\n\nVtube Model by https://x.com/wolf_20212 (국악도령)",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / neojonathan"
-    },
-    {
-      "title": "엔드필드로 배선하러간 에이메스",
-      "link": "https://www.youtube.com/watch?v=er2QSvcvSK4",
-      "shortsLink": "https://www.youtube.com/shorts/er2QSvcvSK4",
-      "youtubeId": "er2QSvcvSK4",
-      "channelTitle": "박정현임",
-      "channelId": "UC6DCtwVu-kkLgjyKfNpiirw",
-      "subscriberCount": 294,
-      "date": "2026-02-03",
-      "viewCount": 140,
-      "likeCount": 4,
-      "commentCount": 0,
-      "durationSeconds": 37,
-      "format": "Shorts",
-      "description": "엔필까지 지키는 내아내임 #명조워더링웨이브 #명일방주엔드필드 #에이메스",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 박정현임"
     },
     {
       "title": "명조 1장 얽힌 별 (앙코, 카멜리아) 스토리 요약",

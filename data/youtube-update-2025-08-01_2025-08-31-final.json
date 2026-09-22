@@ -8,7 +8,7 @@
     "channelsListCalls": 12,
     "generalCalls": 1625,
     "candidateCount": 940,
-    "resultCount": 1552,
+    "resultCount": 1550,
     "playlistItemsListCalls": 1490,
     "seedFiles": [
       "youtube-update-2025-08-01_2025-08-31-search.json"
@@ -53,8 +53,14 @@
     "preFilterResultCount": 1552,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 2,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 2,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:22.192Z"
   },
   "rows": [
     {
@@ -18058,24 +18064,6 @@
       "sources": "YouTube Data API v3 search.list / 명조 다시보기"
     },
     {
-      "title": "[스포주의] 리고스의 정체 붕괴 스타레일 3.5 스토리 개척임무 하이라이트 스누피냥",
-      "link": "https://www.youtube.com/watch?v=iorqvRpql1k",
-      "shortsLink": "https://www.youtube.com/shorts/iorqvRpql1k",
-      "youtubeId": "iorqvRpql1k",
-      "channelTitle": "누피냥",
-      "channelId": "UC0ks1Pr-KocGUPMTdHQy_bw",
-      "subscriberCount": 2180,
-      "date": "2025-08-15",
-      "viewCount": 2323,
-      "likeCount": 21,
-      "commentCount": 2,
-      "durationSeconds": 98,
-      "format": "Shorts",
-      "description": "게임에 진심인 스누피냥 입니다.\n명조 워더링 웨이브가 주 게임이며, 종합 게임 하고 있습니다.\n\n[스누피의 유튜브 후원]\n도네-https://toon.at/donate/consul910\n\n[스누피의 컨설팅]\nhttps://pls.gg/snoopyang\n\n[스누피의 커뮤니티]\n디스코드-https://discord.gg/mBACUvV\n블로그-http://blog.naver.com/consul910\n\n✍일러스트 아티스트✍ : 아기쥐작업소\nhttp://artmug.kr/index.php?channel=view&uid=3743\n\n스누피의 유튜브 구독과 좋아요, 그리고 알림 설정 감사합니다.\n\n제목 : 리고스의 정체 붕괴 스타레일 3.5 스토리 개척임무 하이라이트 스누피냥\n게임 : 鸣潮 Wuthering Waves\n플랫폼 : PC/IOS\n\n#붕괴스타레일 #cyrene #昔涟 #스타레일 #게임 #games #game #gameplay #starrailgameplay #게임 #게임영상  #shortvideo #shortsvideo #shorts #short #trend #trendingshorts",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 3.5"
-    },
-    {
       "title": "괜히 방은우가 아님 [명조 : 워더링 웨이브] #shorts #명조 #games",
       "link": "https://www.youtube.com/watch?v=8kSKzfICFrE",
       "shortsLink": "https://www.youtube.com/shorts/8kSKzfICFrE",
@@ -22952,24 +22940,6 @@
       "description": "게임에 진심인 스누피냥 입니다.\n명조 워더링 웨이브, 원신, 붕괴 스타레일, 젠레스 존 제로가 주 게임이며, 종합 게임 하고 있습니다.\n\n[스누피의 유튜브 후원]\n도네-https://toon.at/donate/consul910\n\n[스누피의 컨설팅]\nhttps://pls.gg/snoopyang\n\n[스누피의 커뮤니티]\n블로그-http://blog.naver.com/consul910\n홈페이지-https://www.snoopy.space\n\n✍일러스트 아티스트✍ : 아기쥐작업소\nhttp://artmug.kr/index.php?channel=view&uid=3743\n\n스누피의 유튜브 구독과 좋아요, 그리고 알림 설정 감사합니다.\n\n1부 모든 시즌 ALL 픽뚫 젠린이의 젠레스 존 제로 스토리 스누피냥 방송 [08/09]\n2부 리메멘토 스토리 밀어보자 누피냥 [08/09]\n3부 원신 스토리 스누피냥 방송 [08/09]\n4부 명조 콘텐츠 상담소 운영 중 역경의탑, 페허, 홀로그램 대리&계정 상담은 스누피냥 방송 [08/09] #명조 #명조워더링웨이브\n5부 붕괴 스타레일 스토리&이벤트 콘텐츠 플레이 스누피냥 [08/09]\n6부 오픈런 46레벨 빙결법사 엔드 콘텐츠 진행 부활한 블루프로토콜 스타 레조넌스 [08/09]\n\n제목 : 명조 워더링 웨이브 스누피냥\n게임 : 鸣潮 Wuthering Waves\n플랫폼 : PC/IOS\n내용 : \n『명조: 워더링 웨이브』는 자유도가 높은 컨텐츠와 다채로운 스토리를 지닌 오픈월드 액션 어드벤처 게임이다. \n플레이어는 기나긴 잠에서 깨어난 방랑자가 되어 새로운 환경, 새로운 기술로 이루어진 드넓은 세상 속에서 모험을 떠난다.\n\n#명조 #명조워더링웨이브\n\n제목 : 원신 나타 플레이\n게임 : 원신 Genshin Impact 原神 \n플랫폼 : 아이패드 미니 6세대, PC\n내용 : \n원신은 '티바트'라는 세계에서 사람들은 세계의 기준에 만족하면 '신의 눈'을 가지게 되고 '신의 눈' 능력을 부여받고 원소의 힘을 다스릴 수 있게 되는 세계관이다. 티바트 대륙의 여행자가 된 유저는 드넓은 대륙에서 자유롭게 여행하고 다양한 동료들을 만나 원소의 힘을 지닌 동료들과 티바트 대륙에서 모험을 하게 된다. 잃어버린 혈육을 찾아 떠난 길에서 '원신'의 진실을 발견하게 된다.\n\n제목 : 붕괴 스타레일 플레이\n플랫폼 : 아이패드 미니 6세대, PC\n내용 : \n‘붕괴: 스타레일’은 HoYoverse의 신작 은하 판타지 RPG 게임입니다. 「은하열차」를 타고 은하계의 신비롭고 환상적인 풍경을 경험하며, 모험과 짜릿함이 가득한 여정의 선율을 즐겨보세요.\n플레이어는 여러 세계에서 새로운 친구를 만나고 반가운 친구와 재회하며 함께 「스텔라론」으로 인한 분쟁을 해결하고 비밀을 파헤치게 됩니다.\n\n제목 : 블루 프로토콜 스타 레조넌스 플레이\n게임 : Blue Protocol: star resonance 星痕共鸣\n플랫폼 : 아이패드 미니 6세대, PC\n내용 : \n블루 프로토콜 스타 레조넌스가 중국에 7월 17일 출시하였습니다.\n테일즈 시리즈가 생각나는 그래픽!\n인간, 용족, 아인족이 함께 살아가는 곳 - 별 레그나스.\n과거의 기억을 잃어버린 주인공과 동료 페스테는 자신들의 잃어버린 기억을 되찾기 위한 모험을 시작한다.\n천년 후의 미래에서 찾아온 자들\n주인공 일행 앞에 나타난 정체불명의 인물들.\n그들은 먼 미래에 찾아오게 될 별 레그나스의 멸망을 예고한다.",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 누피냥"
-    },
-    {
-      "title": "[림버스] 3.5장 미친 탈룰라",
-      "link": "https://www.youtube.com/watch?v=qjVoWiRG0Wk",
-      "shortsLink": "https://www.youtube.com/shorts/qjVoWiRG0Wk",
-      "youtubeId": "qjVoWiRG0Wk",
-      "channelTitle": "G스토리",
-      "channelId": "UCfdZ-RB_QxycTiTAG3LVd0w",
-      "subscriberCount": 29300,
-      "date": "2025-08-09",
-      "viewCount": 1050,
-      "likeCount": 37,
-      "commentCount": 1,
-      "durationSeconds": 829,
-      "format": "VOD",
-      "description": "#G스토리\n#명조워더링웨이브\n#Wuwa\n#이환\n#젠레스존제로 이메일\nsphiecrier12@gmail.com\n#명조\n#젠레스존제로\n#원신\n#니케\n#붕괴스타레일",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 3.5"
     },
     {
       "title": "놀이공원 이벤트 하며 즐거운 이유 #명조",

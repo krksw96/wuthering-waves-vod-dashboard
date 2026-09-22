@@ -8,7 +8,7 @@
     "channelsListCalls": 13,
     "generalCalls": 1220,
     "candidateCount": 991,
-    "resultCount": 2248,
+    "resultCount": 2246,
     "playlistItemsListCalls": 1063,
     "seedFiles": [
       "youtube-update-2026-01-01_2026-01-31-search.json"
@@ -49,8 +49,14 @@
     "preFilterResultCount": 2248,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 0,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 2,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 2,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:23.580Z"
   },
   "rows": [
     {
@@ -15480,24 +15486,6 @@
       "sources": "YouTube Data API v3 uploads playlist / 토퍼"
     },
     {
-      "title": "드디어 밝혀지는 여행자 남매 우주선 비밀 #shorts #원신",
-      "link": "https://www.youtube.com/watch?v=XAcKE6l3ShM",
-      "shortsLink": "https://www.youtube.com/shorts/XAcKE6l3ShM",
-      "youtubeId": "XAcKE6l3ShM",
-      "channelTitle": "뜽현블리",
-      "channelId": "UCQolujgP61x5EOvuecBJ-2A",
-      "subscriberCount": 1910,
-      "date": "2026-01-18",
-      "viewCount": 194,
-      "likeCount": null,
-      "commentCount": 0,
-      "durationSeconds": 60,
-      "format": "Shorts",
-      "description": "#shorts #shortsvideo #shortvideo #short #shortvideos #스토리 #게임 #short #쇼츠\n#명조 #명조워더링웨이브 #명조_워더링_웨이브 #치사 #모니에 #린네 #wutheringwaves #鳴潮 #kurogames #genshinimpact #hoyocreators #호요버스 #hoyoverse #miHoYo #Network #쇼츠추천  #NodKraiStory #유튜브 #추천 #youtube #Honkai #starrail #星穹铁道 #崩坏",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 워더링 웨이브 쇼츠"
-    },
-    {
       "title": "재미로보는 에이메스 나이추정",
       "link": "https://www.youtube.com/watch?v=ebFlXDlvEEg",
       "shortsLink": "https://www.youtube.com/shorts/ebFlXDlvEEg",
@@ -28330,24 +28318,6 @@
       "description": "#G스토리\n#명조워더링웨이브\n#Wuwa\n#이환\n#젠레스존제로 이메일\nsphiecrier12@gmail.com\n#명조",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / G스토리"
-    },
-    {
-      "title": "에이메스 컷신 나나미 대사로 바꾸기",
-      "link": "https://www.youtube.com/watch?v=CL0SUHtRufU",
-      "shortsLink": "https://www.youtube.com/shorts/CL0SUHtRufU",
-      "youtubeId": "CL0SUHtRufU",
-      "channelTitle": "에이치알",
-      "channelId": "UC_ZUeBUi86Wq8oPTa5TjlWg",
-      "subscriberCount": 4,
-      "date": "2026-01-10",
-      "viewCount": 818,
-      "likeCount": 9,
-      "commentCount": 0,
-      "durationSeconds": 31,
-      "format": "Shorts",
-      "description": "이번 공식 유출로 에이메스의 모티브가 나나미인게 확실해졌네요.\n나중에 심홍수영도 볼 수 있다면 좋겠습니다.\n\n\n#wuwa #명조 #명조워더링웨이브 #pgr #퍼니싱그레이레이븐 #퍼니싱",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 에이치알"
     },
     {
       "title": "【명조】욕조견 명조 뉴비 설명회 W.옥쓔, 노랑새【기령 다시보기 / 2025.10.26】",

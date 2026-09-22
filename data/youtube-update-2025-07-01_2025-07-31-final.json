@@ -8,7 +8,7 @@
     "channelsListCalls": 12,
     "generalCalls": 1669,
     "candidateCount": 968,
-    "resultCount": 1709,
+    "resultCount": 1702,
     "playlistItemsListCalls": 1537,
     "seedFiles": [
       "youtube-update-2025-07-01_2025-07-31-seed.json"
@@ -52,9 +52,15 @@
     },
     "preFilterResultCount": 1710,
     "filteredPlaylistRows": 0,
-    "filteredAiRows": 1,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredAiRows": 6,
+    "filteredCollisionRows": 2,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 5,
+      "cross-game-collision": 2,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:22.133Z"
   },
   "rows": [
     {
@@ -470,24 +476,6 @@
       "description": "#명조 \n#명조워더링웨이브 \n#명조_워더링_웨이브 \n\n이런 스토리 영상은 처음이네요!\n며칠 전 커뮤니티에 올린 https://www.youtube.com/post/UgkxbEzFJ0GG3JeuNKCO9WicUCD5dmkAkn_U\n이걸 바탕으로 영상으로 제작해봤습니다\n진짜 다시봐도 가슴아픈 스토리네요...\n\n* 본 영상은 확률형 아이템이 포함된 게임을 다루고 있습니다",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 상한놈"
-    },
-    {
-      "title": "[명조] 방순이 - 노쇼해서 미안해 (원곡 : 귀여워서 미안해)",
-      "link": "https://www.youtube.com/watch?v=e5sFJGUBDlw",
-      "shortsLink": "https://www.youtube.com/shorts/e5sFJGUBDlw",
-      "youtubeId": "e5sFJGUBDlw",
-      "channelTitle": "Assa",
-      "channelId": "UC9C2QqU3c61SUBOFkjNgoqg",
-      "subscriberCount": 30,
-      "date": "2025-07-31",
-      "viewCount": 2738,
-      "likeCount": 56,
-      "commentCount": 13,
-      "durationSeconds": 81,
-      "format": "Shorts",
-      "description": "#wutheringwaves #명조 #명조워더링웨이브 #wutheringwaves #ai노래 #방랑자 #rover #phrolova #귀여워서미안해 #可愛くてごめん  #플로로 \n\n영상에 2.5 버전 스토리 스포 내용이 있습니다.",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조"
     },
     {
       "title": "일곱 언덕에 영광 있으라! 아우구스타, 유노 캐릭터 플레이 리액션ㅣ명조: 워더링 웨이브",
@@ -18760,24 +18748,6 @@
       "sources": "YouTube Data API v3 search.list / 워더링 웨이브 shorts"
     },
     {
-      "title": "[명조] 난쟁이 Hypersomnia (원곡: Chocolate insomnia)",
-      "link": "https://www.youtube.com/watch?v=E3tOxf0TcFA",
-      "shortsLink": "https://www.youtube.com/shorts/E3tOxf0TcFA",
-      "youtubeId": "E3tOxf0TcFA",
-      "channelTitle": "Assa",
-      "channelId": "UC9C2QqU3c61SUBOFkjNgoqg",
-      "subscriberCount": 30,
-      "date": "2025-07-16",
-      "viewCount": 491,
-      "likeCount": 11,
-      "commentCount": 0,
-      "durationSeconds": 90,
-      "format": "Shorts",
-      "description": "원곡 : Chocolate Insomnia\n\n#명조 #명조워더링웨이브 #wutheringwaves #카를로타  #carlotta  #ai노래 #chocolate_insomnia, #chocolate insomnia, #nekomonogatari , #네코모노가타리",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / Assa"
-    },
-    {
       "title": "[명조] 홀로그램 이성 무장 6단계 풀돌풀재 카멜리아 에코 빼고 솔플",
       "link": "https://www.youtube.com/watch?v=MzkbG0-qCiU",
       "shortsLink": "https://www.youtube.com/shorts/MzkbG0-qCiU",
@@ -19514,24 +19484,6 @@
       "description": "● 타임라인\n00:00 영상 시작\n00:11 파수인과 벨리나의 차이점\n01:16 사이클\n01:39 간단한 질문에 대한 답변\n02:18 추천 공효 및 스펙\n02:48 실전 사이클\n04:45 스펙(아웃트로)",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 셸라스"
-    },
-    {
-      "title": "명조 2.5버전 복각..? 칸아가지 뭐",
-      "link": "https://www.youtube.com/watch?v=yQ2eqKmHZoQ",
-      "shortsLink": "https://www.youtube.com/shorts/yQ2eqKmHZoQ",
-      "youtubeId": "yQ2eqKmHZoQ",
-      "channelTitle": "흑우수달 (Blackcowotter)",
-      "channelId": "UC3kYy4y56E1A1VmkmfftBUw",
-      "subscriberCount": 43400,
-      "date": "2025-07-14",
-      "viewCount": 1531,
-      "likeCount": 29,
-      "commentCount": 6,
-      "durationSeconds": 130,
-      "format": "Shorts",
-      "description": "아닐수도있지만 사실 거의 확실하지않을까요\n일러들은 자체적으로 ai제작입니다 출처는 저임\n\n#명조 #명조워더링웨이브 #wutheringwaves  #에코 #강화",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 흑우수달 (Blackcowotter)"
     },
     {
       "title": "명조- 카멜리아 #shorts",
@@ -22072,24 +22024,6 @@
       "sources": "YouTube Data API v3 uploads playlist / 무소게이머"
     },
     {
-      "title": "[원신/2.x] 홀로그램 플뢰르 6단계 -  카르티시아",
-      "link": "https://www.youtube.com/watch?v=tv-MhrL-8kY",
-      "shortsLink": "https://www.youtube.com/shorts/tv-MhrL-8kY",
-      "youtubeId": "tv-MhrL-8kY",
-      "channelTitle": "안녕",
-      "channelId": "UCxjvXwvYuY_Kyu9BIMyttZQ",
-      "subscriberCount": 3180,
-      "date": "2025-07-10",
-      "viewCount": 88,
-      "likeCount": 0,
-      "commentCount": 1,
-      "durationSeconds": 113,
-      "format": "Shorts",
-      "description": "",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 안녕"
-    },
-    {
       "title": "카르띳띠보고 울기 메인스토리 2장 4막 - 6막 /명조_25.07.08  라모 다시보기",
       "link": "https://www.youtube.com/watch?v=bOw-YOKbQ8w",
       "shortsLink": "https://www.youtube.com/shorts/bOw-YOKbQ8w",
@@ -22142,24 +22076,6 @@
       "description": "",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / 명조 다시보기"
-    },
-    {
-      "title": "[원신/2.x] 홀로그램 고릴라 6단계 - 카르티시아",
-      "link": "https://www.youtube.com/watch?v=KBvDhkDhVD4",
-      "shortsLink": "https://www.youtube.com/shorts/KBvDhkDhVD4",
-      "youtubeId": "KBvDhkDhVD4",
-      "channelTitle": "안녕",
-      "channelId": "UCxjvXwvYuY_Kyu9BIMyttZQ",
-      "subscriberCount": 3180,
-      "date": "2025-07-10",
-      "viewCount": 38,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 71,
-      "format": "Shorts",
-      "description": "",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 안녕"
     },
     {
       "title": "[명조:워더링 웨이브] 역경의 탑 중앙 루장파 (4K 60fps)",
@@ -25240,24 +25156,6 @@
       "sources": "YouTube Data API v3 search.list / wuthering waves 명조"
     },
     {
-      "title": "[명조] MWER - 활공참기 (원곡 : QWER - 눈물참기)",
-      "link": "https://www.youtube.com/watch?v=Fl-HOlCb8a4",
-      "shortsLink": "https://www.youtube.com/shorts/Fl-HOlCb8a4",
-      "youtubeId": "Fl-HOlCb8a4",
-      "channelTitle": "Assa",
-      "channelId": "UC9C2QqU3c61SUBOFkjNgoqg",
-      "subscriberCount": 30,
-      "date": "2025-07-06",
-      "viewCount": 1369,
-      "likeCount": 15,
-      "commentCount": 4,
-      "durationSeconds": 194,
-      "format": "VOD",
-      "description": "원곡 : QWER - 눈물참기\n\n#명조 #명조워더링웨이브 #wutheringwaves #금희 #jinhsi #ai노래 #qwer",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / Assa"
-    },
-    {
       "title": "방랑자으흐흐 #shorts",
       "link": "https://www.youtube.com/watch?v=XajvZR27Pq4",
       "shortsLink": "https://www.youtube.com/shorts/XajvZR27Pq4",
@@ -25868,24 +25766,6 @@
       "description": "#명조 #루파 #카르티시아 #wutheringwaves #lupa #ost",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / wuthering waves 명조"
-    },
-    {
-      "title": "[명조] 페비의 꿈 (원곡 : 네모의 꿈 - 화이트)",
-      "link": "https://www.youtube.com/watch?v=AFCeCt97Agc",
-      "shortsLink": "https://www.youtube.com/shorts/AFCeCt97Agc",
-      "youtubeId": "AFCeCt97Agc",
-      "channelTitle": "Assa",
-      "channelId": "UC9C2QqU3c61SUBOFkjNgoqg",
-      "subscriberCount": 30,
-      "date": "2025-07-05",
-      "viewCount": 1904,
-      "likeCount": 21,
-      "commentCount": 2,
-      "durationSeconds": 197,
-      "format": "VOD",
-      "description": "#wutheringwaves #명조 #명조워더링웨이브 #wutheringwaves #ai노래 #네모의꿈 #페비 #phoebe #빵떡",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / Assa"
     },
     {
       "title": "픽뚫 한번에 곱창 뽑히겠다 루파야.. - 명조",

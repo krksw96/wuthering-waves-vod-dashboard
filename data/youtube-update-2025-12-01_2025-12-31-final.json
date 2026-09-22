@@ -8,7 +8,7 @@
     "channelsListCalls": 22,
     "generalCalls": 1775,
     "candidateCount": 1911,
-    "resultCount": 2897,
+    "resultCount": 2891,
     "playlistItemsListCalls": 1561,
     "seedFiles": [
       "youtube-update-2025-12-01_2025-12-31-search.json"
@@ -52,8 +52,14 @@
     "preFilterResultCount": 2900,
     "filteredPlaylistRows": 0,
     "filteredAiRows": 3,
-    "filteredCollisionRows": 0,
-    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded."
+    "filteredCollisionRows": 6,
+    "qualityFilter": "Search seeds retained; uploads-playlist additions require Wuthering Waves title or known title term; disclosed AI-use and known cross-game title collisions excluded.",
+    "rejectedReasons": {
+      "disclosed-ai-use": 0,
+      "cross-game-collision": 6,
+      "official-channel": 0
+    },
+    "lastAuditedAt": "2026-09-22T09:47:23.457Z"
   },
   "rows": [
     {
@@ -4215,24 +4221,6 @@
       "sources": "YouTube Data API v3 search.list / 명조 스토리"
     },
     {
-      "title": "#이터널리턴 실험체들의 겨울을 즐기는법🎅 #christmas #shorts",
-      "link": "https://www.youtube.com/watch?v=5B2n0rws0ug",
-      "shortsLink": "https://www.youtube.com/shorts/5B2n0rws0ug",
-      "youtubeId": "5B2n0rws0ug",
-      "channelTitle": "나는야 잡초맨",
-      "channelId": "UC7_PbM1XWi6iF3A8qHBvHzg",
-      "subscriberCount": 4960,
-      "date": "2025-12-29",
-      "viewCount": 62511,
-      "likeCount": 2301,
-      "commentCount": 169,
-      "durationSeconds": 14,
-      "format": "Shorts",
-      "description": "#animation #프리렌 #젠존제 #수나 #애니 #애니메이션 #2danimation #실비아 #이렘 #미르카 #슈린 #버튜버 #waifu #anime #엔드필드 #원신 #스타레일 #명조 #니케 #트릭컬 #블루아카이브",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 search.list / 명조 shorts"
-    },
-    {
       "title": "[명조] 처음 만난 여고생의 인사법",
       "link": "https://www.youtube.com/watch?v=ZsKyj9jXZk0",
       "shortsLink": "https://www.youtube.com/shorts/ZsKyj9jXZk0",
@@ -7293,24 +7281,6 @@
       "sources": "YouTube Data API v3 search.list / 명조"
     },
     {
-      "title": "샘웨 다시보기 25.12.27 | 린네 풀돌 테스트 & 스타레일 딜러 점검",
-      "link": "https://www.youtube.com/watch?v=tDhpIZ9xlGM",
-      "shortsLink": "https://www.youtube.com/shorts/tDhpIZ9xlGM",
-      "youtubeId": "tDhpIZ9xlGM",
-      "channelTitle": "롱웨",
-      "channelId": "UC7SIaeUWuuIrWTIOBpayDVQ",
-      "subscriberCount": 52300,
-      "date": "2025-12-28",
-      "viewCount": 19790,
-      "likeCount": 126,
-      "commentCount": 39,
-      "durationSeconds": 42992,
-      "format": "VOD",
-      "description": "00:00 방송시작\n35:31 홀로그램 무장자 도전\n1:13:55 린네 풀돌 해금\n2:16:44 스타레일 딜러 실험\n6:20:42 카페탐방\n7:33:34 데이 아 빌리언즈",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 롱웨"
-    },
-    {
       "title": "[명조] 린네 '역광 속 눈부신 서약' 에코 세팅! 🌟 4-3-3-1-1 공략! 💡",
       "link": "https://www.youtube.com/watch?v=oFQQWP-69v4",
       "shortsLink": "https://www.youtube.com/shorts/oFQQWP-69v4",
@@ -9253,24 +9223,6 @@
       "description": "ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n모든영상 한번에 보기 : https://bit.ly/4bQZoVU\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n녹화날짜 : 2025-12-27\n피해자가 맞긴하네 근데 잔성회에 간건 선택이잖아?\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n제우스 TV 방송국 : https://chzzk.me/Zeus\n제우스 TV 유튜브 : https://www.youtube.com/@제우스님_Zeus\n제우스 TV 팬심 : https://bit.ly/3V6UrTP\nㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ\n#제우스TV #명조워더링웨이브 #WutheringWaves",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / 워더링 웨이브"
-    },
-    {
-      "title": "1부) 린네와 새로운 콘텐츠 매트릭스 더블  폰스 2부)젠존제 시유방어전, 엽빛나, 자오 ep 영상",
-      "link": "https://www.youtube.com/watch?v=BsYbFxy9_I4",
-      "shortsLink": "https://www.youtube.com/shorts/BsYbFxy9_I4",
-      "youtubeId": "BsYbFxy9_I4",
-      "channelTitle": "토끼봄",
-      "channelId": "UC-EhkDaaFwkt-ek99H8EjTQ",
-      "subscriberCount": 1390,
-      "date": "2025-12-28",
-      "viewCount": 135,
-      "likeCount": 3,
-      "commentCount": 0,
-      "durationSeconds": 17398,
-      "format": "VOD",
-      "description": "#명조, #명조워더링웨이브, #젠존제, #젠레스존제로, #스타레일,#토끼봄, #명조린네, #린네, #명조3.0, #젠존제엽빛나, #엽빛나, #젠존제자오, #빛나ep, #자오ep, \n\n1부) 린네와 새로운 콘텐츠 매트릭스 더블  폰스 2부)젠존제 시유방어전, 엽빛나, 자오 ep 영상\n\n00:00 방송 시작\n35:25 역경의 탑 시작\n01:01:23 죽음의 노래와 바닷속 폐허\n01:38:08 매트릭스 더블  폰스 시작\n03:26:36 젠존제 시유 방어전 시작\n04:28:05 엽빛나 ep 시작\n04:40:58 자오 ep 시작\n\n영상이 즐거우셨다면 구독, 좋아요, 알림 설정 부탁드립니다~\n방송 일정은 게시물에 공지합니다.\n일정이 변경될 시 게시물에 올리니 게시물을 꼬옥 확인 해주세용~\n\n유튜브, 치지직에서 라이브 방송합니다. \n놀러 오세요~\n치지직 주소 : https://chzzk.naver.com/aa6c1d7bced3983b701c630260649f0c/videos?videoType=&sortType=LATEST&page=1\n\n광고 및 문의사항 : tokkibom@naver.com",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 토끼봄"
     },
     {
       "title": "[ 2025.12.16 ] 하씨 명조 스토리 고점의 시작 갸맛있네 [명조]",
@@ -48531,24 +48483,6 @@
       "sources": "YouTube Data API v3 uploads playlist / G스토리"
     },
     {
-      "title": "드디어 뜬 린네와 모니에",
-      "link": "https://www.youtube.com/watch?v=IWuxSJt6Mow",
-      "shortsLink": "https://www.youtube.com/shorts/IWuxSJt6Mow",
-      "youtubeId": "IWuxSJt6Mow",
-      "channelTitle": "명완",
-      "channelId": "UCiPFljJAdsAXNB2IVcX_5cQ",
-      "subscriberCount": 59,
-      "date": "2025-12-04",
-      "viewCount": 1420,
-      "likeCount": 5,
-      "commentCount": 1,
-      "durationSeconds": 53,
-      "format": "Shorts",
-      "description": "영상 원본\nhttps://youtu.be/7sRAVxs5Z_8?si=MNW2igWMJ7xoMyka\n\n#명조 #wutheringwaves #퍼니싱그레이레이븐 #punishinggrayraven",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 명완"
-    },
-    {
       "title": "[명조]또! 공식에서 유출한 3.0 플레이 영상 집중탐구",
       "link": "https://www.youtube.com/watch?v=EEcTTzchpOM",
       "shortsLink": "https://www.youtube.com/shorts/EEcTTzchpOM",
@@ -49051,24 +48985,6 @@
       "description": "#명조 #명조워더링웨이브 #wutheringwaves #게임",
       "gameTitle": "",
       "sources": "YouTube Data API v3 uploads playlist / 발악하기"
-    },
-    {
-      "title": "드디어 린네와 모니에를 스포해준 공식",
-      "link": "https://www.youtube.com/watch?v=Gbo1vveoiws",
-      "shortsLink": "https://www.youtube.com/shorts/Gbo1vveoiws",
-      "youtubeId": "Gbo1vveoiws",
-      "channelTitle": "명완",
-      "channelId": "UCiPFljJAdsAXNB2IVcX_5cQ",
-      "subscriberCount": 59,
-      "date": "2025-12-04",
-      "viewCount": 16,
-      "likeCount": 0,
-      "commentCount": 0,
-      "durationSeconds": 79,
-      "format": "Shorts",
-      "description": "영상 원본\nhttps://youtu.be/7sRAVxs5Z_8?si=MNW2igWMJ7xoMyka\n\n#명조 #wutheringwaves #퍼니싱그레이레이븐 #punishinggrayraven",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 명완"
     },
     {
       "title": "명조 워더링 웨이브 2.7 2장 12막 2부 새벽빛이 황야에 멈추자",
@@ -50977,24 +50893,6 @@
       "description": "251129 치지직 라이브 방송\n\n이게 바로 명조식 과금유도?!\n\n---------------------------------------------\n치지직: https://chzzk.naver.com/2434c8e01c4582b37b1ab925af938cde\n카페: https://cafe.naver.com/mureng\n---------------------------------------------\n\n시청해주셔서 감사합니다 (｡・ ‧̫・｡)o🪄\n\n\n#서브컬쳐 #명조 #명조워더링웨이브 #버튜버 #머렝 #다시보기 #메인스토리 #조수임무 #스토리 #리액션 #reaction",
       "gameTitle": "",
       "sources": "YouTube Data API v3 search.list / 명조 리액션"
-    },
-    {
-      "title": "컴파일러 25.12.01 저챗 다시보기 원신 눈알학개론, 라하이로이 세계관 추측하기",
-      "link": "https://www.youtube.com/watch?v=B9e4TEY83lM",
-      "shortsLink": "https://www.youtube.com/shorts/B9e4TEY83lM",
-      "youtubeId": "B9e4TEY83lM",
-      "channelTitle": "통파일러",
-      "channelId": "UCPH5K7VjB2__o60u1bMpZnw",
-      "subscriberCount": 1720,
-      "date": "2025-12-02",
-      "viewCount": 503,
-      "likeCount": 14,
-      "commentCount": 3,
-      "durationSeconds": 3976,
-      "format": "VOD",
-      "description": "시청에 감사드립니다.\n\n컴파일러 본채널\nyoutube.com/@gamecompiler\n치지직 생방송 평일 오후 7시\nhttps://chzzk.naver.com/7ad99b46e1c49002efc36263b4c8b075\n노션 - 방송에서 본 메모와 대본은 여기서 보실 수 있어요\nhttps://notion.so/1de66cc1f1b580d99e86d7f674371dce\n네이버 카페: 디컴파일\nhttps://cafe.naver.com/decompile\n디스코드 소통채널\nhttps://discord.gg/Sq7KtedEg4\n이메일/문의\nrunningcompiler@gmail.com\n\n#컴파일러 #다시보기",
-      "gameTitle": "",
-      "sources": "YouTube Data API v3 uploads playlist / 통파일러"
     },
     {
       "title": "[명조:워더링 웨이브] 모킹 전략 • 조화도 편 # 7",
