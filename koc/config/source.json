@@ -1,0 +1,17 @@
+{
+  "url": "https://ojpvaupdkdbj.jp.larksuite.com/wiki/TjncwLOoOi0Ds2kBpiKjKetSpH4?sheet=4z1yjS",
+  "sheetId": "4z1yjS",
+  "label": "명조 KOC 영상 원본",
+  "apiBase": "https://open.larksuite.com",
+  "headerRow": null,
+  "columnMap": {},
+  "dateOrder": "YMD",
+  "timeZone": "Asia/Seoul",
+  "batchRows": 500,
+  "maxRequests": 250,
+  "maxRows": 100000,
+  "maxColumns": 256,
+  "maxInvalidRowRatio": 0.1,
+  "maxRecordDropRatio": 0.4,
+  "versions": []
+}
