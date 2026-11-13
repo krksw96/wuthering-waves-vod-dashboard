@@ -9,9 +9,9 @@
     "reader": "lark-cli-user",
     "revision": 15036
   },
-  "generatedAt": "2026-11-13T18:09:14.867Z",
+  "generatedAt": "2026-11-13T18:11:22.700Z",
   "metricUpdatedAt": "2026-11-13T09:05:00.000Z",
-  "syncedAt": "2026-11-13T18:09:14.867Z",
+  "syncedAt": "2026-11-13T18:11:22.700Z",
   "coverage": {
     "start": "2024-05-23",
     "end": "2026-11-11"
