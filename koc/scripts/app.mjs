@@ -25,6 +25,21 @@ const timeLabel = (value) => {
     year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Seoul',
   }).format(date) : '미확인';
 };
+const sourceTimeLabel = (value) => {
+  if (typeof value !== 'string' || !value.trim()) return '원본에 갱신 시각 없음';
+  // A source-local timestamp has no established time zone. Keep that wall-clock
+  // value instead of silently treating it as the viewer's local time or KST.
+  const local = value.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})(?::\d{2}(?:\.\d+)?)?$/);
+  if (local) return `${formatDate(local[1])} ${local[2]} · 원본 표기`;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return `${formatDate(value)} · 원본 표기`;
+  return `${timeLabel(value)} KST`;
+};
+
+function syncDescription(sync) {
+  if (sync?.enabled !== true) return '자동 동기화 설정 대기 · 현재는 마지막으로 읽은 원본을 표시합니다.';
+  const interval = validMetric(sync.intervalHours) && sync.intervalHours > 0 ? `${sync.intervalHours}시간마다 원본 확인` : '원본 자동 확인 사용 중';
+  return `${interval}${sync.requiresComputer === true ? ' · 이 PC가 켜져 있고 사용자 로그인 상태일 때 실행' : ''}`;
+}
 
 function filters() {
   return {
@@ -66,7 +81,7 @@ function populateFilters() {
 }
 
 function renderSource() {
-  const { mode, source, generatedAt, importedAt, coverage, warnings = [] } = state.payload;
+  const { mode, source, generatedAt, importedAt, syncedAt, metricUpdatedAt, sync, coverage, warnings = [] } = state.payload;
   const isImported = mode === 'live' && source?.status === 'imported';
   const isLive = mode === 'live' && !isImported;
   $('status-pill').classList.toggle('live', isLive);
@@ -78,12 +93,30 @@ function renderSource() {
   const description = isImported
     ? `원본에서 내보낸 파일을 ${timeLabel(importedAt || generatedAt)} KST에 가져왔습니다. 지표는 파일에 저장된 값이며, 자동 동기화는 연결 대기 중입니다. 화면은 5분마다 새 데이터 파일을 확인합니다.`
     : isLive
-    ? `원본의 공개 지표를 읽어 표시합니다. 마지막 수집 ${timeLabel(generatedAt)} KST. 화면은 5분마다 새 데이터 파일을 확인합니다.`
+    ? `${syncDescription(sync)} 화면은 5분마다 새 데이터 파일을 확인합니다.`
     : `요청한 시트의 데이터가 아닙니다. ${provenance?.label || '기존 로컬 수집 데이터'}로 기능을 미리 보여줍니다. 버전 정보는 원본 연결 후 표시합니다.`;
-  $('source-notice-body').innerHTML = `${esc(description)}${provenanceUrl && mode === 'preview' ? ` <a href="${esc(provenanceUrl)}" target="_blank" rel="noopener noreferrer">미리보기 출처 ↗</a>` : ''}${warnings.length ? `<br>${esc(warnings.filter((text) => /주제/.test(text)).join(' '))}` : ''}`;
+  $('source-notice-body').innerHTML = `${esc(description)}${provenanceUrl && mode === 'preview' ? ` <a href="${esc(provenanceUrl)}" target="_blank" rel="noopener noreferrer">미리보기 출처 ↗</a>` : ''}${warnings.length ? `<br>${esc(warnings.join(' · '))}` : ''}`;
   $('collected-at').textContent = isImported
     ? `파일 가져옴 ${timeLabel(importedAt || generatedAt)} KST · 자동 연결 대기`
-    : `데이터 수집 ${timeLabel(generatedAt)} KST${isLive ? '' : ' · 미리보기 스냅샷'}`;
+    : isLive ? `원본 지표 갱신 ${sourceTimeLabel(metricUpdatedAt)}` : `데이터 수집 ${timeLabel(generatedAt)} KST · 미리보기 스냅샷`;
+  $('source-metadata').hidden = !isLive;
+  $('metric-updated-at').textContent = sourceTimeLabel(metricUpdatedAt);
+  $('site-synced-at').textContent = `${timeLabel(syncedAt || generatedAt)} KST`;
+  $('synced-at').hidden = !isLive;
+  $('synced-at').textContent = `사이트 동기화 ${timeLabel(syncedAt || generatedAt)} KST`;
+  const freshness = [];
+  const now = Date.now();
+  // Only calculate elapsed hours when the timestamp carries its own zone.
+  if (isLive && typeof metricUpdatedAt === 'string' && /(?:Z|[+-]\d{2}:?\d{2})$/i.test(metricUpdatedAt)) {
+    const hours = (now - Date.parse(metricUpdatedAt)) / 3_600_000;
+    if (Number.isFinite(hours) && hours >= 72) freshness.push(`원본 지표가 ${Math.floor(hours / 24)}일 전 갱신된 값입니다. 사이트 동기화는 원본 수치를 다시 읽는 작업입니다.`);
+  }
+  if (isLive && sync?.enabled === true && validMetric(sync.intervalHours) && sync.intervalHours > 0) {
+    const hours = (now - Date.parse(syncedAt || generatedAt)) / 3_600_000;
+    if (Number.isFinite(hours) && hours > sync.intervalHours * 2) freshness.push('예정된 확인 간격보다 사이트 동기화가 늦어졌습니다. 마지막으로 정상 수집한 데이터를 표시합니다.');
+  }
+  $('source-freshness').hidden = freshness.length === 0;
+  $('source-freshness').textContent = freshness.join(' ');
   $('coverage-note').textContent = coverage?.start && coverage?.end ? `수집 범위 ${formatDate(coverage.start)} — ${formatDate(coverage.end)}` : '수집 범위 미확인';
   document.querySelectorAll('a[href*="TjncwLOoOi0Ds2kBpiKjKetSpH4"]').forEach((link) => { link.href = safeUrl(source?.url) || SOURCE_URL; });
 }
@@ -280,7 +313,8 @@ function validatePayload(payload) {
   const invalid = (message) => { throw new Error(`데이터 형식 오류: ${message}`); };
   if (!object(payload) || payload.schemaVersion !== 1 || !['preview', 'live'].includes(payload.mode) || !Array.isArray(payload.videos)) invalid('지원하는 데이터 파일이 아닙니다.');
   if (!object(payload.source)) invalid('데이터 출처가 없습니다.');
-  for (const field of ['url', 'label', 'sheetId', 'status']) if (payload.source[field] !== undefined && typeof payload.source[field] !== 'string') invalid(`출처 ${field} 값이 올바르지 않습니다.`);
+  for (const field of ['url', 'label', 'sheetId', 'status', 'reader']) if (payload.source[field] !== undefined && typeof payload.source[field] !== 'string') invalid(`출처 ${field} 값이 올바르지 않습니다.`);
+  if (payload.source.revision !== undefined && payload.source.revision !== null && typeof payload.source.revision !== 'string' && !validMetric(payload.source.revision)) invalid('원본 리비전이 올바르지 않습니다.');
   if (payload.source.provenance !== undefined) {
     if (!object(payload.source.provenance)) invalid('미리보기 출처가 올바르지 않습니다.');
     for (const field of ['url', 'label', 'generatedAt']) if (payload.source.provenance[field] !== undefined && payload.source.provenance[field] !== null && typeof payload.source.provenance[field] !== 'string') invalid(`미리보기 출처 ${field} 값이 올바르지 않습니다.`);
@@ -288,6 +322,20 @@ function validatePayload(payload) {
   for (const field of ['generatedAt', 'importedAt', 'syncedAt']) {
     const value = payload[field];
     if (value !== undefined && value !== null && (typeof value !== 'string' || !Number.isFinite(Date.parse(value)))) invalid(`${field} 시점이 올바르지 않습니다.`);
+  }
+  if (payload.metricUpdatedAt !== undefined && payload.metricUpdatedAt !== null) {
+    if (typeof payload.metricUpdatedAt !== 'string') invalid('원본 지표 갱신 시각이 올바르지 않습니다.');
+    const value = payload.metricUpdatedAt;
+    const local = value.match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2})(?:\.\d+)?)?)?$/);
+    if (local) {
+      if (!validateDateRange(local[1], local[1]).valid || Number(local[2] || 0) > 23 || Number(local[3] || 0) > 59 || Number(local[4] || 0) > 59) invalid('원본 지표 갱신 시각이 올바르지 않습니다.');
+    } else if (!/(?:Z|[+-]\d{2}:?\d{2})$/i.test(value) || !Number.isFinite(Date.parse(value))) invalid('원본 지표 갱신 시각이 올바르지 않습니다.');
+  }
+  if (payload.sync !== undefined) {
+    if (!object(payload.sync)) invalid('자동 동기화 설정이 올바르지 않습니다.');
+    for (const field of ['enabled', 'requiresComputer']) if (payload.sync[field] !== undefined && typeof payload.sync[field] !== 'boolean') invalid(`자동 동기화 ${field} 값이 올바르지 않습니다.`);
+    if (payload.sync.method !== undefined && typeof payload.sync.method !== 'string') invalid('자동 동기화 방식이 올바르지 않습니다.');
+    if (payload.sync.intervalHours !== undefined && (!validMetric(payload.sync.intervalHours) || payload.sync.intervalHours <= 0)) invalid('자동 동기화 간격이 올바르지 않습니다.');
   }
   if (payload.coverage !== undefined) {
     if (!object(payload.coverage)) invalid('수집 범위가 올바르지 않습니다.');
@@ -362,6 +410,9 @@ async function loadData({ automatic = false } = {}) {
       $('status-pill').innerHTML = '<i></i>데이터 로딩 실패';
       $('status-pill').classList.remove('live');
       $('source-notice').classList.remove('live');
+      $('source-metadata').hidden = true;
+      $('source-freshness').hidden = true;
+      $('synced-at').hidden = true;
       $('source-notice-title').textContent = '데이터 파일을 확인할 수 없습니다.';
       $('source-notice-body').textContent = '연결이 복구되면 데이터를 다시 불러올 수 있습니다.';
       $('trend-chart').innerHTML = '<p class="chart-empty">데이터 연결을 기다리고 있습니다.</p>';

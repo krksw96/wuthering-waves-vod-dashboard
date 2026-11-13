@@ -32,6 +32,28 @@ function plainText(value) {
 
 export function textOf(value) { return plainText(value).trim(); }
 
+export function parseTopics(value, { topicLanguage } = {}) {
+  const text = textOf(value);
+  if (topicLanguage !== 'ko') return [...new Set(text.split(/[,，;；\n|、]+/).map(value => value.trim()).filter(Boolean))];
+  const topics = text.split(/[,，;；|、]+/).flatMap(item => {
+    const lines = item.split(/\r?\n/).map(value => value.trim()).filter(Boolean);
+    const korean = lines.filter(line => /[가-힣]/.test(line));
+    return korean.length ? korean : lines;
+  });
+  return [...new Set(topics)];
+}
+
+export function parseSourceTimestamp(value, timeZone = 'Asia/Seoul') {
+  const text = textOf(value);
+  if (!text) return null;
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?(Z|[+-]\d{2}:?\d{2})?$/);
+  if (!match || !validDate(Number(match[1]), Number(match[2]), Number(match[3])) || Number(match[4]) > 23 || Number(match[5]) > 59 || Number(match[6] || 0) > 59) return null;
+  const offset = match[7] || ({ 'Asia/Seoul': '+09:00', 'Asia/Shanghai': '+08:00', UTC: 'Z' })[timeZone];
+  if (!offset) return null;
+  const date = new Date(`${match[1]}-${match[2]}-${match[3]}T${match[4]}:${match[5]}:${match[6] || '00'}${offset}`);
+  return Number.isFinite(date.getTime()) ? date.toISOString() : null;
+}
+
 export function safeSourceUrl(value) {
   try {
     const url = new URL(String(value).trim());
@@ -235,12 +257,14 @@ export function normalizeRows(rows, config = {}, { generatedAt = new Date().toIS
     if (columns.views != null && textOf(row[columns.views]) && views == null) counts.invalidViews += 1;
     if (columns.likes != null && textOf(row[columns.likes]) && likes == null) counts.invalidLikes += 1;
     if (!url) counts.missingUrls += 1;
-    const topics = [...new Set(textOf(row[columns.topics]).split(/[,，;；\n|、]+/).map((value) => value.trim()).filter(Boolean))];
+    const topics = parseTopics(row[columns.topics], config);
     const sourceVersion = textOf(row[columns.version]);
     const matchedVersion = versionRanges.find((version) => date >= version.start && date <= version.end);
     const version = sourceVersion || matchedVersion?.id || null;
     const rawFormat = textOf(row[columns.format]);
-    const format = /^(shorts?|쇼츠|短视频|短片)$/i.test(rawFormat) || url.includes('/shorts/') ? 'Shorts' : /^(vod|video|일반|일반 영상|长视频|长片)$/i.test(rawFormat) ? 'VOD' : rawFormat || '미지정';
+    const shortForm = /^(shorts?|쇼츠|숏폼(?:\/短视频)?|短视频|短片)$/i.test(rawFormat);
+    const longForm = /^(vod|video|일반|일반 영상|롱폼(?:\/长视频)?|长视频|长片)$/i.test(rawFormat);
+    const format = shortForm || (!longForm && url.includes('/shorts/')) ? 'Shorts' : longForm ? 'VOD' : rawFormat || '미지정';
     const ytId = youtubeId(url);
     const canonicalUrl = ytId ? `https://www.youtube.com/watch?v=${ytId}` : url;
     const identity = ytId || (url ? `url:${url}` : `row:${i + 1}\u0000${creator}\u0000${date}\u0000${title}`);
@@ -269,11 +293,23 @@ export function normalizeRows(rows, config = {}, { generatedAt = new Date().toIS
   const availableVersions = [...new Set(videos.map((video) => video.version).filter(Boolean))];
   const versions = availableVersions.map((id) => versionRanges.find((version) => version.id === id) || { id, label: id }).sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true }));
   const dates = videos.map((video) => video.date).sort();
+  let metricUpdatedAt = null;
+  if (config.metricUpdatedAtCell) {
+    const cell = config.metricUpdatedAtCell.match(/^([A-Z]+)([1-9]\d*)$/);
+    if (!cell) throw new Error('metricUpdatedAtCell은 C2 같은 셀 주소여야 합니다.');
+    metricUpdatedAt = parseSourceTimestamp(rows[Number(cell[2]) - 1]?.[columnIndex(cell[1])], config.timeZone);
+  }
+  if (!metricUpdatedAt && config.metricUpdatedAtColumn) {
+    const index = columnIndex(config.metricUpdatedAtColumn);
+    const updates = rows.slice(headerIndex + 1).map(row => parseSourceTimestamp(row[index], config.timeZone)).filter(Boolean).sort();
+    metricUpdatedAt = updates.at(-1) || null;
+  }
   return {
     schemaVersion: 1,
     mode: 'live',
     source: { url: safeSourceUrl(config.url), sheetId: String(config.sheetId || ''), label: String(config.label || 'Lark KOC 원본'), status: imported ? 'imported' : 'connected' },
     generatedAt,
+    metricUpdatedAt,
     ...(imported ? { importedAt: generatedAt } : { syncedAt: generatedAt }),
     coverage: { start: dates[0], end: dates.at(-1) },
     videos,

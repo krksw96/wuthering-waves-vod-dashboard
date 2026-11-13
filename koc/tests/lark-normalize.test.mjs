@@ -85,7 +85,8 @@ test('duplicate canonical YouTube IDs use the complete final row without maximiz
   assert.equal(data.videos[0].sourceRow, 3);
   assert.equal(data.videos[0].views, 9000);
   assert.equal(data.videos[0].likes, null);
-  assert.equal(data.videos[0].format, 'Shorts');
+  // The final row's explicit source format takes precedence over the URL route.
+  assert.equal(data.videos[0].format, 'VOD');
   assert.equal(data.quality.duplicateRows, 1);
 });
 
