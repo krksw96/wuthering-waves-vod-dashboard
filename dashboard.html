@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#101311" />
     <title>게임 YouTube 데이터 보드</title>
+    <script>
+      try { document.documentElement.dataset.theme = localStorage.getItem('vodTheme') === 'light' ? 'light' : 'dark'; } catch {}
+    </script>
     <link rel="stylesheet" href="styles/design-system.css" />
     <link rel="stylesheet" href="styles/dashboard.css" />
   </head>
@@ -21,6 +24,7 @@
           <button class="game-button" type="button" data-game="zenless-zone-zero">젠레스</button>
         </nav>
         <div class="top-links">
+          <button class="icon-button theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="화이트 모드" title="화이트 모드"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg></button>
           <div class="language-switcher" role="group" aria-label="언어 변경" data-i18n-aria="languageSwitch">
             <button class="language-button" type="button" data-language="ko" lang="ko">KO</button>
             <button class="language-button" type="button" data-language="zh" lang="zh-CN">中</button>
@@ -91,6 +95,11 @@
               <input id="start-date" type="date" aria-label="시작일" data-i18n-aria="startDate" />
               <span>—</span>
               <input id="end-date" type="date" aria-label="종료일" data-i18n-aria="endDate" />
+            </div>
+            <div class="date-presets" role="group" aria-label="빠른 날짜 선택">
+              <button type="button" data-period="7" aria-pressed="false">최근 7일</button>
+              <button type="button" data-period="14" aria-pressed="false">최근 2주</button>
+              <button type="button" data-period="month" aria-pressed="false">최근 한달</button>
             </div>
           </div>
           <label class="filter-control"><span class="control-label" data-i18n="format">형식</span><select id="format-filter" aria-label="영상 형식 필터" data-i18n-aria="formatFilter"></select></label>
@@ -172,7 +181,7 @@
     <script>
       const requestedGame = new URLSearchParams(location.search).get("game");
       const gameDataPaths = {
-        "wuthering-waves": "data/wuthering-waves.js?v=refresh-20261117-55673",
+        "wuthering-waves": "data/wuthering-waves.js?v=koc-1794901279471-57616",
         "neverness-to-everness": "data/neverness-to-everness.js?v=refresh-20260814-360",
         "zenless-zone-zero": "data/zenless-zone-zero.js?v=refresh-20261117-9726"
       };
@@ -361,7 +370,8 @@
       for (const id of ["start-date", "end-date"]) {
         const input = document.getElementById(id);
         input.min = data.period.start || "";
-        input.max = data.period.end || "";
+        input.max = "";
+        input.min = "";
       }
       document.getElementById("start-date").value = state.startDate;
       document.getElementById("end-date").value = state.endDate;
@@ -505,9 +515,28 @@
         topicFilter.value = state.topic;
       }
 
+      function updateThemeControls() {
+        const light = document.documentElement.dataset.theme === 'light';
+        const labels = { ko: ['화이트 모드', '다크 모드'], zh: ['浅色模式', '深色模式'], en: ['Light mode', 'Dark mode'] };
+        const button = document.getElementById('theme-toggle');
+        const label = labels[state.language][light ? 1 : 0];
+        button.setAttribute('aria-pressed', String(light));
+        button.setAttribute('aria-label', label);
+        button.title = label;
+        document.querySelector('meta[name="theme-color"]').content = light ? '#f7f9f7' : '#101311';
+        const presets = { ko: ['최근 7일', '최근 2주', '최근 한달'], zh: ['最近7天', '最近2周', '最近一个月'], en: ['Last 7 days', 'Last 2 weeks', 'Last month'] };
+        document.querySelectorAll('[data-period]').forEach((button, index) => button.textContent = presets[state.language][index]);
+      }
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        try { localStorage.setItem('vodTheme', theme); } catch {}
+        updateThemeControls();
+      });
       function applyLanguage(language = state.language) {
         state.language = translations[language] ? language : "ko";
         try { localStorage.setItem("vodLanguage", state.language); localStorage.setItem("data-city-language", state.language); } catch {}
+        updateThemeControls();
         const htmlLanguage = state.language === "zh" ? "zh-CN" : state.language;
         document.documentElement.lang = htmlLanguage;
         document.title = t("metaTitle");
@@ -578,9 +607,32 @@
       document.getElementById("title-search").addEventListener("input", (event) => { state.titleQuery = event.target.value; render(); });
       dailyStartDate.addEventListener("change", renderDailySummary);
       dailyEndDate.addEventListener("change", renderDailySummary);
-      document.getElementById("start-date").addEventListener("change", (event) => { state.startDate = event.target.value; render(); });
-      document.getElementById("end-date").addEventListener("change", (event) => { state.endDate = event.target.value; render(); });
+      const presetButtons = [...document.querySelectorAll('[data-period]')];
+      function clearPeriodPreset() { presetButtons.forEach(button => button.setAttribute('aria-pressed', 'false')); }
+      presetButtons.forEach(button => button.addEventListener('click', () => {
+        const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map(part => [part.type, part.value]));
+        const end = `${parts.year}-${parts.month}-${parts.day}`;
+        const start = new Date(`${end}T00:00:00Z`);
+        if (button.dataset.period === 'month') {
+          const day = start.getUTCDate();
+          start.setUTCDate(1);
+          start.setUTCMonth(start.getUTCMonth() - 1);
+          const lastDay = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 0)).getUTCDate();
+          start.setUTCDate(Math.min(day, lastDay));
+          start.setUTCDate(start.getUTCDate() + 1);
+        } else start.setUTCDate(start.getUTCDate() - Number(button.dataset.period) + 1);
+        state.startDate = start.toISOString().slice(0, 10);
+        state.endDate = end;
+        document.getElementById('start-date').value = state.startDate;
+        document.getElementById('end-date').value = state.endDate;
+        clearPeriodPreset();
+        button.setAttribute('aria-pressed', 'true');
+        render();
+      }));
+      document.getElementById("start-date").addEventListener("change", (event) => { clearPeriodPreset(); state.startDate = event.target.value; render(); });
+      document.getElementById("end-date").addEventListener("change", (event) => { clearPeriodPreset(); state.endDate = event.target.value; render(); });
       document.getElementById("period-reset").addEventListener("click", () => {
+        clearPeriodPreset();
         state.startDate = data.period.start || "";
         state.endDate = data.period.end || "";
         document.getElementById("start-date").value = state.startDate;

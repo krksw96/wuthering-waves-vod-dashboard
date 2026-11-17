@@ -73,6 +73,7 @@ collected.meta.dailyCoverage = { ...plan, knownChannels: registry.channels.lengt
 await writeFile(updateFile, `${JSON.stringify(collected, null, 2)}\n`, "utf8");
 await run("scripts/sync-ad-task-tags.mjs", []);
 await run("scripts/apply-youtube-update.mjs", [updateFile]);
+await run("scripts/merge-koc-reference.mjs", []);
 
 const videosSource = await readFile("data/wuthering-waves.js", "utf8");
 const total = Number(videosSource.match(/"videos": \[/) ? (videosSource.match(/\n      "id": /g) || []).length : 0);

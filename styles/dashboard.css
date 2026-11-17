@@ -10,6 +10,51 @@
   --game-accent-rgb: 101, 232, 222;
 }
 
+/* Light mode overrides also cover surfaces with legacy fixed dark colors. */
+html[data-theme="light"] {
+  color-scheme: light;
+  --dd-bg: #f7f9f7;
+  --dd-panel: #ffffff;
+  --dd-panel-raised: #eaf0eb;
+  --dd-ink: #18251d;
+  --dd-muted: #58675d;
+  --dd-line: #ccd8ce;
+  --dd-accent: #3c6814;
+}
+html[data-theme="light"] body[data-game="wuthering-waves"] { --game-accent: #00766b; --game-accent-rgb: 0, 118, 107; }
+html[data-theme="light"] body[data-game="neverness-to-everness"] { --game-accent: #ac2c61; --game-accent-rgb: 172, 44, 97; }
+html[data-theme="light"] body[data-game="zenless-zone-zero"] { --game-accent: #806100; --game-accent-rgb: 128, 97, 0; }
+html[data-theme="light"] .topbar { background: rgba(247,249,247,.96); }
+html[data-theme="light"] .game-switcher,
+html[data-theme="light"] .detail-stat { background: var(--dd-bg); }
+html[data-theme="light"] th { background: var(--dd-panel-raised); }
+html[data-theme="light"] td { color: #425448; border-color: var(--dd-line); }
+html[data-theme="light"] tbody tr:hover,
+html[data-theme="light"] tbody tr:focus-visible { background: #edf4ee; }
+html[data-theme="light"] input,
+html[data-theme="light"] select,
+html[data-theme="light"] .thumb,
+html[data-theme="light"] .topic,
+html[data-theme="light"] .export-button,
+html[data-theme="light"] dialog { border-color: var(--dd-line); }
+html[data-theme="light"] input::placeholder { color: #647669; }
+html[data-theme="light"] .keyword,
+html[data-theme="light"] .kol-list a { color: #425448; }
+html[data-theme="light"] .format-badge { color: #00766b; border-color: #a5cec6; }
+html[data-theme="light"] .format-badge.shorts { color: #a02e5b; border-color: #dfb0c3; }
+html[data-theme="light"] .koc-badge { color: #765500; border-color: #c9b879; }
+html[data-theme="light"] .kol-badge { color: #982553; border-color: #d5a3b8; }
+html[data-theme="light"] .ad-badge { color: #295d87; border-color: #99b7cd; }
+html[data-theme="light"] .hero-primary:hover,
+html[data-theme="light"] .youtube-button:hover { background: #2f5310; border-color: #2f5310; }
+html[data-theme="light"] .table-wrap,
+html[data-theme="light"] .mobile-list { scrollbar-color: #a6b9aa #edf2ee; }
+.date-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.date-presets button { min-height: 30px; flex: 1; border: 1px solid var(--dd-line); border-radius: 5px; padding: 4px 8px; background: var(--dd-bg); color: var(--dd-muted); font-size: 10px; white-space: nowrap; }
+.date-presets button:hover,
+.date-presets button[aria-pressed="true"] { border-color: var(--game-accent); color: var(--game-accent); background: var(--dd-panel-raised); }
+.theme-toggle[aria-pressed="true"] { color: var(--dd-accent); border-color: var(--dd-accent); }
+
 [hidden] { display: none !important; }
 body { margin: 0; min-height: 100vh; background: var(--dd-bg); color: var(--ink); font-family: var(--dd-font); }
 body[data-game="wuthering-waves"] { --game-accent: #65e8de; --game-accent-rgb: 101, 232, 222; }

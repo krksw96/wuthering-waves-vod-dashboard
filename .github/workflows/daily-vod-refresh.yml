@@ -24,6 +24,8 @@ jobs:
     timeout-minutes: 60
     env:
       YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+      LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
       KURO_API_KEY: ${{ secrets.KURO_API_KEY }}
       KURO_BASE_URL: ${{ secrets.KURO_BASE_URL }}
       FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
@@ -57,7 +59,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ad-videos.json data/wuthering-waves.js data/wuthering-waves-channels.json data/zenless-zone-zero.js data/kol-search-wuthering-waves.json data/kol-search-zenless-zone-zero.json data/youtube-update-*.json data/zenless-youtube-update-*.json dashboard.html
+          git add koc/data/koc-data.json data/ad-videos.json data/wuthering-waves.js data/wuthering-waves-channels.json data/zenless-zone-zero.js data/kol-search-wuthering-waves.json data/kol-search-zenless-zone-zero.json data/youtube-update-*.json data/zenless-youtube-update-*.json dashboard.html
           git commit -m "Daily multi-game VOD refresh $(date -u +%Y-%m-%d)"
           git push origin main
       - name: Report incomplete game refreshes
