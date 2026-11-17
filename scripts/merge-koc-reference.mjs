@@ -6,11 +6,16 @@ import { runSync } from '../koc/scripts/sync-lark.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-// Source membership is authoritative for KOC status, not a channel-name guess.
+export function isExcludedKoc(video) {
+  return video.channelId === 'UCND6Ox1wVvKToDQAZLpuPsg'
+    || String(video.creator || video.channelTitle || '').replace(/\s/g, '') === '카르띠띠';
+}
+
+// Explicit user exclusions override source-sheet membership.
 // Existing YouTube metrics/dates always win; the sheet supplements missing videos.
 export function mergeKocReference(current, reference) {
   if (reference.mode !== 'live' || !reference.videos?.length || !reference.source?.url) throw new Error('Valid KOC reference data is required');
-  const videos = new Map(current.videos.map(video => [video.id, { ...video }]));
+  const videos = new Map(current.videos.map(video => [video.id, isExcludedKoc(video) ? { ...video, isKoc: false, kocName: null } : { ...video }]));
   let added = 0, matched = 0, skipped = 0;
   for (const row of reference.videos) {
     if (!/^[A-Za-z0-9_-]{11}$/.test(row.id) || !/^\d{4}-\d{2}-\d{2}$/.test(row.date) || row.date < current.period.start || row.date > current.period.end) { skipped++; continue; }
@@ -25,7 +30,7 @@ export function mergeKocReference(current, reference) {
         format: row.format, isKol: false, kolName: null, isAdTask: false,
         metricsSource: 'lark-koc-reference', metricsUpdatedAt: reference.metricUpdatedAt || null,
       }),
-      isKoc: true, kocName: existing?.kocName || row.creator,
+      isKoc: !isExcludedKoc(existing || row), kocName: isExcludedKoc(existing || row) ? null : existing?.kocName || row.creator,
       kocReference: { sourceRow: row.sourceRow, publishedDate: row.date, version: row.version, topics: row.topics },
     });
   }

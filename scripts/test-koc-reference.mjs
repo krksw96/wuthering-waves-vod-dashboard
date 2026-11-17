@@ -20,4 +20,10 @@ assert.equal(result.data.videos.find(v => v.id === 'lmnopqrstuv').comments, null
 assert.equal(current.videos[0].isKoc, false);
 assert.equal(mergeKocReference(result.data, source).added, 0);
 assert.throws(() => mergeKocReference(current, { mode: 'pending', videos: [] }));
-console.log('KOC reference merge tests passed');
+const excludedCurrent = { ...current, videos: [{ ...current.videos[0], creator: '카르띠띠', channelId: 'UCND6Ox1wVvKToDQAZLpuPsg', isKoc: true, kocName: '미오 Mio' }] };
+const excluded = mergeKocReference(excludedCurrent, source).data.videos.find(v => v.id === 'abcdefghijk');
+assert.equal(excluded.isKoc, false);
+assert.equal(excluded.kocName, null);
+assert.equal(excluded.views, 100);
+assert.equal(mergeKocReference({ ...current, videos: [excluded] }, source).data.videos.find(v => v.id === excluded.id).isKoc, false);
+console.log('KOC reference merge and exclusion tests passed');
